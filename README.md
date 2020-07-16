@@ -2,7 +2,7 @@
     <img width="600" src=".github/logo.png" title="Logo do projeto"><br />
 </p>
 
-# Coronavírus Chapecó
+# Practice Chapecó
 
 <p align="left">
     <img src="https://img.shields.io/maintenance/yes/2020?style=for-the-badge" title="Status do projeto">
