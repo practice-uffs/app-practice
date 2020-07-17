@@ -37,7 +37,7 @@ Como objetivo principal, o PRACTICE busca estruturar ambientes, capacitar agente
 
 ### 1. Pré-requisitos
 
-Você precisa ter o node versão `>=13.5` instalado no seu sistema. Depois, rode:
+Você precisa ter o node versão `>=13.8` instalado no seu sistema. Depois, rode:
 
 ```
 npm i framework7-cli cordova -g
