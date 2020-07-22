@@ -1,0 +1,166 @@
+<template>
+    <div class="page" data-name="infected">
+        <div class="navbar">
+            <div class="navbar-bg"></div>
+            <div class="navbar-inner sliding">
+                <div class="left">
+                    <a href="#" class="link back">
+                        <i class="icon icon-back"></i>
+                        <span class="if-not-md">Back</span>
+                    </a>
+                </div>
+                <div class="title">Estatísticas</div>
+            </div>
+        </div>
+        <div class="page-content">
+            <div class="block-title">Número de casos</div>
+
+            <div class="block">
+                <div class="row">
+                    <div class="col align-content-center">
+                        <div class="card stat">
+                            <div class="card-header align-content-left text-color-white bg-color-red"><i class="f7-icons">person_crop_circle_badge_exclam</i> Confirmados</div>
+                            {{#if current}}
+                                <div class="card-content card-content-padding text-align-center">
+                                    <strong class="text-color-red">{{current.confirmed}}</strong>
+                                </div>
+                                <div class="card-footer align-content-left">
+                                    <span>{{current.place_name}}</span>
+                                    <span>{{current.date}}</span>
+                                </div>
+                            {{else}}
+                                <!-- Otherwise show preloader -->
+                                <div class="card-content card-content-padding text-align-center">
+                                    <div class="preloader"></div>
+                                </div>
+                            {{/if}}
+                        </div>
+                    </div>
+                    <div class="col align-content-center">
+                        <div class="card stat">
+                            <div class="card-header align-content-left text-color-white bg-color-orange"><i class="f7-icons">search_circle</i> Suspeitos</div>
+                            {{#if current}}
+                                <div class="card-content card-content-padding text-align-center">
+                                    <strong class="text-color-orange">{{current.suspected}}</strong>
+                                </div>
+                                <div class="card-footer align-content-left">
+                                    <span>{{current.place_name}}</span>
+                                    <span>{{current.date}}</span>
+                                </div>
+                            {{else}}
+                                <!-- Otherwise show preloader -->
+                                <div class="card-content card-content-padding text-align-center">
+                                    <div class="preloader"></div>
+                                </div>
+                            {{/if}}
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="row">
+                    <div class="col align-content-center">
+                        <div class="card stat">
+                            <div class="card-header align-content-left text-color-white bg-color-green"><i class="f7-icons">checkmark_alt_circle</i> Curados</div>
+                            {{#if current}}
+                                <div class="card-content card-content-padding text-align-center">
+                                    <strong class="text-color-green">{{current.recovered}}</strong>
+                                </div>
+                                <div class="card-footer align-content-left">
+                                    <span>{{current.place_name}}</span>
+                                    <span>{{current.date}}</span>
+                                </div>
+                            {{else}}
+                                <!-- Otherwise show preloader -->
+                                <div class="card-content card-content-padding text-align-center">
+                                    <div class="preloader"></div>
+                                </div>
+                            {{/if}}
+                        </div>
+                    </div>
+                    <div class="col align-content-center">
+                        <div class="card stat">
+                            <div class="card-header align-content-left text-color-white bg-color-black"><i class="f7-icons">rhombus_fill</i> Óbitos</div>
+                            {{#if current}}
+                                <div class="card-content card-content-padding text-align-center">
+                                    <strong class="text-color-black">{{current.deaths}}</strong>
+                                </div>
+                                <div class="card-footer align-content-left">
+                                    <span>{{current.place_name_name}}</span>
+                                    <span>{{current.date}}</span>
+                                </div>
+                            {{else}}
+                                <!-- Otherwise show preloader -->
+                                <div class="card-content card-content-padding text-align-center">
+                                    <div class="preloader"></div>
+                                </div>
+                            {{/if}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="block">
+                <p class="stat-footnote"><i class="f7-icons">info_circle</i> Fonte: Assessoria de Imprensa de Chapecó, 2020</p>
+                <p class="stat-footnote"><i class="f7-icons">clock</i> Última atualização: {{#if current}} {{ current.date }} {{/if}}</p>
+            </div>
+        </div>
+    </div>
+</template>
+<script>
+    export default {
+        // Component Data
+        data: function() {
+            // Must return an object
+            return {
+                current: null,  // { confirmed: int, suspected: int, recovered: int, deaths: int, place_name: str, date: str }
+            }
+        },
+        // Component Methods
+        methods: {
+            dateParse: function(dateString) {
+                var parts = dateString.split('/');
+
+                if(parts.length < 3) {
+                    return 0;
+                }
+
+                var num = parseInt(parts[0], 10) + parseInt(parts[1], 10) * 30 + parseInt(parts[2], 10) * 1000;
+                return num;
+            },
+
+            getLatestStatByPlaceKey: function(placeKey, data) {
+                var latest = data[0];
+
+                for(var i = 0; i < data.length; i++) {
+                    var entry = data[i];
+
+                    if(entry.place_key != placeKey) {
+                        continue;
+                    }
+                    
+                    if(this.dateParse(entry.date) > this.dateParse(latest.date)) {
+                        latest = entry;
+                    }
+                }
+
+                return latest;
+            },
+
+            loadStats: function() {
+                var self = this;
+                var app = self.$app;
+
+                app.request.json('https://app-covid.api.uffs.cc/v0/stats', function(data) {
+                    self.$setState({
+                        current: self.getLatestStatByPlaceKey('cco', data),
+                    });
+                });
+            },
+        },
+        on: {
+            pageInit: function(e, page) {
+                this.loadStats();
+            },
+        }
+    }
+</script>
