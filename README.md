@@ -1,13 +1,10 @@
 <p align="center">
-    <img width="600" src=".github/logo.png" title="Logo do projeto"><br />
-</p>
-
-# Practice Chapecó
-
-<p align="left">
+    <img width="600" src=".github/logo.png" title="Logo do projeto"><br /><br />
     <img src="https://img.shields.io/maintenance/yes/2020?style=for-the-badge" title="Status do projeto">
-    <img src="https://img.shields.io/github/workflow/status/grintex/app-covid/Main?label=Build&logo=github&logoColor=white&style=for-the-badge" title="Status do build">
+    <img src="https://img.shields.io/github/workflow/status/ccuffs/template/ci.uffs.cc?label=Build&logo=github&logoColor=white&style=for-the-badge" title="Status do build">
 </p>
+
+# App PRACTICE
 
 Esse repositório contém o código-fonte do aplicativo móvel *PRACTICE*.
 
