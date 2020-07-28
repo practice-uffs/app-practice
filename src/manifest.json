@@ -1,12 +1,12 @@
 {
-  "name": "App Practice",
-  "short_name": "App Practice",
-  "description": "Aplicativo mobile do programa Practice",
+  "name": "PRACTICE",
+  "short_name": "PRACTICE",
+  "description": "Aplicativo móvel do PRACTICE",
   "lang": "pt-BR",
   "start_url": "/?source=pwa20200609",
   "display": "standalone",
-  "background_color": "#006f3c",
-  "theme_color": "#006f3c",
+  "background_color": "#eee",
+  "theme_color": "#eee",
   "icons": [
     {
       "src": "/static/icons/128x128.png",
