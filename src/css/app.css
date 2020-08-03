@@ -5,11 +5,15 @@
 
 /* Custom color theme properties */
 :root {
-  --f7-theme-color: #006f3c;
-  --f7-theme-color-rgb: 0, 111, 60;
-  --f7-theme-color-shade: #004626;
-  --f7-theme-color-tint: #009852;
-  --f7-page-bg-color: #fff;
+  --f7-theme-color: #fff;
+  --f7-theme-color-rgb: 255, 255, 255;
+  --f7-theme-color-shade: #ddd;
+  --f7-theme-color-tint: #eee;
+  --f7-page-bg-color: #eee;
+  --color-1: #264653;
+  --color-2: #2F7B9A;
+  --color-3: #FCAE17;
+  --color-4: #FA8334;
 }
 
 /* Invert navigation bars to fill style */
@@ -18,15 +22,15 @@
 :root .theme-dark {
   --f7-bars-bg-color: var(--f7-theme-color);
   --f7-bars-bg-color-rgb: var(--f7-theme-color-rgb);
-  --f7-bars-translucent-opacity: 0.9;
-  --f7-bars-text-color: #fff;
-  --f7-bars-link-color: #fff;
-  --f7-navbar-subtitle-text-color: rgba(255,255,255,0.85);
   --f7-bars-border-color: transparent;
-  --f7-tabbar-link-active-color: #fff;
-  --f7-tabbar-link-inactive-color: rgba(255,255,255,0.54);
+  --f7-bars-translucent-opacity: 0.9;
+  --f7-bars-text-color: #222;
+  --f7-bars-link-color: var(--color-2);
+  --f7-tabbar-link-active-color: var(--color-1);
+  --f7-tabbar-link-inactive-color: var(--color-1);
   --f7-sheet-border-color: transparent;
-  --f7-tabbar-link-active-border-color: #fff;
+  --f7-tabbar-link-active-border-color: #444;
+  --f7-navbar-subtitle-text-color: rgba(34,34,34,0.85);
 }
 .appbar,
 .navbar,
@@ -98,4 +102,8 @@ div.stat div.card-footer {
 
 .card-header-pic .card-content-padding .date {
     color: #8e8e93;
+}
+
+a.link {
+  color: var(--f7-tabbar-link-active-color)
 }
