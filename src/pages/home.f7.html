@@ -24,6 +24,13 @@
                         <div class="item-title">Sobre o aplicativo</div>
                     </div>
                 </a>
+
+                <a href="/profile/" class="menu-grid__item">
+                    <div class="item-inner">
+                        <img src="static/images/person.svg" class="menu-grid__icon">
+                        <div class="item-title">Meu Perfil</div>
+                    </div>
+                </a>
             </div>
 
             <div class="menu-grid">
@@ -67,7 +74,7 @@
             pageInit: function(e, page) {
                 var app = this.$app;
                 var link = document.getElementById('link-install-app');
-                
+
                 if(!link) {
                     return;
                 }
@@ -141,7 +148,7 @@
 
                 if(!navigator.share) {
                     this.shareToClipboard();
-                    return;                    
+                    return;
                 }
 
                 navigator.share({
