@@ -1,11 +1,11 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="cc.uffs.extension.covid" version="0.4.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>Coronavírus Chapecó</name>
+<widget id="cc.uffs.practice" version="0.4.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>PRACTICE</name>
     <description>
-        Aplicativo para orientação e informação da população sobre medidas de prevenção contra a infecção pelo novo Coronavírus, com foco em Chapecó/SC.
+      Toda inovação que o PRACTICE oferece ao alcance de um toque na tela!
     </description>
-    <author email="coronavirus-chapeco@uffs.cc" href="https://grintex.uffs.cc">
-        Equipe do Projeto Aplicativo Coronavírus (UFFS, Chapecó/SC)
+    <author email="practice@uffs.cc" href="https://practice.uffs.cc">
+        Equipe PRACTICE (UFFS)
     </author>
     <content src="index.html" />
     <plugin name="cordova-plugin-whitelist" spec="1" />
