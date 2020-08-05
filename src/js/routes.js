@@ -1,5 +1,6 @@
 // Paginas do aplicativo
 
+import Login from '../pages/login.f7.html';
 import HomePage from '../pages/home.f7.html';
 import StatsPage from '../pages/stats.f7.html';
 import AboutPage from '../pages/about.f7.html';
@@ -9,6 +10,11 @@ var routes = [
     {
         path: '/',
         component: HomePage,
+    },
+
+    {
+        path: '/login/',
+        component: Login,
     },
 
     {
