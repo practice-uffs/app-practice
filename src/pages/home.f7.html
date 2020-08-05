@@ -4,14 +4,13 @@
             <div class="navbar-bg"></div>
             <div class="navbar-inner">
                 <img src="static/images/logo/icon.svg" class="navbar-icon">
-                <div class="title"> PRACTICE</div>
+                <div class="title">PRACTICE</div>
             </div>
         </div>
 
         <!-- Scrollable page content-->
         <div class="page-content">
             <div class="menu-grid">
-
                 <a href="/stats/" class="menu-grid__item">
                     <div class="item-inner">
                         <img src="static/images/bar-chart.svg" class="menu-grid__icon">
@@ -19,11 +18,24 @@
                     </div>
                 </a>
 
-
                 <a href="/about/" class="menu-grid__item">
                     <div class="item-inner">
                         <img src="static/images/information.svg" class="menu-grid__icon">
                         <div class="item-title">Sobre o aplicativo</div>
+                    </div>
+                </a>
+
+                <a href="/profile/" class="menu-grid__item">
+                    <div class="item-inner">
+                        <img src="static/images/person.svg" class="menu-grid__icon">
+                        <div class="item-title">Meu Perfil</div>
+                    </div>
+                </a>
+
+                <a href="/login/" class="menu-grid__item">
+                    <div class="item-inner">
+                        <img src="static/images/login.svg" class="menu-grid__icon">
+                        <div class="item-title">Acessar sua conta</div>
                     </div>
                 </a>
             </div>
@@ -69,7 +81,7 @@
             pageInit: function(e, page) {
                 var app = this.$app;
                 var link = document.getElementById('link-install-app');
-                
+
                 if(!link) {
                     return;
                 }
@@ -143,7 +155,7 @@
 
                 if(!navigator.share) {
                     this.shareToClipboard();
-                    return;                    
+                    return;
                 }
 
                 navigator.share({

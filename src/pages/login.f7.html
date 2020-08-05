@@ -1,0 +1,117 @@
+<template>
+  <div class="page" data-name="about">
+      <div class="navbar">
+          <div class="navbar-bg"></div>
+          <div class="navbar-inner sliding">
+              <div class="left">
+                  <a href="#" class="link back">
+                      <i class="icon icon-back"></i>
+                      <span class="if-not-md">Voltar</span>
+                  </a>
+              </div>
+              <div class="title">Login</div>
+          </div>
+      </div>
+      <div class="page-content">
+
+        <div class="imgcontainer">
+          <img src="static/icons/152x152.png" alt="Avatar" class="avatar">
+          <h2 class="item-title">Acesse sua conta</h2>
+        </div>
+
+        <form action="/" method="post">
+          <div class="container">
+            <label for="uname"><b>Nome</b></label>
+            <input type="text" placeholder="Digite seu nome" name="uname" required>
+
+            <label for="psw"><b>Senha</b></label>
+            <input type="password" placeholder="Digite sua senha" name="psw" required>
+
+            <div class="container" style="background-color:#f1f1f1">
+              <button type="button" class="btn cancel">Cancelar</button>
+              <button type="submit" class="btn login">Entrar</button>
+            </div>
+          </div>
+        </form>
+
+
+      </div>
+  </div>
+</template>
+
+<script>
+  export default {};
+</script>
+
+<style>
+  .imgcontainer {
+    text-align: center;
+    margin: 24px 0 12px 0;
+  }
+
+  img.avatar {
+    width: 40%;
+    border-radius: 50%;
+  }
+  form {border: 3px solid #f1f1f1;}
+
+  input[type=text], input[type=password] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+  }
+
+  button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+  }
+
+  button:hover {
+    opacity: 0.8;
+  }
+
+  .btn {
+    width: auto;
+    padding: 10px 18px;
+  }
+
+  .cancel {
+    background-color: #FA8334;
+  }
+
+  .login {
+    background-color: #2F7B9A;
+  }
+
+  .container {
+    padding: 16px;
+  }
+
+  span.psw {
+    float: right;
+    padding-top: 16px;
+  }
+
+
+
+  @media screen and (min-width: 400px) {
+    .container {
+      padding: 100px;
+    }
+    span.psw {
+       display: block;
+       float: none;
+    }
+    .cancelbtn {
+       width: 10%;
+    }
+  }
+  </style>
