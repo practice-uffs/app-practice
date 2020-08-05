@@ -1,8 +1,8 @@
 {
-  "name": "cc.uffs.extension.covid",
-  "displayName": "Coronavírus Chapeco",
+  "name": "cc.uffs.practice",
+  "displayName": "PRACTICE",
   "version": "0.4.0",
-  "description": "Aplicativo para orientação e informação da população sobre medidas de prevenção contra a infecção pelo novo Coronavírus, com foco em Chapecó/SC.",
+  "description": "Toda inovação do PRACTICE ao alcance de um toque!",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -10,7 +10,7 @@
   "keywords": [
     "ecosystem:cordova"
   ],
-  "author": "Equipe do Projeto Aplicativo Coronavírus (UFFS, Chapecó/SC)",
+  "author": "Equipe PRACTICE (UFFS)",
   "license": "Apache-2.0",
   "dependencies": {
     "cordova-android": "^8.1.0",

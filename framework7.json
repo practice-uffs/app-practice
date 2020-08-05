@@ -1,10 +1,10 @@
 {
-  "cwd": "D:\\wamp\\www\\app-covid",
+  "cwd": "D:\\wamp\\www\\app-practice",
   "type": [
     "pwa",
     "cordova"
   ],
-  "name": "coronavirus-chapeco",
+  "name": "practice",
   "framework": "core",
   "template": "tabs",
   "bundler": "webpack",
@@ -24,7 +24,7 @@
     "preserveAssetsPaths": false,
     "inlineAssets": true
   },
-  "pkg": "cc.uffs.extension.covid",
+  "pkg": "cc.uffs.practice",
   "cordova": {
     "folder": "cordova",
     "platforms": [
