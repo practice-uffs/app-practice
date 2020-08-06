@@ -7,6 +7,8 @@ import ScanPage from '../pages/scan.f7.html';
 import ChatsPage from '../pages/chats.f7.html';
 import NewsPage from '../pages/news.f7.html';
 
+import RightPanelPage from '../pages/right-panel.f7.html';
+
 import LoginPage from '../pages/login.f7.html';
 import StatsPage from '../pages/stats.f7.html';
 import AboutPage from '../pages/about.f7.html';
@@ -43,6 +45,13 @@ var routes = [
                 component: NewsPage,
             },
         ],
+    },
+
+    {
+        path: '/right-panel/',
+        panel: {
+            component: RightPanelPage,
+        }
     },
 
     {
