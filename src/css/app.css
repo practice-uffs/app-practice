@@ -5,23 +5,23 @@
 
 /* Custom color theme properties */
 :root {
-  --f7-theme-color: #fff;
-  --f7-theme-color-rgb: 255, 255, 255;
-  --f7-theme-color-shade: #ddd;
-  --f7-theme-color-tint: #eee;
-  --f7-page-bg-color: #eee;
   --color-1: #264653;
   --color-2: #2F7B9A;
   --color-3: #FCAE17;
   --color-4: #FA8334;
+  --f7-theme-color: var(--color-2);
+  --f7-theme-color-rgb: var(--color-2);
+  --f7-theme-color-shade: #fff;
+  --f7-theme-color-tint: #fff;
+  --f7-page-bg-color: #eee;
 }
 
 /* Invert navigation bars to fill style */
 :root,
 :root.theme-dark,
 :root .theme-dark {
-  --f7-bars-bg-color: var(--f7-theme-color);
-  --f7-bars-bg-color-rgb: var(--f7-theme-color-rgb);
+  --f7-bars-bg-color: white;
+  --f7-bars-bg-color-rgb: white;
   --f7-bars-border-color: transparent;
   --f7-bars-translucent-opacity: 0.9;
   --f7-bars-text-color: #222;
@@ -106,4 +106,28 @@ div.stat div.card-footer {
 
 a.link {
   color: var(--f7-tabbar-link-active-color)
+}
+
+.panel {
+  min-width: 100px;
+  max-width: 80vw;
+}
+
+.card.circle {
+  position: relative;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.card.circle:after {
+  content: "";
+  display: block;
+  padding-bottom: 100%;
+}
+
+.card.circle img {
+  position: absolute;
+  vertical-align: middle;
+  width: 100%;
+  height: auto;
 }
