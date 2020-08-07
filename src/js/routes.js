@@ -8,10 +8,15 @@ import ChatsPage from '../pages/chats.f7.html';
 import NewsPage from '../pages/news.f7.html';
 
 import RightPanelPage from '../pages/right-panel.f7.html';
+import IdeasPage from '../pages/ideas.f7.html';
+import ServicesPage from '../pages/services.f7.html';
+import CoinPage from '../pages/coin.f7.html';
+import NotificationsPage from '../pages/notifications.f7.html';
+import SettingsPage from '../pages/settings.f7.html';
+import AboutPage from '../pages/about.f7.html';
 
 import LoginPage from '../pages/login.f7.html';
 import StatsPage from '../pages/stats.f7.html';
-import AboutPage from '../pages/about.f7.html';
 import NotFoundPage from '../pages/404.f7.html';
 
 var routes = [
@@ -61,12 +66,37 @@ var routes = [
 
     {
         path: '/stats/',
-        component: StatsPage
+        component: StatsPage,
+    },
+
+    {
+        path: '/ideas/',
+        component: IdeasPage,
+    },
+
+    {
+        path: '/services/',
+        component: ServicesPage,
+    },
+
+    {
+        path: '/coin/',
+        component: CoinPage,
+    },
+
+    {
+        path: '/notifications/',
+        component: NotificationsPage,
+    },
+
+    {
+        path: '/settings/',
+        component: SettingsPage,
     },
 
     {
         path: '/about/',
-        component: AboutPage
+        component: AboutPage,
     },
 
     {
