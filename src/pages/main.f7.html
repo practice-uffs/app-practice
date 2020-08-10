@@ -1,142 +1,142 @@
 <template>
-    <div class="page" data-name="main">
-        <div class="navbar">
-            <div class="navbar-bg"></div>
-            <div class="navbar-inner">
-                <div class="left">
-                    <img src="static/images/logo/icon.svg" class="navbar-icon">
-                    <div class="title">PRACTICE</div>
-                </div>
-
-                <div class="right">
-                    <a href="/right-panel/" class="link"><i class="f7-icons">bars</i></a>
-                </div>
-            </div>
+  <div class="page" data-name="main">
+    <div class="navbar">
+      <div class="navbar-bg"></div>
+      <div class="navbar-inner">
+        <div class="left">
+          <img src="static/images/logo/icon.svg" class="navbar-icon">
+          <div class="title">PRACTICE</div>
         </div>
 
-        <div class="toolbar tabbar toolbar-bottom">
-            <div class="toolbar-inner">
-                <a href="/" class="tab-link" data-route-tab-id="home"><i class="f7-icons">house</i></a>
-                <a href="/env/" class="tab-link" data-route-tab-id="env"><i class="f7-icons">book</i></a>
-                <a href="/scan/" class="tab-link" data-route-tab-id="scan"><i class="f7-icons">viewfinder</i></a>
-                <a href="/chats/" class="tab-link" data-route-tab-id="chats"><i class="f7-icons">bubble_left </i></a>
-                <a href="/news/" class="tab-link" data-route-tab-id="news"><i class="f7-icons">doc</i></a>
-            </div>
+        <div class="right">
+          <a href="/right-panel/" class="link"><i class="f7-icons">bars</i></a>
         </div>
-
-        <div class="tabs-swipeable-wrap">
-            <div class="tabs tabs-routable">
-                <div class="page-content tab" id="home"></div>
-                <div class="page-content tab" id="env"></div>
-                <div class="page-content tab" id="scan"></div>
-                <div class="page-content tab" id="chats"></div>
-                <div class="page-content tab" id="news"></div>
-            </div>
-        </div>
+      </div>
     </div>
+
+    <div class="toolbar tabbar toolbar-bottom">
+      <div class="toolbar-inner">
+        <a href="/" class="tab-link" data-route-tab-id="home"><i class="f7-icons">house</i></a>
+        <a href="/env/" class="tab-link" data-route-tab-id="env"><i class="f7-icons">book</i></a>
+        <a href="/scan/" class="tab-link" data-route-tab-id="scan"><i class="f7-icons">viewfinder</i></a>
+        <a href="/chats/" class="tab-link" data-route-tab-id="chats"><i class="f7-icons">bubble_left </i></a>
+        <a href="/news/" class="tab-link" data-route-tab-id="news"><i class="f7-icons">doc</i></a>
+      </div>
+    </div>
+
+    <div class="tabs-swipeable-wrap">
+      <div class="tabs tabs-routable">
+        <div class="page-content tab" id="home"></div>
+        <div class="page-content tab" id="env"></div>
+        <div class="page-content tab" id="scan"></div>
+        <div class="page-content tab" id="chats"></div>
+        <div class="page-content tab" id="news"></div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
-    import IsEnabled from '../js/isenabled.js';
+  import IsEnabled from '../js/isenabled.js';
 
-    export default {
-        data: function() {
-            return {
-                appShareURL: 'https://uffs.cc/app-covid-chapeco',
-                installAd: function() {
-                    return !window.matchMedia('(display-mode: standalone)').matches && IsEnabled.installAd;
-                },
-                shareAd: IsEnabled.shareAd
-            }
+  export default {
+    data: function() {
+      return {
+        appShareURL: 'https://uffs.cc/app-covid-chapeco',
+        installAd: function() {
+          return !window.matchMedia('(display-mode: standalone)').matches && IsEnabled.installAd;
         },
+        shareAd: IsEnabled.shareAd
+      }
+    },
 
-        on: {
-            pageInit: function(e, page) {
-                var app = this.$app;
-                var link = document.getElementById('link-install-app');
+    on: {
+      pageInit: function(e, page) {
+        var app = this.$app;
+        var link = document.getElementById('link-install-app');
 
-                if(!link) {
-                    return;
-                }
-
-                window.addEventListener('appinstalled', function(evt) {
-                    app.toast.create({
-                        text: 'Pronto! Adicionado à tela inicial.',
-                        closeTimeout: 3000,
-                    }).open();
-
-                    link.style.display = 'none';
-                });
-            }
-        },
-
-        methods: {
-            install: function() {
-                var app = this.$app;
-                var deferredPrompt = app.deferredInstallPrompt;
-
-                if(!deferredPrompt) {
-                    app.toast.create({
-                        text: 'Não foi possível adicionar à tela inicial.',
-                        closeTimeout: 2000,
-                    }).open();
-                    return;
-                }
-
-                // Show the install prompt
-                deferredPrompt.prompt();
-
-                // Wait for the user to respond to the prompt
-                deferredPrompt.userChoice.then(function(choiceResult) {
-                    if (choiceResult.outcome === 'accepted') {
-                        console.log('User accepted the install prompt');
-                    } else {
-                        console.log('User dismissed the install prompt');
-                    }
-                });
-            },
-
-            shareToClipboard: function() {
-                var app = this.$app;
-
-                if(!navigator.clipboard) {
-                    return;
-                }
-
-                navigator.clipboard.writeText(this.appShareURL).then(function() {
-                    // success
-                    app.toast.create({
-                        text: 'Link copiado! Basta colar ele agora, ex. no WhatsApp.',
-                        closeTimeout: 5000,
-                    }).open();
-                }, function() {
-                    // fail
-                    app.toast.create({
-                        text: 'Hum, algum problema aconteceu. Desculpe.',
-                        closeTimeout: 2000,
-                    }).open();
-                });
-            },
-
-            share: function() {
-                var app = this.$app;
-
-                app.toast.create({
-                    text: this.appShareURL,
-                    closeTimeout: 6000,
-                }).open();
-
-                if(!navigator.share) {
-                    this.shareToClipboard();
-                    return;
-                }
-
-                navigator.share({
-                    title: 'PRACTICE',
-                    text: 'Toda inovação do PRACTICE ao alcance de um toque!',
-                    url: this.appShareURL,
-                });
-            }
+        if(!link) {
+          return;
         }
+
+        window.addEventListener('appinstalled', function(evt) {
+          app.toast.create({
+            text: 'Pronto! Adicionado à tela inicial.',
+            closeTimeout: 3000,
+          }).open();
+
+          link.style.display = 'none';
+        });
+      }
+    },
+
+    methods: {
+      install: function() {
+        var app = this.$app;
+        var deferredPrompt = app.deferredInstallPrompt;
+
+        if(!deferredPrompt) {
+          app.toast.create({
+            text: 'Não foi possível adicionar à tela inicial.',
+            closeTimeout: 2000,
+          }).open();
+          return;
+        }
+
+        // Show the install prompt
+        deferredPrompt.prompt();
+
+        // Wait for the user to respond to the prompt
+        deferredPrompt.userChoice.then(function(choiceResult) {
+          if (choiceResult.outcome === 'accepted') {
+            console.log('User accepted the install prompt');
+          } else {
+            console.log('User dismissed the install prompt');
+          }
+        });
+      },
+
+      shareToClipboard: function() {
+        var app = this.$app;
+
+        if(!navigator.clipboard) {
+          return;
+        }
+
+        navigator.clipboard.writeText(this.appShareURL).then(function() {
+          // success
+          app.toast.create({
+            text: 'Link copiado! Basta colar ele agora, ex. no WhatsApp.',
+            closeTimeout: 5000,
+          }).open();
+        }, function() {
+          // fail
+          app.toast.create({
+            text: 'Hum, algum problema aconteceu. Desculpe.',
+            closeTimeout: 2000,
+          }).open();
+        });
+      },
+
+      share: function() {
+        var app = this.$app;
+
+        app.toast.create({
+          text: this.appShareURL,
+          closeTimeout: 6000,
+        }).open();
+
+        if(!navigator.share) {
+          this.shareToClipboard();
+          return;
+        }
+
+        navigator.share({
+          title: 'PRACTICE',
+          text: 'Toda inovação do PRACTICE ao alcance de um toque!',
+          url: this.appShareURL,
+        });
+      }
     }
+  }
 </script>

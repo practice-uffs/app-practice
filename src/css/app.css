@@ -113,21 +113,25 @@ a.link {
   max-width: 80vw;
 }
 
-.card.circle {
+.circle {
   position: relative;
   border-radius: 50%;
   overflow: hidden;
 }
 
-.card.circle:after {
+.circle:after {
   content: "";
   display: block;
   padding-bottom: 100%;
 }
 
-.card.circle img {
+.circle img {
   position: absolute;
   vertical-align: middle;
   width: 100%;
   height: auto;
+}
+
+.no-wrap {
+  white-space: nowrap !important;
 }
