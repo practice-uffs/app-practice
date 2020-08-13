@@ -11,7 +11,7 @@
   --color-4: #FA8334;
   --f7-theme-color: var(--color-2);
   --f7-theme-color-rgb: var(--color-2);
-  --f7-theme-color-shade: #fff;
+  --f7-theme-color-shade: var(--color-1);
   --f7-theme-color-tint: #fff;
   --f7-page-bg-color: #eee;
 }
