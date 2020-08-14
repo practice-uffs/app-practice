@@ -49,27 +49,57 @@
         </ul>
       </div>
     </div>
+
     <!-- FAB options -->
-    <div class="fab-backdrop"></div>
-    <div class="fab fab-right-bottom color-blue">
+    <div class="fab fab-right-bottom">
       <a href="#">
         <i class="icon f7-icons">plus</i>
       </a>
-      <!-- Actions -->
       <div class="fab-buttons fab-buttons-top">
+        <!-- Search chats -->
         <a href="#" class="fab-label-button">
           <span><i class="icon f7-icons">search</i></span>
-          <span class="fab-label">Pesquisar</span>
+          <span class="fab-label">Pesquisar conversa</span>
         </a>
-        <a href="#" class="fab-label-button">
+        <!-- New chat -->
+        <a href="#" class="fab-label-button sheet-open" data-sheet=".new-chat-modal">
           <span><i class="icon f7-icons">person</i></span>
           <span class="fab-label">Criar conversa</span>
         </a>
+        <!-- New group -->
         <a href="#" class="fab-label-button">
           <span><i class="icon f7-icons">person_3</i></span>
           <span class="fab-label">Criar grupo</span>
         </a>
       </div>
     </div>
+
+    <!-- New chat modal -->
+    <div class="sheet-modal new-chat-modal" style="height:auto;">
+      <div class="sheet-modal-inner">
+        <div class="list no-hairlines-md no-margin">
+          <ul>
+            <li class="item-content item-input item-input-outline">
+              <div class="item-inner">
+                <div class="item-title item-floating-label">idUFFS</div>
+                <div class="item-input-wrap">
+                  <input type="text" required validate pattern="[a-z]+[.][a-z]+">
+                  <span class="input-clear-button"></span>
+                </div>
+              </div>
+            </li>
+            <li class="item-content">
+              <div class="item-inner">
+                <div class="row">
+                  <a class="button button-raised button-fill" href="#">Confirmar</a>
+                  <a class="button button-raised margin-left sheet-close" href="#">Cancelar</a>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
   </div>
 </template>
