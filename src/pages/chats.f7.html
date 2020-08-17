@@ -4,48 +4,26 @@
     <div class="card">
       <div class="list media-list no-margin">
         <ul>
-          <li>
-            <a href="#" class="item-link item-content">
-              <div class="item-media circle">
-                <img src="static/images/default-profile-image.png">
-              </div>
-              <div class="item-inner">
-                <div class="item-title-row">
-                  <div class="item-title">Cliclano de Souza</div>
-                  <div class="item-after">18:49</div>
+          {{#each chats}}
+            <li>
+              <a href="/chats/{{this.id}}/" class="item-link item-content chat">
+                <div class="item-media circle">
+                  {{#if this.profilePicture}}
+                    <img src="{{this.profilePicture}}">
+                  {{else}}
+                    <img src="static/images/default-profile-image.png">
+                  {{/if}}
                 </div>
-                <div class="item-text no-wrap">Você: Que horas é pra entregar aquele trabalho mesmo? :p</div>
-              </div>
-            </a>
-          </li>
-          <li>
-            <a href="#" class="item-link item-content">
-              <div class="item-media circle">
-                <img src="static/images/default-profile-image.png">
-              </div>
-              <div class="item-inner">
-                <div class="item-title-row">
-                  <div class="item-title">Beltrano Villavicêncio</div>
-                  <div class="item-after">11:32</div>
+                <div class="item-inner">
+                  <div class="item-title-row">
+                    <div class="item-title">{{this.name}}</div>
+                    <div class="item-after">{{this.lastMessage.timestamp}}</div>
+                  </div>
+                  <div class="item-text no-wrap">{{this.lastMessage.content}}</div>
                 </div>
-                <div class="item-text no-wrap">Não esquece de trazer o violão</div>
-              </div>
-            </a>
-          </li>
-          <li>
-            <a href="#" class="item-link item-content">
-              <div class="item-media circle">
-                <img src="static/images/default-profile-image.png">
-              </div>
-              <div class="item-inner">
-                <div class="item-title-row">
-                  <div class="item-title">Luciano de Taubaté</div>
-                  <div class="item-after">08:49</div>
-                </div>
-                <div class="item-text no-wrap">Juro que é verdade</div>
-              </div>
-            </a>
-          </li>
+              </a>
+            </li>
+          {{/each}}
         </ul>
       </div>
     </div>
@@ -103,3 +81,34 @@
 
   </div>
 </template>
+<script>
+  export default {
+    data: function () {
+      // Examples
+      return {
+        chats: [
+          {
+            id: 0,
+            name: 'Cliclano de Souza',
+            profilePicture: null,
+            lastMessage: {
+              id: 0,
+              content: 'É pra entregar aquele trabalho que horas?',
+              timestamp: '08:45'
+            }
+          },
+          {
+            id: 1,
+            name: 'Beltrano Oliveira',
+            profilePicture: null,
+            lastMessage: {
+              id: 1,
+              content: 'Tu não vai acreditar no mico que eu passei...',
+              timestamp: '10:03'
+            }
+          }
+        ]
+      }
+    },
+  };
+</script>
