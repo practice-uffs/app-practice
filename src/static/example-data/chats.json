@@ -1,0 +1,35 @@
+[
+  {
+    "id": 0,
+    "type": "person",
+    "name": "Cliclano de Souza",
+    "picture": "https://cdn.framework7.io/placeholder/people-100x100-9.jpg",
+    "lastMessage": {
+      "id": 0,
+      "content": "É pra entregar aquele trabalho quando?",
+      "timestamp": "08:45"
+    }
+  },
+  {
+    "id": 1,
+    "type": "person",
+    "name": "Beltrano Oliveira",
+    "picture": null,
+    "lastMessage": {
+      "id": 1,
+      "content": "Nossa, que mico que eu passei...",
+      "timestamp": "10:03"
+    }
+  },
+  {
+    "id": 3,
+    "type": "group",
+    "name": "Inteligência Artificial 2021.1",
+    "picture": null,
+    "lastMessage": {
+      "id": 1,
+      "content": "Plano de ensino já disponível no Moodle",
+      "timestamp": "23:08"
+    }
+  }
+]
