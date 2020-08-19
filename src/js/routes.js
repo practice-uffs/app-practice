@@ -17,6 +17,8 @@ import NotificationsPage from '../pages/notifications.f7.html';
 import SettingsPage from '../pages/settings.f7.html';
 import AboutPage from '../pages/about.f7.html';
 
+import IdServicePage from '../pages/id_service.f7.html';
+
 import LoginPage from '../pages/login.f7.html';
 import StatsPage from '../pages/stats.f7.html';
 import NotFoundPage from '../pages/404.f7.html';
@@ -81,6 +83,15 @@ var routes = [
     component: IdeasPage,
   },
 
+    {
+        path: '/id_service/',
+        component: IdServicePage,
+    },
+
+    {
+        path: '/coin/',
+        component: CoinPage,
+    },
   {
     path: '/services/',
     component: ServicesPage,
