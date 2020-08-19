@@ -3,6 +3,7 @@ import RightPanelPage from '../pages/right-panel.f7.html';
 
 // Tabs
 import HomePage from '../pages/home.f7.html';
+
 import EnvPage from '../pages/env.f7.html';
 import ScanPage from '../pages/scan.f7.html';
 import ChatsPage from '../pages/chats.f7.html';
