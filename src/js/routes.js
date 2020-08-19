@@ -1,11 +1,13 @@
-// Paginas do aplicativo
-
 import MainPage from '../pages/main.f7.html';
+
+// Tabs
 import HomePage from '../pages/home.f7.html';
 import EnvPage from '../pages/env.f7.html';
 import ScanPage from '../pages/scan.f7.html';
 import ChatsPage from '../pages/chats.f7.html';
 import NewsPage from '../pages/news.f7.html';
+
+import ChatPage from '../pages/chat.f7.html';
 
 import RightPanelPage from '../pages/right-panel.f7.html';
 import IdeasPage from '../pages/ideas.f7.html';
@@ -22,64 +24,64 @@ import StatsPage from '../pages/stats.f7.html';
 import NotFoundPage from '../pages/404.f7.html';
 
 var routes = [
-    {
+  {
+    path: '/',
+    component: MainPage,
+    tabs: [
+      {
         path: '/',
-        component: MainPage,
-        tabs: [
-            {
-                path: '/',
-                id: 'home',
-                component: HomePage,
-            },
-            {
-                path: '/env/',
-                id: 'env',
-                component: EnvPage,
-            },
-            {
-                path: '/scan/',
-                id: 'scan',
-                component: ScanPage,
-            },
-            {
-                path: '/chats/',
-                id: 'chats',
-                component: ChatsPage,
-            },
-            {
-                path: '/news/',
-                id: 'news',
-                component: NewsPage,
-            },
-        ],
-    },
+        id: 'home',
+        component: HomePage,
+      },
+      {
+        path: '/env/',
+        id: 'env',
+        component: EnvPage,
+      },
+      {
+        path: '/scan/',
+        id: 'scan',
+        component: ScanPage,
+      },
+      {
+        path: '/chats/',
+        id: 'chats',
+        component: ChatsPage,
+      },
+      {
+        path: '/news/',
+        id: 'news',
+        component: NewsPage,
+      },
+    ],
+  },
 
-    {
-        path: '/right-panel/',
-        panel: {
-            component: RightPanelPage,
-        }
-    },
+  {
+    path: '/chats/:id/',
+    component: ChatPage,
+  },
 
-    {
-        path: '/login/',
-        component: LoginPage,
-    },
+  {
+    path: '/right-panel/',
+    panel: {
+      component: RightPanelPage,
+    }
+  },
 
-    {
-        path: '/stats/',
-        component: StatsPage,
-    },
+  {
+    path: '/login/',
+    component: LoginPage,
+  },
 
-    {
-        path: '/ideas/',
-        component: IdeasPage,
-    },
+  {
+    path: '/stats/',
+    component: StatsPage,
+  },
 
-    {
-        path: '/services/',
-        component: ServicesPage,
-    },
+  {
+    path: '/ideas/',
+    component: IdeasPage,
+  },
 
     {
         path: '/id_service/',
@@ -90,26 +92,35 @@ var routes = [
         path: '/coin/',
         component: CoinPage,
     },
+  {
+    path: '/services/',
+    component: ServicesPage,
+  },
 
-    {
-        path: '/notifications/',
-        component: NotificationsPage,
-    },
+  {
+    path: '/coin/',
+    component: CoinPage,
+  },
 
-    {
-        path: '/settings/',
-        component: SettingsPage,
-    },
+  {
+    path: '/notifications/',
+    component: NotificationsPage,
+  },
 
-    {
-        path: '/about/',
-        component: AboutPage,
-    },
+  {
+    path: '/settings/',
+    component: SettingsPage,
+  },
 
-    {
-        path: '(.*)',
-        component: NotFoundPage,
-    },
+  {
+    path: '/about/',
+    component: AboutPage,
+  },
+
+  {
+    path: '(.*)',
+    component: NotFoundPage,
+  },
 ];
 
 export default routes;
