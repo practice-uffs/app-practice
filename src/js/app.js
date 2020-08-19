@@ -18,48 +18,55 @@ import Abalytics from './abalytics.js';
 import App from '../app.f7.html';
 
 var app = new Framework7({
-    root: '#app', // App root element
-    component: App, // App main component
-    id: 'cc.uffs.extension.covid', // App bundle ID
-    name: 'coronavirus-chapeco', // App name
-    theme: 'auto', // Automatic theme detection
+  root: '#app', // App root element
+  component: App, // App main component
+  id: 'cc.uffs.practice', // App bundle ID
+  name: 'practice', // App name
+  theme: 'auto', // Automatic theme detection
 
-    // App routes
-    routes: routes,
+  // App routes
+  routes: routes,
 
-    // Register service worker
-    serviceWorker: Framework7.device.cordova ? {} : {
-        path: '/service-worker.js',
+  // Register service worker
+  serviceWorker: Framework7.device.cordova ? {} : {
+    path: '/service-worker.js',
+  },
+
+  // Input settings
+  input: {
+    scrollIntoViewOnFocus: Framework7.device.cordova && !Framework7.device.electron,
+    scrollIntoViewCentered: Framework7.device.cordova && !Framework7.device.electron,
+  },
+  
+  // Cordova Statusbar settings
+  statusbar: {
+    iosOverlaysWebView: true,
+    androidOverlaysWebView: false,
+  },
+
+  // Touch options
+  touch: {
+    tapHold: true,
+  },
+
+  on: {
+    init: function() {
+      var f7 = this;
+      if (f7.device.cordova) {
+        // Init cordova APIs (see cordova-app.js)
+        cordovaApp.init(f7);
+      } else {
+        // Save context to allow 'Add to home screen'
+        f7.deferredInstallPrompt = null;
+
+        window.addEventListener('beforeinstallprompt', function(e) {
+          // Stash the event so it can be triggered later.
+          f7.deferredInstallPrompt = e;
+          console.log('Saving beforeinstallprompt: ', e);
+        });
+      }
+
+      Abalytics.init(f7);
     },
-
-    // Input settings
-    input: {
-        scrollIntoViewOnFocus: Framework7.device.cordova && !Framework7.device.electron,
-        scrollIntoViewCentered: Framework7.device.cordova && !Framework7.device.electron,
-    },
-    // Cordova Statusbar settings
-    statusbar: {
-        iosOverlaysWebView: true,
-        androidOverlaysWebView: false,
-    },
-    on: {
-        init: function() {
-            var f7 = this;
-            if (f7.device.cordova) {
-                // Init cordova APIs (see cordova-app.js)
-                cordovaApp.init(f7);
-            } else {
-                // Save context to allow 'Add to home screen'
-                f7.deferredInstallPrompt = null;
-
-                window.addEventListener('beforeinstallprompt', function(e) {
-                    // Stash the event so it can be triggered later.
-                    f7.deferredInstallPrompt = e;
-                    console.log('Saving beforeinstallprompt: ', e);
-                });
-            }
-
-            Abalytics.init(f7);
-        },
-    },
+  },
 });

@@ -1,4 +1,4 @@
-# coronavirus-chapeco
+# App PRACTICE
 
 ## Framework7 CLI Options
 
@@ -6,11 +6,11 @@ Framework7 app created with following options:
 
 ```
 {
-  "cwd": "D:\\wamp\\www\\app-covid",
+  "cwd": "D:\\wamp\\www\\app-practice",
   "type": [
     "cordova"
   ],
-  "name": "coronavirus-chapeco",
+  "name": "practice",
   "framework": "core",
   "template": "tabs",
   "bundler": "webpack",
@@ -30,7 +30,7 @@ Framework7 app created with following options:
     "preserveAssetsPaths": false,
     "inlineAssets": true
   },
-  "pkg": "cc.uffs.extension.covid",
+  "pkg": "cc.uffs.practice",
   "cordova": {
     "folder": "cordova",
     "platforms": [

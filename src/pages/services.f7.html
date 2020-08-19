@@ -1,0 +1,39 @@
+<template>
+  <div class="page" data-name="services">
+    <div class="navbar">
+      <div class="navbar-bg"></div>
+      <div class="navbar-inner sliding">
+        <div class="left">
+          <a href="/" class="link back">
+            <i class="icon icon-back"></i>
+            <span class="if-not-md">Voltar</span>
+          </a>
+        </div>
+        <div class="title">Serviços</div>
+      </div>
+    </div>
+
+    <div class="page-content">
+      {{#each '012'}}
+        <div class="list card demo-facebook-card margin-bottom">
+          <a href="/services/{{this}}/" class="item-link">
+            <div class="card-content card-content"><img src="https://cdn.framework7.io/placeholder/nature-1000x700-8.jpg" width="100%" height="120"/></div>
+            <div class="card-content card-content-padding">
+              <p>Quisque eget vestibulum nulla. Quisque quis dui quis ex ultricies efficitur vitae non felis. Phasellus quis nibh hendrerit...</p>
+            </div>
+            <div class="row card-header">
+              <div class="col-20 demo-facebook-avatar"><img src="static/images/default-profile-image.png" width="50" height="50"/></div>
+              <div class="row col-80">
+                <div class="col-100 tablet-50 item-title">Título</div>
+                <div class="col-100 tablet-50 item-text no-wrap">Subtítulo</div>
+              </div>
+            </div>
+          </a>
+        </div>
+      {{/each}}
+    </div>
+  </div>
+</template>
+<script>
+  export default {};
+</script>
