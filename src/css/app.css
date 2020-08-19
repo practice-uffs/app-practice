@@ -122,10 +122,10 @@ a.link {
 .circle:after {
   content: "";
   display: block;
-  padding-bottom: 100%;
+  margin-bottom: 100%;
 }
 
-.circle img {
+.circle * {
   position: absolute;
   vertical-align: middle;
   width: 100%;

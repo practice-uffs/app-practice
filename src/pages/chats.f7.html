@@ -4,70 +4,67 @@
     <div class="card">
       <div class="list media-list no-margin">
         <ul>
-          <li>
-            <a href="#" class="item-link item-content">
-              <div class="item-media circle">
-                <img src="static/images/default-profile-image.png">
-              </div>
-              <div class="item-inner">
-                <div class="item-title-row">
-                  <div class="item-title">Cliclano de Souza</div>
-                  <div class="item-after">18:49</div>
+          {{#if chats}}
+            {{#each chats}}
+              <li>
+                <a href="/chats/{{this.id}}/" class="item-link item-content chat">
+                  <div class="item-media circle no-padding margin-vertical">
+                    {{#if this.picture}}
+                      <img src="{{this.picture}}">
+                    {{else}}
+                      <img src="static/images/default-profile-image.png">
+                    {{/if}}
+                  </div>
+                  <div class="item-inner">
+                    <div class="item-title-row">
+                      <div class="item-title">{{this.name}}</div>
+                      <div class="item-after">{{this.lastMessage.timestamp}}</div>
+                    </div>
+                    <div class="item-text no-wrap">{{this.lastMessage.content}}</div>
+                  </div>
+                </a>
+              </li>
+            {{/each}}
+          {{else}}
+            {{#each '123'}}
+            <li>
+              <a class="item-link item-content skeleton-text skeleton-effect-blink">
+                <div class="item-media">
+                  <div class="skeleton-block circle" style="height: 100%; width: 100%;"></div>
                 </div>
-                <div class="item-text no-wrap">Você: Que horas é pra entregar aquele trabalho mesmo? :p</div>
-              </div>
-            </a>
-          </li>
-          <li>
-            <a href="#" class="item-link item-content">
-              <div class="item-media circle">
-                <img src="static/images/default-profile-image.png">
-              </div>
-              <div class="item-inner">
-                <div class="item-title-row">
-                  <div class="item-title">Beltrano Villavicêncio</div>
-                  <div class="item-after">11:32</div>
+                <div class="item-inner">
+                  <div class="item-title-row">
+                    <div class="item-title">____________</div>
+                    <div class="item-after">____</div>
+                  </div>
+                  <div class="item-text no-wrap">____________________________________</div>
                 </div>
-                <div class="item-text no-wrap">Não esquece de trazer o violão</div>
-              </div>
-            </a>
-          </li>
-          <li>
-            <a href="#" class="item-link item-content">
-              <div class="item-media circle">
-                <img src="static/images/default-profile-image.png">
-              </div>
-              <div class="item-inner">
-                <div class="item-title-row">
-                  <div class="item-title">Luciano de Taubaté</div>
-                  <div class="item-after">08:49</div>
-                </div>
-                <div class="item-text no-wrap">Juro que é verdade</div>
-              </div>
-            </a>
-          </li>
+              </a>
+            </li>
+            {{/each}}
+          {{/if}}
         </ul>
       </div>
     </div>
 
     <!-- FAB options -->
-    <div class="fab fab-right-bottom">
+    <div class="fab fab-right-bottom options-fab">
       <a href="#">
         <i class="icon f7-icons">plus</i>
       </a>
       <div class="fab-buttons fab-buttons-top">
         <!-- Search chats -->
-        <a href="#" class="fab-label-button">
+        <a href="#" class="fab-label-button fab-close" data-fab=".options-fab">
           <span><i class="icon f7-icons">search</i></span>
           <span class="fab-label">Pesquisar conversa</span>
         </a>
         <!-- New chat -->
-        <a href="#" class="fab-label-button sheet-open" data-sheet=".new-chat-modal">
+        <a href="#" class="fab-label-button fab-close sheet-open" data-fab=".options-fab" data-sheet=".new-chat-modal">
           <span><i class="icon f7-icons">person</i></span>
           <span class="fab-label">Criar conversa</span>
         </a>
         <!-- New group -->
-        <a href="#" class="fab-label-button">
+        <a href="#" class="fab-label-button fab-close" data-fab=".options-fab">
           <span><i class="icon f7-icons">person_3</i></span>
           <span class="fab-label">Criar grupo</span>
         </a>
@@ -100,6 +97,35 @@
         </div>
       </div>
     </div>
-
   </div>
 </template>
+<script>
+  export default {
+    data: function () {
+      return {
+        chats: null,
+      }
+    },
+    methods: {
+      loadChats: function () {
+        var self = this;
+        var app = self.$app;
+
+        app.request.json('../static/example-data/chats.json', function (data) {
+          // Sleeping only to show loading effects
+          setTimeout(function () {
+            // Setting data
+            self.$setState({
+              chats: data,
+            });
+          }, 2000);
+        });
+      }
+    },
+    on: {
+      tabInit: function(e, page) {
+        this.loadChats();
+      },
+    }
+  };
+</script>
