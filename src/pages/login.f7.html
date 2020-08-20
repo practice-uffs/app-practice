@@ -1,63 +1,74 @@
 <template>
-  <div class="page" data-name="about">
-      <div class="navbar">
-          <div class="navbar-bg"></div>
-          <div class="navbar-inner sliding">
-              <div class="left">
-                  <a href="#" class="link back">
-                      <i class="icon icon-back"></i>
-                      <span class="if-not-md">Voltar</span>
-                  </a>
-              </div>
-              <div class="title">Login</div>
+  <div class="login-screen">
+    <div class="view">
+      <div class="page">
+        <div class="page-content login-screen-content">
+          <div class="login-screen-title">
+            <img src="../static/images/logo/logo 915x286.png" style="width: 100%; height: auto;" />
           </div>
-      </div>
-      <div class="page-content">
-
-
-        <div class="view">
-          <div class="page">
-            <div class="page-content login-screen-content">
-              <div class="login-screen-title">Acessar conta</div>
-              <form>
-                <div class="list">
-                  <ul>
-                    <li class="item-content item-input">
-                      <div class="item-inner">
-                        <div class="item-title">Nome de usuário</div>
-                        <div class="item-input-wrap">
-                          <input type="text" name="username" placeholder="Digite seu nome de usuário">
-                        </div>
-                      </div>
-                    </li>
-                    <li class="item-content item-input">
-                      <div class="item-inner">
-                        <div class="item-title">Senha</div>
-                        <div class="item-input-wrap">
-                          <input type="password" name="password" placeholder="Digite sua senha">
-                        </div>
-                      </div>
-                    </li>
-                  </ul>
-                </div>
-                <div class="list">
-                  <ul>
-                    <li><a class="list-button" style="color: blue;" href="#">Entrar</a></li>
-                  </ul>
-                  <div class="block-footer">
-                    <p>Em caso de esquecer ou perder sua senha </p>
-                    <p><a class="link login-screen-close" href="#">Redefinir senha!</a></p>
+          <form class="list" id="login-form" onSubmit="return false;" @submit="login()">
+            <ul>
+              <li class="item-content item-input item-input-outline">
+                <div class="item-inner">
+                  <div class="item-title item-floating-label">idUFFS</div>
+                  <div class="item-input-wrap">
+                    <input type="text" name="iduffs" pattern="[a-z]+[.][a-z]+" required validate>
+                    <span class="input-clear-button"></span>
                   </div>
                 </div>
-              </form>
-            </div>
-          </div>
+              </li>
+              <li class="item-content item-input item-input-outline">
+                <div class="item-inner">
+                  <div class="item-title item-floating-label">Senha</div>
+                  <div class="item-input-wrap">
+                    <input type="password" name="password" required validate>
+                    <span class="input-clear-button"></span>
+                  </div>
+                </div>
+              </li>
+              <li class="item-content item-input">
+                <div class="item-inner">
+                  <input type="submit" class="button button-raised button-fill" value="Acessar">
+                </div>
+              </li>
+              <li class="item-content">
+                <div class="item-inner">
+                  <a href="#" class="link text-align-center login-screen-close" style="width: 100%;"> Clique aqui para redefinir sua senha</a>
+                </div>
+              </li>
+            </ul>
+          </form>
         </div>
-
       </div>
+    </div>
   </div>
 </template>
 
 <script>
-  export default {};
+  export default {
+    methods: {
+      login: function () {
+        let self = this
+        let app = self.$app
+
+        app.dialog.preloader("Carregando")
+        let loginData = app.form.convertToData('#login-form')
+
+        // Sleeping only to show loading effects
+        setTimeout(function () {
+          // Request login
+          app.request.promise.get('../static/example-data/login.json', loginData)
+          .then(function (res) {
+            app.dialog.close()
+            if (res) {
+              localStorage['userCredentials'] = res
+              app.view.main.router.navigate('/')
+            } 
+            else
+              app.dialog.alert('Credenciais incorretas, tente novamente!')
+          })
+        }, 1000)
+      }
+    }
+  };
 </script>
