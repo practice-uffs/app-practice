@@ -27,43 +27,39 @@ import NotFoundPage from '../pages/404.f7.html';
 var routes = [
   {
     path: '/',
+    tabs: [
+      {
+        path: '/',
+        id: 'home',
+        component: HomePage,
+      },
+      {
+        path: '/env/',
+        id: 'env',
+        component: EnvPage,
+      },
+      {
+        path: '/scan/',
+        id: 'scan',
+        component: ScanPage,
+      },
+      {
+        path: '/chats/',
+        id: 'chats',
+        component: ChatsPage,
+      },
+      {
+        path: '/news/',
+        id: 'news',
+        component: NewsPage,
+      },
+    ],
     async(routeTo, routeFrom, resolve, reject) {
       // Checking login session
       if(localStorage.userCredentials) {
-        resolve({
-          component: MainPage,
-          tabs: [
-            {
-              path: '/',
-              id: 'home',
-              component: HomePage,
-            },
-            {
-              path: '/env/',
-              id: 'env',
-              component: EnvPage,
-            },
-            {
-              path: '/scan/',
-              id: 'scan',
-              component: ScanPage,
-            },
-            {
-              path: '/chats/',
-              id: 'chats',
-              component: ChatsPage,
-            },
-            {
-              path: '/news/',
-              id: 'news',
-              component: NewsPage,
-            },
-          ],
-        });
+        resolve({component: MainPage});
       } else {
-        resolve({
-          component: InitialPage,
-        });
+        resolve({component: InitialPage});
       }
     },
   },
