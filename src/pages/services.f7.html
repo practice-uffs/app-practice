@@ -14,26 +14,55 @@
     </div>
 
     <div class="page-content">
-      {{#each '012'}}
+
+      {{#each services}}
         <div class="list card demo-facebook-card margin-bottom">
-          <a href="/services/{{this}}/" class="item-link">
-            <div class="card-content card-content"><img src="https://cdn.framework7.io/placeholder/nature-1000x700-8.jpg" width="100%" height="120"/></div>
+          <a href="/services/{{this.id}}/" class="item-link service">
+            <div class="card-content card-content"><img src="{{this.picture}}" width="100%" height="120"/></div>
             <div class="card-content card-content-padding">
-              <p>Quisque eget vestibulum nulla. Quisque quis dui quis ex ultricies efficitur vitae non felis. Phasellus quis nibh hendrerit...</p>
+              <p>{{this.description}}</p>
             </div>
             <div class="row card-header">
-              <div class="col-20 demo-facebook-avatar"><img src="static/images/default-profile-image.png" width="50" height="50"/></div>
+              <div class="col-20 demo-facebook-avatar"><img src="{{this.imageProfile}}" width="50" height="50"/></div>
               <div class="row col-80">
-                <div class="col-100 tablet-50 item-title">Título</div>
-                <div class="col-100 tablet-50 item-text no-wrap">Subtítulo</div>
+                <div class="col-100 tablet-50 item-title">{{this.title}}</div>
+                <div class="col-100 tablet-50 item-text no-wrap">{{this.subtitle}}</div>
               </div>
             </div>
           </a>
         </div>
       {{/each}}
+
     </div>
   </div>
 </template>
 <script>
-  export default {};
+  export default {
+    data: function () {
+      return {
+        services: null,
+      }
+    },
+    methods: {
+      loadServices: function () {
+        var self = this;
+        var app = self.$app;
+
+        app.request.json('../static/example-data/services.json', function (data) {
+          // Sleeping only to show loading effects
+          setTimeout(function () {
+            // Setting services
+            self.$setState({
+              services: data,
+            });
+          }, 100);
+        });
+      }
+    },
+    on: {
+      pageInit: function(e, page) {
+        this.loadServices();
+      }
+    }
+  };
 </script>
