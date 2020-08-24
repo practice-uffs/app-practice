@@ -2,9 +2,7 @@ import InitialPage from '../pages/initial.f7.html';
 import MainPage from '../pages/main.f7.html';
 import RightPanelPage from '../pages/right-panel.f7.html';
 
-// Tabs
 import HomePage from '../pages/home.f7.html';
-
 import EnvPage from '../pages/env.f7.html';
 import ScanPage from '../pages/scan.f7.html';
 import ChatsPage from '../pages/chats.f7.html';
@@ -30,7 +28,7 @@ const authenticated = function (to, from, resolve, reject) {
     resolve();
   } else {
     reject();
-    this.navigate('/')
+    this.navigate('/initial/')
   }
 }
 
@@ -44,8 +42,12 @@ const unauthenticated = function (to, from, resolve, reject) {
 }
 
 var routes = [
+  // Authenticated routes
+  
   {
     path: '/',
+    component: MainPage,
+    beforeEnter: authenticated,
     tabs: [
       {
         path: '/',
@@ -73,20 +75,6 @@ var routes = [
         component: NewsPage,
       },
     ],
-    async(routeTo, routeFrom, resolve, reject) {
-      // Checking login session
-      if(localStorage.userCredentials) {
-        resolve({
-          component: MainPage,
-          beforeEnter: authenticated,
-        });
-      } else {
-        resolve({
-          component: InitialPage,
-          beforeEnter: unauthenticated,
-        });
-      }
-    },
   },
 
   {
@@ -117,14 +105,6 @@ var routes = [
       component: RightPanelPage,
     },
     beforeEnter: authenticated,
-  },
-
-  {
-    path: '/login/',
-    loginScreen: {
-      component: LoginPage,
-    },
-    beforeEnter: unauthenticated,
   },
 
   {
@@ -173,6 +153,22 @@ var routes = [
     path: '/about/',
     component: AboutPage,
     beforeEnter: authenticated,
+  },
+
+  // Unauthenticated routes
+
+  {
+    path: '/initial/',
+    component: InitialPage,
+    beforeEnter: unauthenticated,
+  },
+
+  {
+    path: '/login/',
+    loginScreen: {
+      component: LoginPage,
+    },
+    beforeEnter: unauthenticated,
   },
 
   {

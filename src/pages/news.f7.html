@@ -5,7 +5,7 @@
       <div class="card list demo-facebook-card list margin-bottom">
         <a href="/news/{{this.id}}/" class="item-link new">
           <div class="row card-header">
-            <div class="demo-facebook-avatar col-20"><img src="static/images/default-profile-image.png" width="50" height="50"/></div>
+            <div class="demo-facebook-avatar col-20"><img src="{{this.pictureProfile}}" width="50" height="50"/></div>
             <div class="row col-80">
               <div class="item-title col-100 tablet-50">{{this.author}}</div>
               <div class="item-text">{{this.date}}</div>
@@ -47,9 +47,6 @@
     on: {
       tabInit: function(e, page) {
         this.loadNews();
-      },
-      taphold: function (element) {
-        console.log(element)
       }
     }
   };
