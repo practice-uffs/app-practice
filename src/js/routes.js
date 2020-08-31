@@ -86,17 +86,20 @@ var routes = [
   {
     path: '/news/:id/',
     component: NewPage,
+    beforeEnter: authenticated,
   },
 
   {
     path: '/services/',
     id: 'services',
     component: ServicesPage,
+    beforeEnter: authenticated,
   },
 
   {
     path: '/services/:id/',
     component: ServicePage,
+    beforeEnter: authenticated,
   },
 
   {
