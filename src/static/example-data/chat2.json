@@ -1,0 +1,22 @@
+{
+  "id": 2,
+  "name": "Inteligência Artificial 2021.1",
+  "picture": null,
+  "messages": [
+    {
+      "type": "text",
+      "content": "Sejam bem-vindos ao grupo da turma de Inteligência Artificial 2021.1",
+      "timestamp": "21:20"
+    },
+    {
+      "type": "text",
+      "content": "Nossas aulas acontecerão remotamente, depois mandarei o link pra vocês",
+      "timestamp": "21:20"
+    },
+    {
+      "type": "text",
+      "content": "Plano de ensino já disponível no Moodle",
+      "timestamp": "21:21"
+    }
+  ]
+}
