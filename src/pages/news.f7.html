@@ -1,37 +1,53 @@
 <template>
   <div data-name="news">
 
-    <div class="card list demo-facebook-card list margin-bottom">
-      <a href="#" class="item-link">
-        <div class="row card-header">
-          <div class="demo-facebook-avatar col-20"><img src="static/images/default-profile-image.png" width="50" height="50"/></div>
-          <div class="row col-80">
-            <div class="item-title col-100 tablet-50">Fulano da Silva</div>
-            <div class="item-text">Monday at 3:47 PM</div>
+    {{#each services}}
+      <div class="card list demo-facebook-card list margin-bottom">
+        <a href="/news/{{this.id}}/" class="item-link new">
+          <div class="row card-header">
+            <div class="demo-facebook-avatar col-20"><img src="{{this.pictureProfile}}" width="50" height="50"/></div>
+            <div class="row col-80">
+              <div class="item-title col-100 tablet-50">{{this.author}}</div>
+              <div class="item-text">{{this.date}}</div>
+            </div>
           </div>
-        </div>
-        <div class="card-content card-content-padding">
-          <p class="item-subtitle">What a nice photo i took yesterday!</p>
-          <img src="https://cdn.framework7.io/placeholder/nature-1000x700-8.jpg" width="100%"/>
-        </div>
-      </a>
-    </div>
-
-    <div class="card list demo-facebook-card list margin-bottom">
-      <a href="#" class="item-link">
-        <div class="row card-header">
-          <div class="demo-facebook-avatar col-20"><img src="static/images/default-profile-image.png" width="50" height="50"/></div>
-          <div class="row col-80">
-            <div class="item-title col-100 tablet-50">Fulano da Silva</div>
-            <div class="item-text">Monday at 3:47 PM</div>
+          <div class="card-content card-content-padding">
+            <p class="item-subtitle">{{this.description}}</p>
+            <img src="{{this.picture}}" width="100%"/>
           </div>
-        </div>
-        <div class="card-content card-content-padding">
-          <p class="item-subtitle">What a nice photo i took yesterday!</p>
-          <img src="https://cdn.framework7.io/placeholder/nature-1000x700-8.jpg" width="100%"/>
-        </div>
-      </a>
-    </div>
+        </a>
+      </div>
+    {{/each}}
 
   </div>
 </template>
+<script>
+  export default {
+    data: function () {
+      return {
+        news: null,
+      }
+    },
+    methods: {
+      loadNews: function () {
+        var self = this;
+        var app = self.$app;
+
+        app.request.json('../static/example-data/news.json', function (data) {
+          // Sleeping only to show loading effects
+          setTimeout(function () {
+            // Setting services
+            self.$setState({
+              services: data,
+            });
+          }, 100);
+        });
+      }
+    },
+    on: {
+      tabInit: function(e, page) {
+        this.loadNews();
+      }
+    }
+  };
+</script>

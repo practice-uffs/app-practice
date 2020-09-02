@@ -1,0 +1,69 @@
+{
+  "id": 0,
+  "name": "Laboratório 403B",
+  "university": "UFFS",
+  "campus": "Chapecó",
+  "pins": [
+    {
+      "id": 0,
+      "type": "text",
+      "title": "Aula de Computação Gráfica",
+      "content": "Professor Fulano Bevilacqua"
+    },
+    {
+      "id": 1,
+      "type": "embed",
+      "title": "Introdução a Computação Gráfica",
+      "content": "https://www.youtube.com/embed/-4_OU95nKuU"
+    },
+    {
+      "id": 2,
+      "type": "action",
+      "title": "Votação para definir o trabalho final",
+      "method": "api/finalWork",
+      "inputs": [
+        {
+          "label": "Escolha uma opção",
+          "name": "finalWork",
+          "type": "select",
+          "options": [
+            {
+              "value": "dominó",
+              "label": "Jogo de dominó 3D"
+            },
+            {
+              "value": "xadrez",
+              "label": "Jogo de xadrez 3D"
+            },
+            {
+              "value": "modelagem",
+              "label": "Modelagem 3D de algum personagem"
+            },
+            {
+              "value": "animação",
+              "label": "Animação 3D de no mínimo 30 segundos"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "type": "action",
+      "title": "Reservar laboratório",
+      "method": "api/bookLab",
+      "inputs": [
+        {
+          "label": "Defina um motivo",
+          "name": "reason",
+          "type": "text"
+        },
+        {
+          "label": "Defina uma data",
+          "name": "date",
+          "type": "date"
+        }
+      ]
+    }
+  ]
+}
