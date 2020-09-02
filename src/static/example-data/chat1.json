@@ -1,0 +1,23 @@
+{
+  "id": 1,
+  "name": "Beltrano Oliveira",
+  "picture": null,
+  "messages": [
+    {
+      "type": "text",
+      "content": "Suas aulas não começaram hoje?",
+      "timestamp": "09:46",
+      "status": "seen"
+    },
+    {
+      "type": "text",
+      "content": "Sim",
+      "timestamp": "10:03"
+    },
+    {
+      "type": "text",
+      "content": "Nossa, que mico que eu passei...",
+      "timestamp": "10:03"
+    }
+  ]
+}

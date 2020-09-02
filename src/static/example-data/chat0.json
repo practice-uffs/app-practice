@@ -1,0 +1,35 @@
+{
+  "id": 0,
+  "name": "Ciclano de Souza",
+  "picture": "https://cdn.framework7.io/placeholder/people-100x100-9.jpg",
+  "messages": [
+    {
+      "type": "text",
+      "content": "Depois a gente se fala, tenho que voltar pra aula",
+      "timestamp": "21:20",
+      "status": "seen"
+    },
+    {
+      "type": "text",
+      "content": "Tranquilo, mas me manda a foto do quadro, se puder",
+      "timestamp": "21:22"
+    },
+    {
+      "type": "image",
+      "content": "https://cdn.framework7.io/placeholder/cats-200x260-4.jpg",
+      "timestamp": "21:25",
+      "status": "seen"
+    },
+    {
+      "type": "text",
+      "content": "Isso não é um quadro...",
+      "timestamp": "21:26"
+    },
+    {
+      "type": "text",
+      "content": "É pra entregar aquele trabalho quando?",
+      "timestamp": "08:45",
+      "status": "unseen"
+    }
+  ]
+}

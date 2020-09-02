@@ -2,7 +2,7 @@
   {
     "id": 0,
     "type": "person",
-    "name": "Cliclano de Souza",
+    "name": "Ciclano de Souza",
     "picture": "https://cdn.framework7.io/placeholder/people-100x100-9.jpg",
     "lastMessage": {
       "id": 0,
@@ -22,7 +22,7 @@
     }
   },
   {
-    "id": 3,
+    "id": 2,
     "type": "group",
     "name": "Inteligência Artificial 2021.1",
     "picture": null,

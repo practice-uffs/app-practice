@@ -24,7 +24,7 @@
   --f7-bars-bg-color-rgb: white;
   --f7-bars-border-color: transparent;
   --f7-bars-translucent-opacity: 0.9;
-  --f7-bars-text-color: #222;
+  --f7-bars-text-color: var(--color-1);
   --f7-bars-link-color: var(--color-2);
   --f7-tabbar-link-active-color: var(--color-1);
   --f7-tabbar-link-inactive-color: var(--color-1);

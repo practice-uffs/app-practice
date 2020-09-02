@@ -10,135 +10,104 @@
             <span class="if-not-md">Voltar</span>
           </a>
         </div>
-        <div class="title">Conversa</div>
+        <div class="title display-flex flex-direction-row justify-content-space-between">
+          {{#if chat}}
+            {{#if chat.picture}}
+              <div class="message-avatar" style="background-image:url({{chat.picture}});"></div>
+            {{else}}
+              <div class="message-avatar" style="background-image:url(static/images/default-profile-image.png);"></div>
+            {{/if}}
+            <p class="no-margin margin-left-half" style="margin-top: 4px !important;">{{chat.name}}</p>
+          {{/if}}
+        </div>
+        <div class="right">
+          <a href="#" class="link">
+            <i class="icon f7-icons">ellipsis_vertical</i>
+          </a>
+        </div>
       </div>
     </div>
     <!-- Toolbar -->
-    <div class="toolbar messagebar">
+    <div class="toolbar messagebar" data-max-height="500">
       <div class="toolbar-inner">
+        <a class="link toggle-sheet" href="#">
+          <i class="icon f7-icons">camera</i>
+        </a>
         <div class="messagebar-area">
-          <textarea class="resizable" placeholder="Message" style="max-height: 30vh;"></textarea>
-        </div><a class="link send-link" href="#"><span><i class="icon f7-icons">arrowtriangle_right</i></span></a>
+          <textarea placeholder="Digite uma mensagem"></textarea>
+        </div>
+        <a class="link" href="#"><span><i class="icon f7-icons">arrowtriangle_right</i></span></a>
       </div>
+      <div class="messagebar-sheet"></div>
     </div>
     <!-- Content -->
-    <div class="page-content messages-content">
+    <div class="page-content messages-content infinite-scroll-content infinite-scroll-top">
       <div class="messages">
-        <!-- Messages title -->
-        <div class="messages-title"><b>5 de Setembro,</b> 12:32</div>
-        <!-- Full layout sent message -->
-        <div class="message message-sent">
-          <div class="message-avatar" style="background-image:url(https://cdn.framework7.io/placeholder/people-100x100-7.jpg);"></div>
-          <div class="message-content">
-            <div class="message-name">User name</div>
-            <div class="message-header">Message header</div>
-            <div class="message-bubble">
-              <div class="message-text-header">Text header</div>
-              <div class="message-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</div>
-              <div class="message-text-footer">Text footer</div>
+        {{#if chat}}
+          {{#each chat.messages}}
+            <div class="message message-{{#if this.status}}sent{{else}}received{{/if}}">
+              <div class="message-content">
+                <div class="message-bubble">
+                  {{#js_if "this.type === 'text'"}}
+                    <div class="message-text">{{this.content}}</div>
+                  {{/js_if}}
+                  {{#js_if "this.type === 'image'"}}
+                    <div class="message-image"><img src="{{this.content}}" style="width:200px; height: 260px;"></div>
+                  {{/js_if}}
+                  <div class="message-text-footer">{{this.timestamp}}</div>
+                </div>
+                {{#if this.status}}
+                  <div class="message-footer">
+                    {{#js_if "this.status === 'seen'"}}
+                      <span><i class="icon f7-icons" style="font-size: 14px;">checkmark</i></span>
+                    {{/js_if}}
+                  </div>
+                {{/if}}
+              </div>
             </div>
-            <div class="message-footer">Message footer</div>
-          </div>
-        </div>
-        <!-- Full layout received message -->
-        <div class="message message-received">
-          <div class="message-avatar" style="background-image:url(https://cdn.framework7.io/placeholder/people-100x100-7.jpg);"></div>
-          <div class="message-content">
-            <div class="message-name">John Doe</div>
-            <div class="message-header">Message header</div>
-            <div class="message-bubble">
-              <div class="message-text-header">Text header</div>
-              <div class="message-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</div>
-              <div class="message-text-footer">Text footer</div>
-            </div>
-            <div class="message-footer">Message footer</div>
-          </div>
-        </div>
-        <!-- Messages -->
-        <div class="message message-sent">
-          <div class="message-content">
-            <div class="message-bubble">
-              <div class="message-text">Hi, Kate</div>
-            </div>
-          </div>
-        </div>
-        <div class="message message-sent">
-          <div class="message-content">
-            <div class="message-bubble">
-              <div class="message-text">How are you?</div>
-            </div>
-          </div>
-        </div>
-        <div class="message message-received">
-          <div class="message-avatar" style="background-image:url(https://cdn.framework7.io/placeholder/people-100x100-9.jpg);"></div>
-          <div class="message-content">
-            <div class="message-name">Kate</div>
-            <div class="message-bubble">
-              <div class="message-text">Hi, I am good!</div>
-            </div>
-          </div>
-        </div>
-        <div class="message message-received">
-          <div class="message-avatar" style="background-image:url(https://cdn.framework7.io/placeholder/people-100x100-7.jpg);"></div>
-          <div class="message-content">
-            <div class="message-name">Blue Ninja</div>
-            <div class="message-bubble">
-              <div class="message-text">Hi there, I am also fine, thanks! And how are you?</div>
-            </div>
-          </div>
-        </div>
-        <div class="message message-sent">
-          <div class="message-content">
-            <div class="message-bubble">
-              <div class="message-text">Hey, Blue Ninja! Glad to see you ;)</div>
-            </div>
-          </div>
-        </div>
-        <div class="message message-sent">
-          <div class="message-content">
-            <div class="message-bubble">
-              <div class="message-text">Hey, look, cutest kitten ever!</div>
-            </div>
-          </div>
-        </div>
-        <div class="message message-sent">
-          <div class="message-content">
-            <div class="message-bubble">
-              <div class="message-image"><img src="https://cdn.framework7.io/placeholder/cats-200x260-4.jpg" style="width:200px; height: 260px;"></div>
-            </div>
-          </div>
-        </div>
-        <div class="message message-received">
-          <div class="message-avatar" style="background-image:url(https://cdn.framework7.io/placeholder/people-100x100-9.jpg);"></div>
-          <div class="message-content">
-            <div class="message-name">Kate</div>
-            <div class="message-bubble">
-              <div class="message-text">Nice!</div>
-            </div>
-          </div>
-        </div>
-        <div class="message message-received">
-          <div class="message-avatar" style="background-image:url(https://cdn.framework7.io/placeholder/people-100x100-9.jpg);"></div>
-          <div class="message-content">
-            <div class="message-name">Kate</div>
-            <div class="message-bubble">
-              <div class="message-text">Like it very much!</div>
-            </div>
-          </div>
-        </div>
-        <div class="message message-received">
-          <div class="message-avatar" style="background-image:url(https://cdn.framework7.io/placeholder/people-100x100-7.jpg);"></div>
-          <div class="message-content">
-            <div class="message-name">Blue Ninja</div>
-            <div class="message-bubble">
-              <div class="message-text">Awesome!</div>
-            </div>
-          </div>
-        </div>
+          {{/each}}
+        {{/if}}
       </div>
     </div>
   </div>
 </template>
 <script>
-  export default {};
+  // Simulating phone images
+  let images = [
+    'https://cdn.framework7.io/placeholder/cats-300x300-1.jpg',
+    'https://cdn.framework7.io/placeholder/cats-200x300-2.jpg',
+    'https://cdn.framework7.io/placeholder/cats-400x300-3.jpg',
+    'https://cdn.framework7.io/placeholder/cats-300x150-4.jpg',
+    'https://cdn.framework7.io/placeholder/cats-150x300-5.jpg',
+    'https://cdn.framework7.io/placeholder/cats-300x300-6.jpg',
+    'https://cdn.framework7.io/placeholder/cats-300x300-7.jpg',
+    'https://cdn.framework7.io/placeholder/cats-200x300-8.jpg',
+    'https://cdn.framework7.io/placeholder/cats-400x300-9.jpg',
+    'https://cdn.framework7.io/placeholder/cats-300x150-10.jpg'
+  ]
+
+    export default {
+    data: function () {
+      return {
+        chat: null,
+      }
+    },
+    methods: {
+      loadData: function () {
+        var self = this;
+        var app = self.$app;
+
+        app.request.json('../static/example-data/chat' + this.$route.params.id + '.json', function (data) {
+          self.$setState({
+            chat: data,
+          });
+        });
+      }
+    },
+    on: {
+      pageInit: function (e, page) {
+        this.loadData()
+      }
+    },
+  };
 </script>
