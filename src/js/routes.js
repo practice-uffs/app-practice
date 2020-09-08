@@ -17,6 +17,7 @@ import CoinPage from '../pages/coin.f7.html';
 import NotificationsPage from '../pages/notifications.f7.html';
 import SettingsPage from '../pages/settings.f7.html';
 import AboutPage from '../pages/about.f7.html';
+  import RecordAudioPage from '../pages/record-audio.f7.html';
 
 import LoginPage from '../pages/login.f7.html';
 
@@ -155,6 +156,12 @@ var routes = [
   {
     path: '/about/',
     component: AboutPage,
+    beforeEnter: authenticated,
+  },
+
+  {
+    path: '/about/record-audio/',
+    component: RecordAudioPage,
     beforeEnter: authenticated,
   },
 

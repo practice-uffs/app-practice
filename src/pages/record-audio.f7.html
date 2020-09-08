@@ -1,0 +1,55 @@
+<template>
+  <div class="page" data-name="record-audio">
+    
+    <div class="navbar">
+      <div class="navbar-bg"></div>
+      <div class="navbar-inner sliding">
+        <div class="left">
+          <a href="#" class="link back">
+            <i class="icon icon-back"></i>
+            <span class="if-not-md">Voltar</span>
+          </a>
+        </div>
+        <div class="title">Gravação de áudio</div>
+      </div>
+    </div>
+
+    <div class="page-content">
+
+      {{#if recording}}
+
+      {{else}}
+
+      {{/if}}
+
+      {{#if records}}
+        {{#each records}}
+
+        {{/each}}
+      {{/if}}
+
+    </div>
+
+  </div>
+</template>
+<script>
+  export default {
+    data: function () {
+      return {
+        recording: false,
+        records: null,
+      }
+    },
+    methods: {
+      loadData: function () {
+        var self = this;
+        var app = self.$app;
+      }
+    },
+    on: {
+      pageInit: function(e, page) {
+        this.loadData();
+      }
+    }
+  };
+</script>
