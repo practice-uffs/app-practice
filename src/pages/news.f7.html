@@ -6,14 +6,17 @@
         <div class="card card-expandable">
           <div class="card-content">
             <div class="card-expandable-header">
-              <div class="thumb-image" style="background-image: url(https://practice.uffs.cc{{this.image.feature}});"></div>
-              <a href="#" class="link card-close card-opened-fade-in color-black" style="position: absolute; right: 15px; top: 15px">
+              <div class="thumb-image" style="background-image: url(https://practice.uffs.cc/{{this.image.feature}});"></div>
+              <a href="#" class="link card-close card-opened-fade-in" style="position: absolute; right: 15px; top: 15px">
                 <i class="icon f7-icons">multiply_circle_fill</i>
               </a>
             </div>
             <div class="card-content-padding">
-              <h4 class="no-margin margin-bottom margin-right">{{this.title}}</h4>
-              {{this.content}}
+              <h4 class="no-margin margin-bottom margin-right" style="font-weight: normal;">{{this.title}}</h4>
+              <p><small>{{this.pubDate}}</small></p><br/>
+              <div class="text-align-justify" id="new-{{@index}}">
+                {{this.content}}
+              </div>
             </div>
           </div>
         </div>
@@ -51,22 +54,24 @@
           try {
             let parser = require('fast-xml-parser');
             let obj = parser.parse(data)
-          
+            let news = obj.rss.channel.item
+
             self.$setState({
-              news: obj.rss.channel.item,
+              news: news,
             });
+            
           } catch (error) {
             console.log(error)
             app.dialog.alert("Um erro inesperado ocorreu. Tente novamente!", "")
           }
           
         });
-      }
+      },
     },
     on: {
       tabInit: function(e, page) {
         this.loadData();
-      }
+      },
     }
   };
 </script>
