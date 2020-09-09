@@ -29,24 +29,29 @@
       }
     },
     methods: {
-      loadNews: function () {
+      loadData: function () {
         var self = this;
         var app = self.$app;
 
-        app.request.json('../static/example-data/news.json', function (data) {
-          // Sleeping only to show loading effects
-          setTimeout(function () {
-            // Setting services
+        app.request.get('https://practice.uffs.cc/feed.xml', function (data) {
+          try {
+            let parser = require('fast-xml-parser');
+            let obj = parser.parse(data)
+          
             self.$setState({
-              services: data,
+              news: obj.rss.channel.item,
             });
-          }, 100);
+          } catch (error) {
+            console.log(error)
+            app.dialog.alert("Um erro inesperado ocorreu. Tente novamente!", "")
+          }
+          
         });
       }
     },
     on: {
       tabInit: function(e, page) {
-        this.loadNews();
+        this.loadData();
       }
     }
   };
