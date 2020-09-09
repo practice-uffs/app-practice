@@ -1,23 +1,37 @@
 <template>
   <div data-name="news">
 
-    {{#each services}}
-      <div class="card list demo-facebook-card list margin-bottom">
-        <a href="/news/{{this.id}}/" class="item-link new">
-          <div class="row card-header">
-            <div class="demo-facebook-avatar col-20"><img src="{{this.pictureProfile}}" width="50" height="50"/></div>
-            <div class="row col-80">
-              <div class="item-title col-100 tablet-50">{{this.author}}</div>
-              <div class="item-text">{{this.date}}</div>
+    {{#if news}}
+      {{#each news}}
+        <div class="card card-expandable">
+          <div class="card-content">
+            <div class="card-expandable-header">
+              <div class="thumb-image" style="background-image: url(https://practice.uffs.cc{{this.image.feature}});"></div>
+              <a href="#" class="link card-close card-opened-fade-in color-black" style="position: absolute; right: 15px; top: 15px">
+                <i class="icon f7-icons">multiply_circle_fill</i>
+              </a>
+            </div>
+            <div class="card-content-padding">
+              <h4 class="no-margin margin-bottom margin-right">{{this.title}}</h4>
+              {{this.content}}
             </div>
           </div>
-          <div class="card-content card-content-padding">
-            <p class="item-subtitle">{{this.description}}</p>
-            <img src="{{this.picture}}" width="100%"/>
+        </div>
+      {{/each}}
+    {{else}}
+      {{#each '01'}}
+        <div class="card skeleton-text skeleton-effect-blink">
+          <div class="card-content">
+            <div class="card-expandable-header">
+              <div class="thumb-image skeleton-block"></div>
+            </div>
+            <div class="card-content-padding">
+              <h4 class="no-margin margin-bottom margin-right">_____________________________________</h4>
+            </div>
           </div>
-        </a>
-      </div>
-    {{/each}}
+        </div>
+      {{/each}}
+    {{/if}}
 
   </div>
 </template>
