@@ -8,7 +8,6 @@ import ScanPage from '../pages/scan.f7.html';
 import ChatsPage from '../pages/chats.f7.html';
   import ChatPage from '../pages/chat.f7.html';
 import NewsPage from '../pages/news.f7.html';
-  import NewPage from '../pages/new.f7.html';
 
 import IdeasPage from '../pages/ideas.f7.html';
 import ServicesPage from '../pages/services.f7.html';
@@ -81,12 +80,6 @@ var routes = [
   {
     path: '/chats/:id/',
     component: ChatPage,
-    beforeEnter: authenticated,
-  },
-
-  {
-    path: '/news/:id/',
-    component: NewPage,
     beforeEnter: authenticated,
   },
 
