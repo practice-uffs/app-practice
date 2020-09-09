@@ -1,0 +1,117 @@
+<template>
+  <div class="page" data-name="record-audio">
+    
+    <div class="navbar">
+      <div class="navbar-bg"></div>
+      <div class="navbar-inner sliding">
+        <div class="left">
+          <a href="#" class="link back">
+            <i class="icon icon-back"></i>
+            <span class="if-not-md">Voltar</span>
+          </a>
+        </div>
+        <div class="title">Gravação de áudio</div>
+      </div>
+    </div>
+
+    <div class="page-content">
+      <!-- New record -->
+      <div class="col margin-top margin-horizontal">
+        {{#if recording}}
+          <a href="#" class="button button-raised button-fill button-record" @click="stopRecording()">
+            <i class="f7-icons" style="vertical-align: middle;">square</i>
+          </a>
+        {{else}}
+          <a href="#" class="button button-raised button-fill button-record" @click="startRecording()">
+            <i class="f7-icons" style="vertical-align: middle;">mic</i>
+          </a>
+        {{/if}}
+      </div>
+
+      <!-- Records list -->
+      <div class="block-title">
+        <h3><i class="f7-icons">film</i> Gravações</h3>
+      </div>
+      <div class="card">
+        <div class="list media-list no-margin">
+          <ul>
+            {{#if records}}
+              {{#each records}}
+                <li class="item-content">
+                  <div class="item-inner">
+                    <div class="item-title-row">
+                      <div class="item-title">{{this.title}}</div>
+                      <div class="item-after">{{this.duration}}</div>
+                    </div>
+                  </div>
+                </li>
+              {{/each}}
+            {{else}}
+              <li class="item-content">
+                <div class="item-inner">
+                  <div class="item-title">Nenhuma gravação feita</div>
+                </div>
+              </li>
+            {{/if}}
+          </ul>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</template>
+<style>
+  .button.button-record {
+    position: relative;
+    border-radius: 50%;
+    overflow: hidden;
+    width: 40vw;
+    height: 40vw;
+  }
+
+  .button.button-record i {
+    margin-top: 45%;
+  }
+</style>
+<script>
+  export default {
+    data: function () {
+      return {
+        recording: false,
+        records: null,
+      }
+    },
+    methods: {
+      loadData: function () {
+        var self = this;
+        var app = self.$app;
+      },
+      startRecording: function () {
+        var self = this;
+        var app = self.$app;
+
+        self.$setState({
+          recording: true,
+        });
+      },
+      stopRecording: function () {
+        var self = this;
+        var app = self.$app;
+
+        self.$setState({
+          recording: false,
+        });
+
+        app.dialog.prompt("Digite o título deste áudio:", "", function (title) {
+          console.log(title)
+        });
+      }
+    },
+    on: {
+      pageInit: function(e, page) {
+        this.loadData();
+      }
+    }
+  };
+</script>
