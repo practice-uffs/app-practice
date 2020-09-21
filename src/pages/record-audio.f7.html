@@ -126,17 +126,21 @@
         self.mediaRecorder.stop();
 
         app.dialog.prompt("Digite o título deste áudio:", "", function (title) {
-          console.log(title)
           let audioBlob = new Blob(self.audioChunks, { 'type': 'audio/mp3;' });
-          let audioUrl = window.URL.createObjectURL(audioBlob);
-          let audio = new Audio(audioBlob);
-          audio.play();
-          console.log(audioUrl)
+          let audioUrl = window.URL.createObjectURL(audioBlob)
+          let reader = new FileReader()
+          reader.readAsDataURL(audioBlob)
+          reader.onloadend = function() {
+            let base64data = reader.result            
+            console.log(base64data)
+            let audio = new Audio(base64data)
+            audio.play()
+          }
+          self.$setState({
+            audioChunks: [],
+          });
         });
-        self.$setState({
-          audioChunks: [],
-        });
-      }
+      },
     },
     on: {
       pageInit: function (e, page) {
