@@ -136,7 +136,7 @@
       saveRecording: function (title) {
         var self = this;
 
-        let audioBlob = new Blob(self.audioChunks, { 'type': 'audio/mp3;' });
+        let audioBlob = new Blob(self.audioChunks, { 'type': 'audio/wav;' });
         let audioUrl = window.URL.createObjectURL(audioBlob)
         let reader = new FileReader()
         reader.readAsDataURL(audioBlob)
