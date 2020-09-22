@@ -142,3 +142,16 @@ a.link {
   width: 100%;
   height: 200px;
 }
+
+.button.button-record {
+  position: relative;
+  border-radius: 50%;
+  overflow: hidden;
+  width: 100%;
+  height: 35vw;
+}
+
+.button.button-record i {
+  position: relative;
+  top: 40%;
+}

@@ -16,17 +16,26 @@
 
     <div class="page-content">
       <!-- New record -->
-      <div class="col margin-top margin-horizontal">
-        {{#if recording}}
-          <a href="#" class="button button-raised button-fill button-record" @click="stopRecording()">
-            <i class="f7-icons" style="vertical-align: middle;">square</i>
-          </a>
-        {{else}}
-          <a href="#" class="button button-raised button-fill button-record" @click="startRecording()">
-            <i class="f7-icons" style="vertical-align: middle;">mic</i>
-          </a>
-        {{/if}}
+      <div class="row margin-top margin-horizontal">
+        <div class="col-30 text-align-center">
+          <p>Texto qualquer</p>
+        </div>
+        <div class="col-40">
+          {{#if recording}}
+            <a href="#" class="button button-raised button-fill button-record" @click="stopRecording()">
+              <i class="f7-icons">square</i>
+            </a>
+          {{else}}
+            <a href="#" class="button button-raised button-fill button-record" @click="startRecording()">
+              <i class="f7-icons">mic</i>
+            </a>
+          {{/if}}
+        </div>
+        <div class="col-30 text-align-center">
+          <p>{{duration}}</p>
+        </div>
       </div>
+
 
       <!-- Records list -->
       <div class="block-title">
@@ -61,24 +70,14 @@
 
   </div>
 </template>
-<style>
-  .button.button-record {
-    position: relative;
-    border-radius: 50%;
-    overflow: hidden;
-    width: 40vw;
-    height: 40vw;
-  }
-
-  .button.button-record i {
-    margin-top: 45%;
-  }
-</style>
 <script>
   export default {
     data: function () {
       return {
         recording: false,
+        audioChunks: [],
+        mediaRecorder: null,
+        duration: "00:00:00",
         records: null,
       }
     },
@@ -87,6 +86,22 @@
         var self = this;
         var app = self.$app;
       },
+      initRecorder: function () {
+        var self = this;
+
+        navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+          let mediaRecorder = new MediaRecorder(stream);
+
+          mediaRecorder.addEventListener("dataavailable", event => {
+            console.log(event.data)
+            self.audioChunks.push(event.data);
+          });
+
+          self.$setState({
+            mediaRecorder: mediaRecorder,
+          });
+        });
+      },
       startRecording: function () {
         var self = this;
         var app = self.$app;
@@ -94,6 +109,11 @@
         self.$setState({
           recording: true,
         });
+        
+        self.$setState({
+          audioChunks: [],
+        });
+        self.mediaRecorder.start();
       },
       stopRecording: function () {
         var self = this;
@@ -103,14 +123,35 @@
           recording: false,
         });
 
+        self.mediaRecorder.stop();
+
         app.dialog.prompt("Digite o título deste áudio:", "", function (title) {
-          console.log(title)
+          self.saveRecording(title)
+
+          self.$setState({
+            audioChunks: [],
+          });
         });
+      },
+      saveRecording: function (title) {
+        var self = this;
+
+        let audioBlob = new Blob(self.audioChunks, { 'type': 'audio/wav;' });
+        let audioUrl = window.URL.createObjectURL(audioBlob)
+        let reader = new FileReader()
+        reader.readAsDataURL(audioBlob)
+        reader.onloadend = function() {
+          let base64data = reader.result            
+          console.log(base64data)
+          let audio = new Audio(base64data)
+          audio.play()
+        }
       }
     },
     on: {
-      pageInit: function(e, page) {
-        this.loadData();
+      pageInit: function (e, page) {
+        this.loadData()
+        this.initRecorder()
       }
     }
   };
