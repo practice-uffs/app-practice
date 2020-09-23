@@ -44,8 +44,8 @@
       <div class="card">
         <div class="list media-list no-margin">
           <ul>
-            {{#if records}}
-              {{#each records}}
+            {{#if recordings}}
+              {{#each recordings}}
                 <li class="item-content">
                   <div class="item-inner">
                     <div class="item-title-row">
@@ -71,6 +71,8 @@
   </div>
 </template>
 <script>
+  import { openDB, deleteDB, wrap, unwrap } from 'idb';
+
   export default {
     data: function () {
       return {
@@ -78,13 +80,31 @@
         audioChunks: [],
         mediaRecorder: null,
         duration: "00:00:00",
-        records: null,
+        recordings: null,
       }
     },
     methods: {
       loadData: function () {
         var self = this;
         var app = self.$app;
+
+        let openRequest = openDB('store', 1)
+  
+        openRequest.onsuccess = function () {
+          let store = openRequest.result;
+          const objectName = 'recording'
+          
+          if (!store.objectStoreNames.contains(objectName))
+            store.createObjectStore(objectName, storeOptions)
+
+          let transaction = store.transaction(objectName, 'read')
+          let objects = transaction.objectStore(objectName)
+          let recordings = objects.getAll()
+          console.log(recordings)
+          self.$setState({
+            recordings: recordings,
+          })
+        }
       },
       initRecorder: function () {
         var self = this;
@@ -125,7 +145,7 @@
 
         self.mediaRecorder.stop();
 
-        app.dialog.prompt("Digite o título deste áudio:", "", function (title) {
+        app.dialog.prompt("Digite o título deste áudio:", function (title) {
           self.saveRecording(title)
 
           self.$setState({
@@ -140,11 +160,32 @@
         let audioUrl = window.URL.createObjectURL(audioBlob)
         let reader = new FileReader()
         reader.readAsDataURL(audioBlob)
-        reader.onloadend = function() {
+        reader.onloadend = function () {
           let base64data = reader.result            
-          console.log(base64data)
-          let audio = new Audio(base64data)
-          audio.play()
+          
+          let openRequest = openDB('store', 1)
+          openRequest.onsuccess = function () {
+            let store = openRequest.result;
+            const objectName = 'recording'
+            const object = {
+              title: title,
+              audio: base64data
+            }
+            console.log(object)
+            
+            if (!store.objectStoreNames.contains(objectName))
+              store.createObjectStore(objectName, storeOptions)
+
+            let transaction = store.transaction(objectName, 'write')
+            let objects = transaction.objectStore(objectName)
+            let request = objects.add(object)
+            request.onsuccess = function () {
+              console.log(object)
+              self.loadData()
+            }
+          }
+          //let audio = new Audio(base64data)
+          //audio.play()
         }
       }
     },
