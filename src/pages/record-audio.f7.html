@@ -51,6 +51,11 @@
                     <div class="item-title-row">
                       <div class="item-title">{{this.title}}</div>
                     </div>
+                    <div class="item-text" style="max-height: fit-content;">
+                      <audio controls>
+                        <source src="{{this.base64}}" type="audio/wav">
+                      </audio>
+                    </div>
                   </div>
                 </li>
               {{/each}}
