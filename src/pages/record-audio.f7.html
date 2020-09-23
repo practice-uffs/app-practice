@@ -44,13 +44,12 @@
       <div class="card">
         <div class="list media-list no-margin">
           <ul>
-            {{#if recordings}}
+            {{#js_if "Array.isArray(this.recordings) && this.recordings.length > 0"}}
               {{#each recordings}}
                 <li class="item-content">
                   <div class="item-inner">
                     <div class="item-title-row">
                       <div class="item-title">{{this.title}}</div>
-                      <div class="item-after">{{this.duration}}</div>
                     </div>
                   </div>
                 </li>
@@ -61,7 +60,7 @@
                   <div class="item-title">Nenhuma gravação feita</div>
                 </div>
               </li>
-            {{/if}}
+            {{/js_if}}
           </ul>
         </div>
       </div>
@@ -71,7 +70,7 @@
   </div>
 </template>
 <script>
-  import { openDB, deleteDB, wrap, unwrap } from 'idb';
+  import { getRecordings, addRecording } from '../js/storage.js';
 
   export default {
     data: function () {
@@ -80,7 +79,7 @@
         audioChunks: [],
         mediaRecorder: null,
         duration: "00:00:00",
-        recordings: null,
+        recordings: [],
       }
     },
     methods: {
@@ -88,23 +87,9 @@
         var self = this;
         var app = self.$app;
 
-        let openRequest = openDB('store', 1)
-  
-        openRequest.onsuccess = function () {
-          let store = openRequest.result;
-          const objectName = 'recording'
-          
-          if (!store.objectStoreNames.contains(objectName))
-            store.createObjectStore(objectName, storeOptions)
-
-          let transaction = store.transaction(objectName, 'read')
-          let objects = transaction.objectStore(objectName)
-          let recordings = objects.getAll()
-          console.log(recordings)
-          self.$setState({
-            recordings: recordings,
-          })
-        }
+        self.$setState({
+          recordings: getRecordings(),
+        });
       },
       initRecorder: function () {
         var self = this;
@@ -161,30 +146,10 @@
         let reader = new FileReader()
         reader.readAsDataURL(audioBlob)
         reader.onloadend = function () {
-          let base64data = reader.result            
-          
-          let openRequest = openDB('store', 1)
-          openRequest.onsuccess = function () {
-            let store = openRequest.result;
-            const objectName = 'recording'
-            const object = {
-              title: title,
-              audio: base64data
-            }
-            console.log(object)
-            
-            if (!store.objectStoreNames.contains(objectName))
-              store.createObjectStore(objectName, storeOptions)
-
-            let transaction = store.transaction(objectName, 'write')
-            let objects = transaction.objectStore(objectName)
-            let request = objects.add(object)
-            request.onsuccess = function () {
-              console.log(object)
-              self.loadData()
-            }
-          }
-          //let audio = new Audio(base64data)
+          let base64 = reader.result            
+          addRecording(title, base64)
+          self.loadData()
+          //let audio = new Audio(base64)
           //audio.play()
         }
       }
