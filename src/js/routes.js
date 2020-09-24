@@ -8,7 +8,6 @@ import ScanPage from '../pages/scan.f7.html';
 import ChatsPage from '../pages/chats.f7.html';
   import ChatPage from '../pages/chat.f7.html';
 import NewsPage from '../pages/news.f7.html';
-  import NewPage from '../pages/new.f7.html';
 
 import IdeasPage from '../pages/ideas.f7.html';
 import ServicesPage from '../pages/services.f7.html';
@@ -17,26 +16,29 @@ import CoinPage from '../pages/coin.f7.html';
 import NotificationsPage from '../pages/notifications.f7.html';
 import SettingsPage from '../pages/settings.f7.html';
 import AboutPage from '../pages/about.f7.html';
+  import RecordAudioPage from '../pages/record-audio.f7.html';
 
 import LoginPage from '../pages/login.f7.html';
 
 import StatsPage from '../pages/stats.f7.html';
 import NotFoundPage from '../pages/404.f7.html';
 
+import { getUserCredentials } from '../js/storage.js'
+
 const authenticated = function (to, from, resolve, reject) {
-  if (localStorage.userCredentials) {
-    resolve();
+  if (getUserCredentials()) {
+    resolve()
   } else {
-    reject();
+    reject()
     this.navigate('/initial/')
   }
 }
 
 const unauthenticated = function (to, from, resolve, reject) {
-  if (!localStorage.userCredentials) {
-    resolve();
+  if (!getUserCredentials()) {
+    resolve()
   } else {
-    reject();
+    reject()
     this.navigate('/')
   }
 }
@@ -80,12 +82,6 @@ var routes = [
   {
     path: '/chats/:id/',
     component: ChatPage,
-    beforeEnter: authenticated,
-  },
-
-  {
-    path: '/news/:id/',
-    component: NewPage,
     beforeEnter: authenticated,
   },
 
@@ -155,6 +151,12 @@ var routes = [
   {
     path: '/about/',
     component: AboutPage,
+    beforeEnter: authenticated,
+  },
+
+  {
+    path: '/about/record-audio/',
+    component: RecordAudioPage,
     beforeEnter: authenticated,
   },
 

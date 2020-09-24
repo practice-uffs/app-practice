@@ -1,0 +1,169 @@
+<template>
+  <div class="page" data-name="record-audio">
+    
+    <div class="navbar">
+      <div class="navbar-bg"></div>
+      <div class="navbar-inner sliding">
+        <div class="left">
+          <a href="#" class="link back">
+            <i class="icon icon-back"></i>
+            <span class="if-not-md">Voltar</span>
+          </a>
+        </div>
+        <div class="title">Gravação de áudio</div>
+      </div>
+    </div>
+
+    <div class="page-content">
+      <!-- New record -->
+      <div class="row margin-top margin-horizontal">
+        <div class="col-30 text-align-center">
+          <p>Texto qualquer</p>
+        </div>
+        <div class="col-40">
+          {{#if recording}}
+            <a href="#" class="button button-raised button-fill button-record" @click="stopRecording()">
+              <i class="f7-icons">square</i>
+            </a>
+          {{else}}
+            <a href="#" class="button button-raised button-fill button-record" @click="startRecording()">
+              <i class="f7-icons">mic</i>
+            </a>
+          {{/if}}
+        </div>
+        <div class="col-30 text-align-center">
+          <p>{{duration}}</p>
+        </div>
+      </div>
+
+
+      <!-- Records list -->
+      <div class="block-title">
+        <h3><i class="f7-icons">film</i> Gravações</h3>
+      </div>
+      <div class="card">
+        <div class="list media-list no-margin">
+          <ul>
+            {{#js_if "Array.isArray(this.recordings) && this.recordings.length > 0"}}
+              {{#each recordings}}
+                <li class="item-content">
+                  <div class="item-inner">
+                    <div class="item-title-row">
+                      <div class="item-title">{{this.title}}</div>
+                    </div>
+                    <div class="item-text" style="max-height: fit-content;">
+                      <audio controls>
+                        <source src="{{this.base64}}" type="audio/wav">
+                      </audio>
+                    </div>
+                  </div>
+                </li>
+              {{/each}}
+            {{else}}
+              <li class="item-content">
+                <div class="item-inner">
+                  <div class="item-title">Nenhuma gravação feita</div>
+                </div>
+              </li>
+            {{/js_if}}
+          </ul>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</template>
+<script>
+  import { getRecordings, addRecording } from '../js/storage.js';
+
+  export default {
+    data: function () {
+      return {
+        recording: false,
+        audioChunks: [],
+        mediaRecorder: null,
+        duration: "00:00:00",
+        recordings: [],
+      }
+    },
+    methods: {
+      loadData: function () {
+        var self = this;
+        var app = self.$app;
+
+        self.$setState({
+          recordings: getRecordings(),
+        });
+      },
+      initRecorder: function () {
+        var self = this;
+
+        navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+          let mediaRecorder = new MediaRecorder(stream);
+
+          mediaRecorder.addEventListener("dataavailable", event => {
+            console.log(event.data)
+            self.audioChunks.push(event.data);
+          });
+
+          self.$setState({
+            mediaRecorder: mediaRecorder,
+          });
+        });
+      },
+      startRecording: function () {
+        var self = this;
+        var app = self.$app;
+
+        self.$setState({
+          recording: true,
+        });
+        
+        self.$setState({
+          audioChunks: [],
+        });
+        self.mediaRecorder.start();
+      },
+      stopRecording: function () {
+        var self = this;
+        var app = self.$app;
+
+        self.$setState({
+          recording: false,
+        });
+
+        self.mediaRecorder.stop();
+
+        app.dialog.prompt("Digite o título deste áudio:", function (title) {
+          self.saveRecording(title)
+
+          self.$setState({
+            audioChunks: [],
+          });
+        });
+      },
+      saveRecording: function (title) {
+        var self = this;
+
+        let audioBlob = new Blob(self.audioChunks, { 'type': 'audio/wav;' });
+        let audioUrl = window.URL.createObjectURL(audioBlob)
+        let reader = new FileReader()
+        reader.readAsDataURL(audioBlob)
+        reader.onloadend = function () {
+          let base64 = reader.result            
+          addRecording(title, base64)
+          self.loadData()
+          //let audio = new Audio(base64)
+          //audio.play()
+        }
+      }
+    },
+    on: {
+      pageInit: function (e, page) {
+        this.loadData()
+        this.initRecorder()
+      }
+    }
+  };
+</script>

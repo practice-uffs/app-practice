@@ -1,23 +1,40 @@
 <template>
   <div data-name="news">
 
-    {{#each services}}
-      <div class="card list demo-facebook-card list margin-bottom">
-        <a href="/news/{{this.id}}/" class="item-link new">
-          <div class="row card-header">
-            <div class="demo-facebook-avatar col-20"><img src="{{this.pictureProfile}}" width="50" height="50"/></div>
-            <div class="row col-80">
-              <div class="item-title col-100 tablet-50">{{this.author}}</div>
-              <div class="item-text">{{this.date}}</div>
+    {{#if news}}
+      {{#each news}}
+        <div class="card card-expandable">
+          <div class="card-content">
+            <div class="card-expandable-header">
+              <div class="thumb-image" style="background-image: url(https://practice.uffs.cc/{{this.image.feature}});"></div>
+              <a href="#" class="link card-close card-opened-fade-in" style="position: absolute; right: 15px; top: 15px">
+                <i class="icon f7-icons">multiply_circle_fill</i>
+              </a>
+            </div>
+            <div class="card-content-padding">
+              <h4 class="no-margin margin-bottom margin-right" style="font-weight: normal;">{{this.title}}</h4>
+              <p><small>{{this.pubDate}}</small></p><br/>
+              <div class="block text-align-justify">
+                {{this.content}}
+              </div>
             </div>
           </div>
-          <div class="card-content card-content-padding">
-            <p class="item-subtitle">{{this.description}}</p>
-            <img src="{{this.picture}}" width="100%"/>
+        </div>
+      {{/each}}
+    {{else}}
+      {{#each '01'}}
+        <div class="card skeleton-text skeleton-effect-blink">
+          <div class="card-content">
+            <div class="card-expandable-header">
+              <div class="thumb-image skeleton-block"></div>
+            </div>
+            <div class="card-content-padding">
+              <h4 class="no-margin margin-bottom margin-right">_____________________________________</h4>
+            </div>
           </div>
-        </a>
-      </div>
-    {{/each}}
+        </div>
+      {{/each}}
+    {{/if}}
 
   </div>
 </template>
@@ -29,25 +46,54 @@
       }
     },
     methods: {
-      loadNews: function () {
+      processHTML: function (input) {
+        var e = document.createElement('div');
+        e.innerHTML = input;
+        return e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue;
+      },
+      processDate: function (date) {
+        date = date.split(" ")
+        date = new Date(Date.parse(date[2] + " " + date[1] + ", " + date[3]))
+
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        date = date.toLocaleDateString(undefined, options)
+
+        return date.toUpperCase().charAt(0).toUpperCase() + date.slice(1)
+      },
+      loadData: function () {
         var self = this;
         var app = self.$app;
 
-        app.request.json('../static/example-data/news.json', function (data) {
-          // Sleeping only to show loading effects
-          setTimeout(function () {
-            // Setting services
+        app.request.get('https://practice.uffs.cc/feed.xml', function (data) {
+          try {
+            let xml_parser = require('fast-xml-parser');
+            let obj = xml_parser.parse(data)
+            let news = obj.rss.channel.item
+
+            for (let i = 0; i < news.length; i++) {
+              const content = self.processHTML(news[i].content)
+              news[i].content = content
+
+              const pubDate = self.processDate(news[i].pubDate)
+              news[i].pubDate = pubDate
+            }
+
             self.$setState({
-              services: data,
+              news: news,
             });
-          }, 100);
+            
+          } catch (error) {
+            console.log(error)
+            app.dialog.alert("Um erro inesperado ocorreu. Tente novamente!", "")
+          }
+          
         });
-      }
+      },
     },
     on: {
       tabInit: function(e, page) {
-        this.loadNews();
-      }
+        this.loadData();
+      },
     }
   };
 </script>

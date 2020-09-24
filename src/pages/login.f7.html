@@ -57,6 +57,8 @@
 </template>
 
 <script>
+  import { setUserCredentials } from '../js/storage.js'
+
   export default {
     methods: {
       login: function () {
@@ -73,7 +75,7 @@
           .then(function (res) {
             app.dialog.close()
             if (res) {
-              localStorage['userCredentials'] = res
+              setUserCredentials(res)
               app.view.main.router.navigate('/')
             } 
             else
