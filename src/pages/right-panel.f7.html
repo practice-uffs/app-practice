@@ -83,14 +83,16 @@
   </div>
 </template>
 <script>
+  import { removeUserCredentials } from '../js/storage.js'
+
   export default {
     methods: {
       logout: function () {
         let self = this
         let app = self.$app
 
-        app.dialog.confirm("Tem certeza que deseja sair?", "", function () {
-          localStorage.removeItem('userCredentials')
+        app.dialog.confirm("Tem certeza que deseja sair?", function () {
+          removeUserCredentials()
           app.view.main.router.navigate('/')
         });
       }

@@ -23,20 +23,22 @@ import LoginPage from '../pages/login.f7.html';
 import StatsPage from '../pages/stats.f7.html';
 import NotFoundPage from '../pages/404.f7.html';
 
+import { getUserCredentials } from '../js/storage.js'
+
 const authenticated = function (to, from, resolve, reject) {
-  if (localStorage.userCredentials) {
-    resolve();
+  if (getUserCredentials()) {
+    resolve()
   } else {
-    reject();
+    reject()
     this.navigate('/initial/')
   }
 }
 
 const unauthenticated = function (to, from, resolve, reject) {
-  if (!localStorage.userCredentials) {
-    resolve();
+  if (!getUserCredentials()) {
+    resolve()
   } else {
-    reject();
+    reject()
     this.navigate('/')
   }
 }
