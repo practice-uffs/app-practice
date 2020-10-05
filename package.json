@@ -33,6 +33,7 @@
     "framework7": "^5.7.0",
     "framework7-icons": "^3.0.0",
     "idb": "^5.0.6",
+    "qr-scanner": "^1.2.0",
     "template7": "^1.4.2",
     "uuid": "^8.0.0"
   },
