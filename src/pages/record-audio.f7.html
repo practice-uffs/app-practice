@@ -101,7 +101,6 @@
         self.$setState({
           recordings: getRecordings(),
         })
-        console.log(getRecordings())
       },
       initRecorder: function () {
         var self = this;
@@ -171,12 +170,27 @@
           self.loadData()
         })
       },
+      removeRecorder: function () {
+        var self = this
+
+        if(self.mediaRecorder.state === 'recording')
+          self.mediaRecorder.stop()
+        
+        delete self.mediaRecorder
+
+        self.$setState({
+          mediaRecorder: null,
+        });
+      },
     },
     on: {
-      pageInit: function (e, page) {
+      pageInit: function (e) {
         this.loadData()
         this.initRecorder()
-      }
+      },
+      pageBeforeOut: function (e) {
+        this.removeRecorder()
+      },
     }
   };
 </script>
