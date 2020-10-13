@@ -42,4 +42,8 @@ const addRecording = function (recording) {
   localStorage['recordings'] = JSON.stringify(recordings)
 }
 
-export { getRecordings, addRecording }
+const removeRecordings = function () {
+  localStorage.removeItem('recordings')
+}
+
+export { getRecordings, addRecording, removeRecordings }
