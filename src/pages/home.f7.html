@@ -17,32 +17,53 @@
     <!-- Tabs toolbar -->
     <div class="toolbar tabbar toolbar-bottom">
       <div class="toolbar-inner">
-        <a href="/" class="tab-link" data-route-tab-id="news"><i class="f7-icons">doc</i></a>
-        <a href="/env/" class="tab-link" data-route-tab-id="env"><i class="f7-icons">book</i></a>
-        <a href="/scan/" class="tab-link" data-route-tab-id="scan"><i class="f7-icons">viewfinder</i></a>
-        <a href="/chats/" class="tab-link" data-route-tab-id="chats"><i class="f7-icons">bubble_left </i></a>
-        <a href="/profile/" class="tab-link" data-route-tab-id="profile"><i class="f7-icons">person</i></a>
+        {{#if isEnabled.newsPage}}
+          <a href="/" class="tab-link" data-route-tab-id="news"><i class="f7-icons">doc</i></a>
+        {{/if}}
+        {{#if isEnabled.envPage}}
+          <a href="/env/" class="tab-link" data-route-tab-id="env"><i class="f7-icons">book</i></a>
+        {{/if}}
+        {{#if isEnabled.scanPage}}
+          <a href="/scan/" class="tab-link" data-route-tab-id="scan"><i class="f7-icons">viewfinder</i></a>
+        {{/if}}
+        {{#if isEnabled.chatsPage}}
+          <a href="/chats/" class="tab-link" data-route-tab-id="chats"><i class="f7-icons">bubble_left </i></a>
+        {{/if}}
+        {{#if isEnabled.profilePage}}
+          <a href="/profile/" class="tab-link" data-route-tab-id="profile"><i class="f7-icons">person</i></a>
+        {{/if}}
       </div>
     </div>
     <!-- Tabs content -->
     <div class="tabs-animated-wrap">
       <div class="tabs tabs-routable">
-        <div class="page-content tab" id="news"></div>
-        <div class="page-content tab" id="env"></div>
-        <div class="page-content tab" id="scan"></div>
-        <div class="page-content tab" id="chats"></div>
-        <div class="page-content tab" id="profile"></div>
+        {{#if isEnabled.newsPage}}
+          <div class="page-content tab" id="news"></div>
+        {{/if}}
+        {{#if isEnabled.envPage}}
+          <div class="page-content tab" id="env"></div>
+        {{/if}}
+        {{#if isEnabled.scanPage}}
+          <div class="page-content tab" id="scan"></div>
+        {{/if}}
+        {{#if isEnabled.chatsPage}}
+          <div class="page-content tab" id="chats"></div>
+        {{/if}}
+        {{#if isEnabled.profilePage}}
+          <div class="page-content tab" id="profile"></div>
+        {{/if}}
       </div>
     </div>
   </div>
 </template>
 
 <script>
-  import IsEnabled from '../js/isenabled.js';
+  import IsEnabled from '../js/isenabled.js'
 
   export default {
     data: function() {
       return {
+        isEnabled: IsEnabled,
         appShareURL: 'https://uffs.cc/app-covid-chapeco',
         installAd: function() {
           return !window.matchMedia('(display-mode: standalone)').matches && IsEnabled.installAd;
