@@ -255,6 +255,4 @@ var routes = routes.filter(function (el) {
   return el != null
 })
 
-console.log(routes)
-
 export default routes
