@@ -1,13 +1,13 @@
 import InitialPage from '../pages/initial.f7.html';
-import MainPage from '../pages/main.f7.html';
+import HomePage from '../pages/home.f7.html';
 import RightPanelPage from '../pages/right-panel.f7.html';
 
-import HomePage from '../pages/home.f7.html';
 import EnvPage from '../pages/env.f7.html';
 import ScanPage from '../pages/scan.f7.html';
 import ChatsPage from '../pages/chats.f7.html';
   import ChatPage from '../pages/chat.f7.html';
 import NewsPage from '../pages/news.f7.html';
+import ProfilePage from '../pages/profile.f7.html';
 
 import IdeasPage from '../pages/ideas.f7.html';
 import ServicesPage from '../pages/services.f7.html';
@@ -48,13 +48,13 @@ var routes = [
   
   {
     path: '/',
-    component: MainPage,
+    component: HomePage,
     beforeEnter: authenticated,
     tabs: [
       {
         path: '/',
-        id: 'home',
-        component: HomePage,
+        id: 'news',
+        component: NewsPage,
       },
       {
         path: '/env/',
@@ -72,9 +72,9 @@ var routes = [
         component: ChatsPage,
       },
       {
-        path: '/news/',
-        id: 'news',
-        component: NewsPage,
+        path: '/profile/',
+        id: 'profile',
+        component: ProfilePage,
       },
     ],
   },

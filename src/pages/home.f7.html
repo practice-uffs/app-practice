@@ -1,108 +1,143 @@
 <template>
-  <div data-name="home">
-    <!-- Profile -->
-    <div class="margin-horizontal">
-      <div class="card circle" style="margin-right: 25%; margin-left: 25%;">
-        <img src="static/images/default-profile-image.png">
-      </div>
-      <div class="text-align-center">
-        <h2 class="no-margin">Fulano da Silva</h2>
-        <small>fulano.silva</small>
-      </div>
-    </div>
-    <!-- Scores -->
-    <div class="card margin-top text-align-center">
-      <div class="card-content card-content-padding row">
-        <!-- Coins/Diamonds -->
-        <div class="col-50">
-          <i class="f7-icons">suit_diamond</i>
-          <p class="no-margin">128</p>
+  <div class="page" data-name="home">
+    <!-- Navbar -->
+    <div class="navbar">
+      <div class="navbar-bg"></div>
+      <div class="navbar-inner">
+        <div class="left">
+          <img src="static/images/logo/icon.svg" class="navbar-icon">
+          <div class="title">PRACTICE</div>
         </div>
-        <!-- Reputation -->
-        <div class="col-50">
-          <i class="f7-icons">star</i>
-          <p class="no-margin">256</p>
+
+        <div class="right">
+          <a href="/right-panel/" class="link"><i class="f7-icons">bars</i></a>
         </div>
       </div>
     </div>
-    <!-- Achievements -->
-    <div class="block-title">Conquistas</div>
-    <div class="card">
-      <div class="card-content">
-        <div class="list media-list">
-          <ul>
-            <li>
-              <div class="item-content">
-                <div class="item-media"><i class="f7-icons">book</i></div>
-                <div class="item-inner">
-                  <div class="item-title-row">
-                    <div class="item-title">Bibliotecário</div>
-                    <div class="item-after">15/20</div>
-                  </div>
-                  <div class="item-subtitle">Nível 3</div>
-                  <div class="progressbar" data-progress="75"><span></span></div>
-                  <div class="item-text">Pegue 20 livros da biblioteca</div>
-                </div>
-              </div>
-            </li>
-            <li>
-              <div class="item-content">
-                <div class="item-media"><i class="f7-icons">square_pencil</i></div>
-                <div class="item-inner">
-                  <div class="item-title-row">
-                    <div class="item-title">Estudioso</div>
-                    <div class="item-after">25/50</div>
-                  </div>
-                  <div class="item-subtitle">Nível 4</div>
-                  <div class="progressbar" data-progress="50"><span></span></div>
-                  <div class="item-text">Participe de monitorias 50 vezes</div>
-              </div>
-            </li>
-            <li>
-              <div class="item-content">
-                <div class="item-media"><i class="f7-icons">rocket</i></div>
-                <div class="item-inner">
-                  <div class="item-title-row">
-                    <div class="item-title">Cientista</div>
-                    <div class="item-after">6/10</div>
-                  </div>
-                  <div class="item-subtitle">Nível 3</div>
-                  <div class="progressbar" data-progress="60"><span></span></div>
-                  <div class="item-text">Publique 10 trabalhos no SEPE</div>
-                </div>
-              </div>
-            </li>
-            <li>
-              <div class="item-content">
-                <div class="item-media"><i class="f7-icons">chart_bar</i></div>
-                <div class="item-inner">
-                  <div class="item-title-row">
-                    <div class="item-title">Contribuidor</div>
-                    <div class="item-after">1/5</div>
-                  </div>
-                  <div class="item-subtitle">Nível 1</div>
-                  <div class="progressbar" data-progress="20"><span></span></div>
-                  <div class="item-text">Responda 5 pesquisas de TCC</div>
-                </div>
-              </div>
-            </li>
-            <li>
-              <div class="item-content">
-                <div class="item-media"><i class="f7-icons">guitars</i></div>
-                <div class="item-inner">
-                  <div class="item-title-row">
-                    <div class="item-title">Musicista</div>
-                    <div class="item-after">6/10</div>
-                  </div>
-                  <div class="item-subtitle">Nível 2</div>
-                  <div class="progressbar" data-progress="60"><span></span></div>
-                  <div class="item-text">Participe de 10 intervalos musicais</div>
-                </div>
-              </div>
-            </li>
-          </ul>
-        </div>
+    <!-- Tabs toolbar -->
+    <div class="toolbar tabbar toolbar-bottom">
+      <div class="toolbar-inner">
+        <a href="/" class="tab-link" data-route-tab-id="news"><i class="f7-icons">doc</i></a>
+        <a href="/env/" class="tab-link" data-route-tab-id="env"><i class="f7-icons">book</i></a>
+        <a href="/scan/" class="tab-link" data-route-tab-id="scan"><i class="f7-icons">viewfinder</i></a>
+        <a href="/chats/" class="tab-link" data-route-tab-id="chats"><i class="f7-icons">bubble_left </i></a>
+        <a href="/profile/" class="tab-link" data-route-tab-id="profile"><i class="f7-icons">person</i></a>
+      </div>
+    </div>
+    <!-- Tabs content -->
+    <div class="tabs-animated-wrap">
+      <div class="tabs tabs-routable">
+        <div class="page-content tab" id="news"></div>
+        <div class="page-content tab" id="env"></div>
+        <div class="page-content tab" id="scan"></div>
+        <div class="page-content tab" id="chats"></div>
+        <div class="page-content tab" id="profile"></div>
       </div>
     </div>
   </div>
 </template>
+
+<script>
+  import IsEnabled from '../js/isenabled.js';
+
+  export default {
+    data: function() {
+      return {
+        appShareURL: 'https://uffs.cc/app-covid-chapeco',
+        installAd: function() {
+          return !window.matchMedia('(display-mode: standalone)').matches && IsEnabled.installAd;
+        },
+        shareAd: IsEnabled.shareAd
+      }
+    },
+
+    on: {
+      pageInit: function(e, page) {
+        var app = this.$app;
+        var link = document.getElementById('link-install-app');
+
+        if(!link) {
+          return;
+        }
+
+        window.addEventListener('appinstalled', function(evt) {
+          app.toast.create({
+            text: 'Pronto! Adicionado à tela inicial.',
+            closeTimeout: 3000,
+          }).open();
+
+          link.style.display = 'none';
+        });
+      }
+    },
+
+    methods: {
+      install: function() {
+        var app = this.$app;
+        var deferredPrompt = app.deferredInstallPrompt;
+
+        if(!deferredPrompt) {
+          app.toast.create({
+            text: 'Não foi possível adicionar à tela inicial.',
+            closeTimeout: 2000,
+          }).open();
+          return;
+        }
+
+        // Show the install prompt
+        deferredPrompt.prompt();
+
+        // Wait for the user to respond to the prompt
+        deferredPrompt.userChoice.then(function(choiceResult) {
+          if (choiceResult.outcome === 'accepted') {
+            console.log('User accepted the install prompt');
+          } else {
+            console.log('User dismissed the install prompt');
+          }
+        });
+      },
+
+      shareToClipboard: function() {
+        var app = this.$app;
+
+        if(!navigator.clipboard) {
+          return;
+        }
+
+        navigator.clipboard.writeText(this.appShareURL).then(function() {
+          // success
+          app.toast.create({
+            text: 'Link copiado! Basta colar ele agora, ex. no WhatsApp.',
+            closeTimeout: 5000,
+          }).open();
+        }, function() {
+          // fail
+          app.toast.create({
+            text: 'Hum, algum problema aconteceu. Desculpe.',
+            closeTimeout: 2000,
+          }).open();
+        });
+      },
+
+      share: function() {
+        var app = this.$app;
+
+        app.toast.create({
+          text: this.appShareURL,
+          closeTimeout: 6000,
+        }).open();
+
+        if(!navigator.share) {
+          this.shareToClipboard();
+          return;
+        }
+
+        navigator.share({
+          title: 'PRACTICE',
+          text: 'Toda inovação do PRACTICE ao alcance de um toque!',
+          url: this.appShareURL,
+        });
+      }
+    }
+  }
+</script>
