@@ -21,7 +21,7 @@ var app = new Framework7({
   root: '#app', // App root element
   component: App, // App main component
   id: 'cc.uffs.practice', // App bundle ID
-  name: 'practice', // App name
+  name: 'PRACTICE', // App name
   theme: 'auto', // Automatic theme detection
 
   // App routes

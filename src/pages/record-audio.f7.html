@@ -44,13 +44,17 @@
       <div class="card">
         <div class="list media-list no-margin">
           <ul>
-            {{#if records}}
-              {{#each records}}
+            {{#js_if "Array.isArray(this.recordings) && this.recordings.length > 0"}}
+              {{#each recordings}}
                 <li class="item-content">
                   <div class="item-inner">
                     <div class="item-title-row">
                       <div class="item-title">{{this.title}}</div>
-                      <div class="item-after">{{this.duration}}</div>
+                    </div>
+                    <div class="item-text" style="max-height: fit-content;">
+                      <audio controls>
+                        <source src="{{this.base64}}" type="audio/wav">
+                      </audio>
                     </div>
                   </div>
                 </li>
@@ -61,9 +65,15 @@
                   <div class="item-title">Nenhuma gravação feita</div>
                 </div>
               </li>
-            {{/if}}
+            {{/js_if}}
           </ul>
         </div>
+      </div>
+
+      <div class="block">
+        <button class="col button button-raised button-fill color-red" @click="removeRecordings()">
+          <i class="f7-icons">trash</i> Deletar todas as gravações
+        </button>
       </div>
 
     </div>
@@ -71,6 +81,8 @@
   </div>
 </template>
 <script>
+  import { getRecordings, addRecording, removeRecordings } from '../js/storage.js';
+
   export default {
     data: function () {
       return {
@@ -78,13 +90,17 @@
         audioChunks: [],
         mediaRecorder: null,
         duration: "00:00:00",
-        records: null,
+        recordings: [],
       }
     },
     methods: {
       loadData: function () {
-        var self = this;
-        var app = self.$app;
+        var self = this
+        var app = self.$app
+
+        self.$setState({
+          recordings: getRecordings(),
+        })
       },
       initRecorder: function () {
         var self = this;
@@ -93,7 +109,6 @@
           let mediaRecorder = new MediaRecorder(stream);
 
           mediaRecorder.addEventListener("dataavailable", event => {
-            console.log(event.data)
             self.audioChunks.push(event.data);
           });
 
@@ -103,8 +118,8 @@
         });
       },
       startRecording: function () {
-        var self = this;
-        var app = self.$app;
+        var self = this
+        var app = self.$app
 
         self.$setState({
           recording: true,
@@ -113,11 +128,11 @@
         self.$setState({
           audioChunks: [],
         });
-        self.mediaRecorder.start();
+        self.mediaRecorder.start()
       },
       stopRecording: function () {
-        var self = this;
-        var app = self.$app;
+        var self = this
+        var app = self.$app
 
         self.$setState({
           recording: false,
@@ -125,7 +140,7 @@
 
         self.mediaRecorder.stop();
 
-        app.dialog.prompt("Digite o título deste áudio:", "", function (title) {
+        app.dialog.prompt("Digite o título deste áudio:", function (title) {
           self.saveRecording(title)
 
           self.$setState({
@@ -140,19 +155,42 @@
         let audioUrl = window.URL.createObjectURL(audioBlob)
         let reader = new FileReader()
         reader.readAsDataURL(audioBlob)
-        reader.onloadend = function() {
-          let base64data = reader.result            
-          console.log(base64data)
-          let audio = new Audio(base64data)
-          audio.play()
+        reader.onloadend = function () {
+          let base64 = reader.result
+          addRecording({title: title, base64: base64})
+          self.loadData()
         }
-      }
+      },
+      removeRecordings: function () {
+        var self = this
+        var app = self.$app
+
+        app.dialog.confirm("Tem certeza que deseja deletar todas as gravações?", function () {
+          removeRecordings()
+          self.loadData()
+        })
+      },
+      removeRecorder: function () {
+        var self = this
+
+        if(self.mediaRecorder.state === 'recording')
+          self.mediaRecorder.stop()
+        
+        delete self.mediaRecorder
+
+        self.$setState({
+          mediaRecorder: null,
+        });
+      },
     },
     on: {
-      pageInit: function (e, page) {
+      pageInit: function (e) {
         this.loadData()
         this.initRecorder()
-      }
+      },
+      pageBeforeOut: function (e) {
+        this.removeRecorder()
+      },
     }
   };
 </script>

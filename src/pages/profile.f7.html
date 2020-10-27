@@ -1,81 +1,108 @@
 <template>
-  <div class="page" data-name="profile">
-
-    <div class="navbar">
-        <div class="navbar-bg"></div>
-        <div class="navbar-inner sliding">
-            <div class="left">
-                <a href="#" class="link back">
-                    <i class="icon icon-back"></i>
-                    <span class="if-not-md">Voltar</span>
-                </a>
-            </div>
-            <div class="title">Perfil</div>
-        </div>
+  <div data-name="profile">
+    <!-- Profile -->
+    <div class="margin-horizontal">
+      <div class="card circle" style="margin-right: 25%; margin-left: 25%;">
+        <img src="static/images/default-profile-image.png">
+      </div>
+      <div class="text-align-center">
+        <h2 class="no-margin">Fulano da Silva</h2>
+        <small>fulano.silva</small>
+      </div>
     </div>
-
-    <div class="page-content text-align-center">
-        <div class="content-block margin-top">
-            <div class="row padding-top">
-                <div class="col-100 tablet-50"><img src="static/icons/128x128.png"/></div>
-                <div class="col-100 tablet-50">
-                    <h2 class="no-margin-bottom">Cleisson Vieira Raimundi</h2>
-                    <h3 class="no-margin-top">cleisson.raimundi</h3>
-                </div>
-            </div>
+    <!-- Scores -->
+    <div class="card margin-top text-align-center">
+      <div class="card-content card-content-padding row">
+        <!-- Coins/Diamonds -->
+        <div class="col-50">
+          <i class="f7-icons">suit_diamond</i>
+          <p class="no-margin">128</p>
         </div>
-
-        <div class="content-block margin-top">
-            <div class="row">
-                <div class="col-33">
-                    <img src="static/images/information.svg" class="menu-grid__icon">
-                    <div class="row">
-                        <div class="col-100 tablet-50">Título</div>
-                        <div class="col-100 tablet-50">Subtitulo</div>
-                    </div>
-                </div>
-                <div class="col-33">
-                    <img src="static/images/information.svg" class="menu-grid__icon">
-                    <div class="row">
-                        <div class="col-100 tablet-50">Título</div>
-                        <div class="col-100 tablet-50">Subtitulo</div>
-                    </div>
-                </div>
-                <div class="col-33">
-                    <img src="static/images/information.svg" class="menu-grid__icon">
-                    <div class="row">
-                        <div class="col-100 tablet-50">Título</div>
-                        <div class="col-100 tablet-50">Subtitulo</div>
-                    </div>
-                </div>
-            </div>
+        <!-- Reputation -->
+        <div class="col-50">
+          <i class="f7-icons">star</i>
+          <p class="no-margin">256</p>
         </div>
-
-        <div class="content-block margin-top margin-left padding text-align-left">
-            <div class="row margin-top">
-                <div class="col-100 tablet-50">Linhas com apenas textos, ilustrando</div>
-                <div class="col-100 tablet-50">Linhas com apenas textos, ilustrando</div>
-            </div>
-            <div class="row margin-top">
-                <div class="col-10"><img src="static/images/information.svg" class="material-icons"></div>
-                <div class="col-90">Imagem/Ícone com frase ao lado</div>
-            </div>
-            <div class="row margin-top">
-                <div class="col-100 tablet-50">Linhas com apenas textos, ilustrando</div>
-                <div class="col-100 tablet-50">Linhas com apenas textos, ilustrando</div>
-                <div class="col-100 tablet-50">Linhas com apenas textos, ilustrando</div>
-            </div>
-            <div class="row margin-top">
-                <div class="col-10"><img src="static/images/information.svg" class="material-icons"></div>
-                <div class="col-90">Imagem/Ícone com frase ao lado</div>
-            </div>
-        </div>
-
+      </div>
     </div>
-
+    <!-- Achievements -->
+    <div class="block-title">Conquistas</div>
+    <div class="card">
+      <div class="card-content">
+        <div class="list media-list">
+          <ul>
+            <li>
+              <div class="item-content">
+                <div class="item-media"><i class="f7-icons">book</i></div>
+                <div class="item-inner">
+                  <div class="item-title-row">
+                    <div class="item-title">Bibliotecário</div>
+                    <div class="item-after">15/20</div>
+                  </div>
+                  <div class="item-subtitle">Nível 3</div>
+                  <div class="progressbar" data-progress="75"><span></span></div>
+                  <div class="item-text">Pegue 20 livros da biblioteca</div>
+                </div>
+              </div>
+            </li>
+            <li>
+              <div class="item-content">
+                <div class="item-media"><i class="f7-icons">square_pencil</i></div>
+                <div class="item-inner">
+                  <div class="item-title-row">
+                    <div class="item-title">Estudioso</div>
+                    <div class="item-after">25/50</div>
+                  </div>
+                  <div class="item-subtitle">Nível 4</div>
+                  <div class="progressbar" data-progress="50"><span></span></div>
+                  <div class="item-text">Participe de monitorias 50 vezes</div>
+              </div>
+            </li>
+            <li>
+              <div class="item-content">
+                <div class="item-media"><i class="f7-icons">rocket</i></div>
+                <div class="item-inner">
+                  <div class="item-title-row">
+                    <div class="item-title">Cientista</div>
+                    <div class="item-after">6/10</div>
+                  </div>
+                  <div class="item-subtitle">Nível 3</div>
+                  <div class="progressbar" data-progress="60"><span></span></div>
+                  <div class="item-text">Publique 10 trabalhos no SEPE</div>
+                </div>
+              </div>
+            </li>
+            <li>
+              <div class="item-content">
+                <div class="item-media"><i class="f7-icons">chart_bar</i></div>
+                <div class="item-inner">
+                  <div class="item-title-row">
+                    <div class="item-title">Contribuidor</div>
+                    <div class="item-after">1/5</div>
+                  </div>
+                  <div class="item-subtitle">Nível 1</div>
+                  <div class="progressbar" data-progress="20"><span></span></div>
+                  <div class="item-text">Responda 5 pesquisas de TCC</div>
+                </div>
+              </div>
+            </li>
+            <li>
+              <div class="item-content">
+                <div class="item-media"><i class="f7-icons">guitars</i></div>
+                <div class="item-inner">
+                  <div class="item-title-row">
+                    <div class="item-title">Musicista</div>
+                    <div class="item-after">6/10</div>
+                  </div>
+                  <div class="item-subtitle">Nível 2</div>
+                  <div class="progressbar" data-progress="60"><span></span></div>
+                  <div class="item-text">Participe de 10 intervalos musicais</div>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
-
-<script>
-  export default {};
-</script>
