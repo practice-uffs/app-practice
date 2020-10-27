@@ -60,16 +60,6 @@
               </a>
             </li>
           {{/if}}
-          {{#if isEnabled.settingsPage}}
-            <li>
-              <a href="/settings/" class="item-link item-content">
-                <div class="item-media"><i class="f7-icons">gear_alt</i></div>
-                <div class="item-inner">
-                  <div class="item-title">Configurações</div>
-                </div>
-              </a>
-            </li>
-          {{/if}}
           {{#if isEnabled.aboutPage}}
             <li>
               <a href="/about/" class="item-link item-content">
@@ -80,15 +70,25 @@
               </a>
             </li>
           {{/if}}
-            <hr class="no-margin" />
+          {{#if isEnabled.settingsPage}}
             <li>
-              <a href="#" class="item-link item-content" @click="logout()">
-                <div class="item-media"><i class="f7-icons">square_arrow_left</i></div>
+              <a href="/settings/" class="item-link item-content">
+                <div class="item-media"><i class="f7-icons">gear_alt</i></div>
                 <div class="item-inner">
-                  <div class="item-title">Sair</div>
+                  <div class="item-title">Configurações</div>
                 </div>
               </a>
             </li>
+          {{/if}}
+          <hr class="no-margin" />
+          <li>
+            <a href="#" class="item-link item-content" @click="logout()">
+              <div class="item-media"><i class="f7-icons">square_arrow_left</i></div>
+              <div class="item-inner">
+                <div class="item-title">Sair</div>
+              </div>
+            </a>
+          </li>
         </ul>
       </div>
     </div>
