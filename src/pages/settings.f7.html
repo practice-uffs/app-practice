@@ -14,10 +14,40 @@
     </div>
 
     <div class="page-content">
-      <h3>Settings: T001-A</h3>
+      <div class="block-title">
+        <h3><i class="f7-icons">archivebox</i> Armazenamento</h3>
+      </div>
+      <div class="list no-hairlines-md">
+        <ul>
+          <li>
+            <a href="#" class="item-link item-content" @click='clearStorage()'>
+              <div class="item-media">
+                <i class="f7-icons">trash</i>
+              </div>
+              <div class="item-inner">
+                Limpar armazenamento
+              </div>
+            </a>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </template>
 <script>
-  export default {};
+  import storage from '../js/storage.js'
+
+  export default {
+    methods: {
+      clearStorage: function () {
+        let self = this
+        let app = self.$app
+
+        app.dialog.confirm("Tem certeza que deseja limpar todos os dados salvos?", function () {
+          storage.clearAll()
+          app.view.main.router.navigate('/')
+        })
+      },
+    },
+  }
 </script>

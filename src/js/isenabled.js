@@ -28,7 +28,7 @@ var IsEnabled = {
 
     notificationsPage: false,
 
-    settingsPage: false,
+    settingsPage: true,
 
     aboutPage: true,
     recordAudioPage: true,
