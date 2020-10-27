@@ -3,7 +3,7 @@ const storage = {
 
   // LocalStorage methods
 
-  removeAll: function () {
+  clearAll: function () {
     localStorage.clear()
   },
   
@@ -18,7 +18,7 @@ const storage = {
     localStorage['userCredentials'] = userCredentials
   },
   
-  removeUserCredentials: function () {
+  clearUserCredentials: function () {
     localStorage.removeItem('userCredentials')
   },
   
@@ -49,7 +49,7 @@ const storage = {
     localStorage['recordings'] = JSON.stringify(recordings)
   },
   
-  removeRecordings: function () {
+  clearRecordings: function () {
     localStorage.removeItem('recordings')
   },
 
