@@ -3,15 +3,8 @@
     <div class="block card no-margin no-padding">
       <div class="row">
 
-        <div class="col-100 tablet-50" style="background-color: #969ea7; height: 360px;">
-          <h3>Scan: S001-A (essa área será para uso da câmera)</h3>
-
-          <div class="fab fab-right-bottom color-white" style="margin-bottom: 170px;">
-            <a href="#">
-              <i class="icon material-icons md-only color-black">archive</i>
-            </a>
-          </div>
-
+        <div class="col-100 tablet-50">
+          <video id="scanner-video" style="width: 100%;"></video>
         </div>
 
         <div class="col-100 tablet-50 margin-horizontal">
@@ -35,5 +28,40 @@
 </template>
 
 <script>
+  import QrScanner from 'qr-scanner'
+  //QrScanner.WORKER_PATH = '../js/qr-scanner-worker.min.js';
 
+  export default {
+    data: function () {
+      return {
+        scan: null
+      }
+    },
+    methods: {
+      initScan: function () {
+        let self = this
+        let app = self.$app
+
+        if(QrScanner.hasCamera()){
+          const scannerVideo = document.getElementById('scanner-video')
+          const scanner = new QrScanner(scannerVideo, function (result){
+            console.log('decoded qr code:', result)
+          });
+          
+          self.$setState({
+            scanner: scanner,
+          });
+
+          self.scanner.start()
+        }
+        else
+          app.dialog.alert('Nenhuma câmera encontrada!')
+      }
+    },
+    on: {
+      tabInit: function(e, page) {
+        this.initScan()
+      },
+    }
+  }
 </script>

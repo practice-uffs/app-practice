@@ -70,12 +70,18 @@
         </div>
       </div>
 
+      <div class="block">
+        <button class="col button button-raised button-fill color-red" @click="removeRecordings()">
+          <i class="f7-icons">trash</i> Deletar todas as gravações
+        </button>
+      </div>
+
     </div>
 
   </div>
 </template>
 <script>
-  import { getRecordings, addRecording } from '../js/storage.js';
+  import storage from '../js/storage.js';
 
   export default {
     data: function () {
@@ -89,12 +95,12 @@
     },
     methods: {
       loadData: function () {
-        var self = this;
-        var app = self.$app;
+        var self = this
+        var app = self.$app
 
         self.$setState({
-          recordings: getRecordings(),
-        });
+          recordings: storage.getRecordings(),
+        })
       },
       initRecorder: function () {
         var self = this;
@@ -103,7 +109,6 @@
           let mediaRecorder = new MediaRecorder(stream);
 
           mediaRecorder.addEventListener("dataavailable", event => {
-            console.log(event.data)
             self.audioChunks.push(event.data);
           });
 
@@ -113,8 +118,8 @@
         });
       },
       startRecording: function () {
-        var self = this;
-        var app = self.$app;
+        var self = this
+        var app = self.$app
 
         self.$setState({
           recording: true,
@@ -123,11 +128,11 @@
         self.$setState({
           audioChunks: [],
         });
-        self.mediaRecorder.start();
+        self.mediaRecorder.start()
       },
       stopRecording: function () {
-        var self = this;
-        var app = self.$app;
+        var self = this
+        var app = self.$app
 
         self.$setState({
           recording: false,
@@ -151,19 +156,41 @@
         let reader = new FileReader()
         reader.readAsDataURL(audioBlob)
         reader.onloadend = function () {
-          let base64 = reader.result            
-          addRecording(title, base64)
+          let base64 = reader.result
+          storage.addRecording({title: title, base64: base64})
           self.loadData()
-          //let audio = new Audio(base64)
-          //audio.play()
         }
-      }
+      },
+      removeRecordings: function () {
+        var self = this
+        var app = self.$app
+
+        app.dialog.confirm("Tem certeza que deseja deletar todas as gravações?", function () {
+          storage.clearRecordings()
+          self.loadData()
+        })
+      },
+      removeRecorder: function () {
+        var self = this
+
+        if(self.mediaRecorder.state === 'recording')
+          self.mediaRecorder.stop()
+        
+        delete self.mediaRecorder
+
+        self.$setState({
+          mediaRecorder: null,
+        });
+      },
     },
     on: {
-      pageInit: function (e, page) {
+      pageInit: function (e) {
         this.loadData()
         this.initRecorder()
-      }
+      },
+      pageBeforeOut: function (e) {
+        this.removeRecorder()
+      },
     }
   };
 </script>

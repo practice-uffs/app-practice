@@ -20,54 +20,66 @@
 
       <div class="list no-margin">
         <ul>
-          <li>
-            <a href="/ideas/" class="item-link item-content">
-              <div class="item-media padding-top"><i class="f7-icons">lightbulb</i></div>
-              <div class="item-inner">
-                <div class="item-title">Ideias</div>
-              </div>
-            </a>
-          </li>
-          <li>
-            <a href="/services/" class="item-link item-content">
-              <div class="item-media"><i class="f7-icons">wrench</i></div>
-              <div class="item-inner">
-                <div class="item-title">Serviços</div>
-              </div>
-            </a>
-          </li>
-          <li>
-            <a href="/coin/" class="item-link item-content">
-              <div class="item-media"><i class="f7-icons">money_dollar_circle</i></div>
-              <div class="item-inner">
-                <div class="item-title">PR Coin</div>
-              </div>
-            </a>
-          </li>
-          <li>
-            <a href="/notifications/" class="item-link item-content">
-              <div class="item-media"><i class="f7-icons">bell</i></div>
-              <div class="item-inner">
-                <div class="item-title">Notificações</div>
-              </div>
-            </a>
-          </li>
-          <li>
-            <a href="/settings/" class="item-link item-content">
-              <div class="item-media"><i class="f7-icons">gear_alt</i></div>
-              <div class="item-inner">
-                <div class="item-title">Configurações</div>
-              </div>
-            </a>
-          </li>
-          <li>
-            <a href="/about/" class="item-link item-content">
-              <div class="item-media"><i class="f7-icons">info_circle</i></div>
-              <div class="item-inner">
-                <div class="item-title">Sobre</div>
-              </div>
-            </a>
-          </li>
+          {{#if isEnabled.ideasPage}}
+            <li>
+              <a href="/ideas/" class="item-link item-content">
+                <div class="item-media padding-top"><i class="f7-icons">lightbulb</i></div>
+                <div class="item-inner">
+                  <div class="item-title">Ideias</div>
+                </div>
+              </a>
+            </li>
+          {{/if}}
+          {{#if isEnabled.servicesPage}}
+            <li>
+              <a href="/services/" class="item-link item-content">
+                <div class="item-media"><i class="f7-icons">wrench</i></div>
+                <div class="item-inner">
+                  <div class="item-title">Serviços</div>
+                </div>
+              </a>
+            </li>
+          {{/if}}
+          {{#if isEnabled.coinPage}}
+            <li>
+              <a href="/coin/" class="item-link item-content">
+                <div class="item-media"><i class="f7-icons">money_dollar_circle</i></div>
+                <div class="item-inner">
+                  <div class="item-title">PR Coin</div>
+                </div>
+              </a>
+            </li>
+          {{/if}}
+          {{#if isEnabled.notificationsPage}}
+            <li>
+              <a href="/notifications/" class="item-link item-content">
+                <div class="item-media"><i class="f7-icons">bell</i></div>
+                <div class="item-inner">
+                  <div class="item-title">Notificações</div>
+                </div>
+              </a>
+            </li>
+          {{/if}}
+          {{#if isEnabled.aboutPage}}
+            <li>
+              <a href="/about/" class="item-link item-content">
+                <div class="item-media"><i class="f7-icons">info_circle</i></div>
+                <div class="item-inner">
+                  <div class="item-title">Sobre</div>
+                </div>
+              </a>
+            </li>
+          {{/if}}
+          {{#if isEnabled.settingsPage}}
+            <li>
+              <a href="/settings/" class="item-link item-content">
+                <div class="item-media"><i class="f7-icons">gear_alt</i></div>
+                <div class="item-inner">
+                  <div class="item-title">Configurações</div>
+                </div>
+              </a>
+            </li>
+          {{/if}}
           <hr class="no-margin" />
           <li>
             <a href="#" class="item-link item-content" @click="logout()">
@@ -83,16 +95,22 @@
   </div>
 </template>
 <script>
-  import { removeUserCredentials } from '../js/storage.js'
+  import storage from '../js/storage.js'
+  import IsEnabled from '../js/isenabled.js'
 
   export default {
+    data: function() {
+      return {
+        isEnabled: IsEnabled,
+      }
+    },
     methods: {
       logout: function () {
         let self = this
         let app = self.$app
 
         app.dialog.confirm("Tem certeza que deseja sair?", function () {
-          removeUserCredentials()
+          storage.clearUserCredentials()
           app.view.main.router.navigate('/')
         });
       }
