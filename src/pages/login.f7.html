@@ -57,7 +57,7 @@
 </template>
 
 <script>
-  import { setUserCredentials } from '../js/storage.js'
+  import storage from '../js/storage.js'
 
   export default {
     methods: {
@@ -75,7 +75,7 @@
           .then(function (res) {
             app.dialog.close()
             if (res) {
-              setUserCredentials(res)
+              storage.setUserCredentials(res)
               app.view.main.router.navigate('/')
             } 
             else

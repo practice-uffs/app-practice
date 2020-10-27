@@ -81,7 +81,7 @@
   </div>
 </template>
 <script>
-  import { getRecordings, addRecording, removeRecordings } from '../js/storage.js';
+  import storage from '../js/storage.js';
 
   export default {
     data: function () {
@@ -99,7 +99,7 @@
         var app = self.$app
 
         self.$setState({
-          recordings: getRecordings(),
+          recordings: storage.getRecordings(),
         })
       },
       initRecorder: function () {
@@ -157,7 +157,7 @@
         reader.readAsDataURL(audioBlob)
         reader.onloadend = function () {
           let base64 = reader.result
-          addRecording({title: title, base64: base64})
+          storage.addRecording({title: title, base64: base64})
           self.loadData()
         }
       },
@@ -166,7 +166,7 @@
         var app = self.$app
 
         app.dialog.confirm("Tem certeza que deseja deletar todas as gravações?", function () {
-          removeRecordings()
+          storage.removeRecordings()
           self.loadData()
         })
       },
