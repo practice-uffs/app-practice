@@ -14,11 +14,28 @@
     </div>
 
     <div class="page-content">
+      
       <div class="block-title">
         <h3><i class="f7-icons">archivebox</i> Armazenamento</h3>
       </div>
-      <div class="list no-hairlines-md">
+      <div class="list">
         <ul>
+          <li>
+            <div class="item-content">
+              <div class="item-media">
+                <i class="f7-icons">cloud_download</i>
+              </div>
+              <div class="item-inner">
+                <div class="item-title">Baixar dados para acesso offline</div>
+                <div class="item-after">
+                  <label class="toggle toggle-init color-blue">
+                    <input type="checkbox" checked>
+                    <span class="toggle-icon"></span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </li>
           <li>
             <a href="#" class="item-link item-content" @click='clearStorage()'>
               <div class="item-media">
@@ -31,7 +48,31 @@
           </li>
         </ul>
       </div>
-    </div>
+
+      <div class="block-title">
+        <h3><i class="f7-icons">chevron_left_slash_chevron_right</i> Desenvolvimento</h3>
+      </div>
+      <div class="list">
+        <ul>
+          <li>
+            <div class="item-content">
+              <div class="item-media">
+                <i class="f7-icons">exclamationmark_triangle</i>
+              </div>
+              <div class="item-inner">
+                <div class="item-title">Funcionalidades em versão beta</div>
+                <div class="item-after">
+                  <label class="toggle toggle-init color-blue">
+                    <input type="checkbox">
+                    <span class="toggle-icon"></span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+  
   </div>
 </template>
 <script>
