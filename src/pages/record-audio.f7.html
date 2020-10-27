@@ -166,7 +166,7 @@
         var app = self.$app
 
         app.dialog.confirm("Tem certeza que deseja deletar todas as gravações?", function () {
-          storage.removeRecordings()
+          storage.clearRecordings()
           self.loadData()
         })
       },
