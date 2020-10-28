@@ -76,8 +76,6 @@
   </div>
 </template>
 <script>
-  import storage from '../js/storage.js'
-
   export default {
     data: function () {
       return {
@@ -92,7 +90,7 @@
         var app = self.$app
 
         self.$setState({
-          settings: storage.getSettings(),
+          settings: app.storage.getSettings(),
         })
       },
 
@@ -101,16 +99,17 @@
         let app = self.$app
 
         app.dialog.confirm("Tem certeza que deseja limpar todos os dados salvos?", function () {
-          storage.clearAll()
+          app.storage.clearAll()
           app.view.main.router.navigate('/')
         })
       },
 
       toogleCheckbox: function (e) {
         let self = this
+        let app = self.$app
         
         self.settings[e.target.name] = !self.settings[e.target.name]
-        storage.setSettings(self.settings)
+        app.storage.setSettings(self.settings)
       }
 
     },
