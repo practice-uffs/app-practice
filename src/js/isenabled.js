@@ -17,6 +17,10 @@ var IsEnabled = {
 
     envPage: false,
 
+    profilePage: false,
+    scores: false,
+    achievements: false,
+
     servicesPage: false,
     servicePage: false,
 
