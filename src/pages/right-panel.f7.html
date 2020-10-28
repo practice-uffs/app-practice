@@ -95,7 +95,6 @@
   </div>
 </template>
 <script>
-  import storage from '../js/storage.js'
   import IsEnabled from '../js/isenabled.js'
 
   export default {
@@ -110,7 +109,7 @@
         let app = self.$app
 
         app.dialog.confirm("Tem certeza que deseja sair?", function () {
-          storage.clearUserCredentials()
+          app.storage.clearUserCredentials()
           app.view.main.router.navigate('/')
         });
       }
