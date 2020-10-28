@@ -106,8 +106,11 @@
         })
       },
 
-      toogleCheckbox: function (e, f) {
-        console.log(e.target.name)
+      toogleCheckbox: function (e) {
+        let self = this
+        
+        self.settings[e.target.name] = !self.settings[e.target.name]
+        storage.setSettings(self.settings)
       }
 
     },
