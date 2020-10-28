@@ -29,7 +29,7 @@
                 <div class="item-title">Baixar dados para acesso offline</div>
                 <div class="item-after">
                   <label class="toggle toggle-init color-blue">
-                    <input type="checkbox" checked>
+                    <input type="checkbox" name="offlineStorage" {{#if settings}}{{#if settings.offlineStorage}}checked{{/if}}{{/if}} @change="toogleCheckbox">
                     <span class="toggle-icon"></span>
                   </label>
                 </div>
@@ -37,7 +37,7 @@
             </div>
           </li>
           <li>
-            <a href="#" class="item-link item-content" @click='clearStorage()'>
+            <a href="#" class="item-link item-content" @click="clearStorage">
               <div class="item-media">
                 <i class="f7-icons">trash</i>
               </div>
@@ -63,7 +63,7 @@
                 <div class="item-title">Funcionalidades em versão beta</div>
                 <div class="item-after">
                   <label class="toggle toggle-init color-blue">
-                    <input type="checkbox">
+                    <input type="checkbox" name="betaFunctions" {{#if settings}}{{#if settings.betaFunctions}}checked{{/if}}{{/if}} @change="toogleCheckbox">
                     <span class="toggle-icon"></span>
                   </label>
                 </div>
@@ -79,7 +79,23 @@
   import storage from '../js/storage.js'
 
   export default {
+    data: function () {
+      return {
+        settings: null
+      }
+    },
+
     methods: {
+
+      loadData: function () {
+        var self = this
+        var app = self.$app
+
+        self.$setState({
+          settings: storage.getSettings(),
+        })
+      },
+
       clearStorage: function () {
         let self = this
         let app = self.$app
@@ -89,6 +105,18 @@
           app.view.main.router.navigate('/')
         })
       },
+
+      toogleCheckbox: function (e, f) {
+        console.log(e.target.name)
+      }
+
     },
+    on: {
+
+      pageInit: function () {
+        this.loadData()
+      },
+
+    }
   }
 </script>
