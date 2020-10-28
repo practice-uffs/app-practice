@@ -10,10 +10,10 @@
         </div>
         <div class="col-65 margin-top padding-top">
           <div class="row">
-            <div class="col-100"><strong>Fulano da Silva</strong></div>
+            <div class="col-100"><strong>{{name}}</strong></div>
           </div>
           <div class="row">
-            <div class="col-100">fulano.silva</div>
+            <div class="col-100">{{username}}</div>
           </div>
         </div>
       </div>
@@ -100,10 +100,26 @@
   export default {
     data: function() {
       return {
+        name: null,
+        username: null,
+        email: null,
         isEnabled: IsEnabled,
       }
     },
+
     methods: {
+      loadUser: function () {
+        let self = this
+        let app = self.$app
+
+        const user = app.storage.getUserCredentials().user
+        self.$setState({
+          name: user.name,
+          username: user.username,
+          email: user.email,
+        })
+      },
+
       logout: function () {
         let self = this
         let app = self.$app
@@ -112,7 +128,13 @@
           app.storage.clearUserCredentials()
           app.view.main.router.navigate('/')
         });
+      },
+    },
+
+    on: {
+      panelInit: function () {
+        this.loadUser()
       }
     }
-  };
+  }
 </script>
