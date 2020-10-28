@@ -2,8 +2,8 @@
 const storage = {
 
   init: function (app) {
-    this.app = app
-    app.storage = this
+    storage.app = app
+    app.storage = storage
   },
 
   // LocalStorage methods
@@ -35,6 +35,19 @@ const storage = {
   },
   
   // User credentials methods
+
+  authorizeUser: function (user, password, callback=()=>{}) {
+    storage.app.request.promise.post('https://api.uffs.cc/v0/auth', {user: user, password: password})
+    .then(function (res) {
+      let data = JSON.parse(res.data)
+      if (data.token) {
+        storage.setUserCredentials(data)
+        callback(true)
+      }
+      else
+        callback(false)
+    })
+  },
 
   getUserCredentials: function () {
     let userCredentials = localStorage['userCredentials']
