@@ -51,11 +51,15 @@ const storage = {
 
   getUserCredentials: function () {
     let userCredentials = localStorage['userCredentials']
+
+    if (userCredentials)
+      userCredentials = JSON.parse(userCredentials)
+      
     return userCredentials
   },
 
   setUserCredentials: function (userCredentials) {
-    localStorage['userCredentials'] = userCredentials
+    localStorage['userCredentials'] = JSON.stringify(userCredentials)
   },
   
   clearUserCredentials: function () {
