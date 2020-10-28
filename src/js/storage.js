@@ -1,6 +1,11 @@
 
 const storage = {
 
+  init: function (app) {
+    this.app = app
+    app.storage = this
+  },
+
   // LocalStorage methods
 
   clearAll: function () {
