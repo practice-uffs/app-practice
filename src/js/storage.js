@@ -24,6 +24,10 @@ const storage = {
     
     return settings
   },
+
+  setSettings: function (settings) {
+    localStorage['settings'] = JSON.stringify(settings)
+  },
   
   // User credentials methods
 
