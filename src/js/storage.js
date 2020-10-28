@@ -6,6 +6,24 @@ const storage = {
   clearAll: function () {
     localStorage.clear()
   },
+
+  // Settings methods
+
+  getSettings: function () {
+    let settings = localStorage['settings']
+
+    if (!settings) {
+      settings = {
+        offlineStorage: true,
+        betaFunctions: false
+      }
+      localStorage['settings'] = JSON.stringify(settings)
+    }
+    else
+      settings = JSON.parse(settings)
+    
+    return settings
+  },
   
   // User credentials methods
 
