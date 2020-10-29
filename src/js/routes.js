@@ -58,28 +58,28 @@ const homePageRoute = function () {
       id: 'news',
       component: NewsPage,
     })
-  
+
   if (IsEnabled.envPage)
     tabs.push({
       path: '/env/',
       id: 'env',
       component: EnvPage,
     })
-  
+
   if (IsEnabled.scanPage)
     tabs.push({
       path: '/scan/',
       id: 'scan',
       component: ScanPage,
     })
-  
+
   if (IsEnabled.chatsPage)
     tabs.push({
       path: '/chats/',
       id: 'chats',
       component: ChatsPage,
     })
-  
+
   if (IsEnabled.profilePage)
     tabs.push({
       path: '/profile/',
