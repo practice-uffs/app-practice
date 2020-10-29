@@ -80,6 +80,16 @@
               </a>
             </li>
           {{/if}}
+          {{#if isEnabled.taskCompletedPage}}
+            <li>
+              <a href="/task-completed/" class="item-link item-content">
+                <div class="item-media"><i class="f7-icons">info_circle</i></div>
+                <div class="item-inner">
+                  <div class="item-title">Modal issue 56</div>
+                </div>
+              </a>
+            </li>
+          {{/if}}
             <hr class="no-margin" />
             <li>
               <a href="#" class="item-link item-content" @click="logout()">
