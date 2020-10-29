@@ -1,0 +1,47 @@
+name: deploy-qa
+on:
+  push:
+    branches:    
+      - dev
+env:
+  PROD_HOST: qa.app.practice.uffs.cc
+  PROD_WEB_DIRECTORY: /home/ccuffspracticeapp/qa.app.practice.uffs.cc/www
+  PROD_WEB_URL: https://qa.app.practice.uffs.cc
+jobs:
+  build-deploy-audit:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - uses: actions/setup-node@v1
+      with:
+        node-version: '8.10'
+    - run: sudo npm install -g --unsafe-perm --quiet --no-progress framework7-cli
+    - name: Extract branch name
+      shell: bash
+      run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+      id: extract_branch
+    - name: Prepare deploy server
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ env.PROD_HOST }}
+        username: ${{ secrets.PROD_USERNAME }}
+        password: ${{ secrets.PROD_PASSWORD }}
+        script: |
+          mkdir -p ${{ env.PROD_WEB_DIRECTORY }}
+    - name: Build app
+      run: |
+        sudo npm install --quiet --no-progress
+        sudo npm run build-dev
+    - name: Deploy app via SSH
+      uses: garygrossgarten/github-action-scp@release
+      with:
+        local: ${{ github.workspace }}/www
+        remote: ${{ env.PROD_WEB_DIRECTORY }}/
+        host: ${{ env.PROD_HOST }}
+        username: ${{ secrets.PROD_USERNAME }}
+        password: ${{ secrets.PROD_PASSWORD }}
+    - name: Summary
+      run: |
+        echo "Summary:"
+        echo " Live URL: ${{ env.PROD_WEB_URL }}"
