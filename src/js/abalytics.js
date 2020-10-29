@@ -53,7 +53,7 @@ var Abalytics = {
             data: data
         };
 
-        app.request.post('https://app-covid.api.uffs.cc/v0/analytics', payload, function (data) {
+        app.request.post('https://api.app.practice.uffs.cc/v0/analytics', payload, function (data) {
             console.debug('[Abalytics] Payload sent to API: ', data);
         });
     },
