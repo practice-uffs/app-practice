@@ -57,8 +57,6 @@
 </template>
 
 <script>
-  import { setUserCredentials } from '../js/storage.js'
-
   export default {
     methods: {
       login: function () {
@@ -68,21 +66,15 @@
         app.dialog.preloader("Carregando")
         let loginData = app.form.convertToData('#login-form')
 
-        // Sleeping only to show loading effects
-        setTimeout(function () {
-          // Request login
-          app.request.promise.get('../static/example-data/login.json', loginData)
-          .then(function (res) {
-            app.dialog.close()
-            if (res) {
-              setUserCredentials(res)
-              app.view.main.router.navigate('/')
-            } 
-            else
-              app.dialog.alert('Credenciais incorretas, tente novamente!')
-          })
-        }, 1000)
+        // Request login
+        app.storage.authorizeUser(loginData.iduffs, loginData.password, function (res) {
+          app.dialog.close()
+          if (res)
+            app.view.main.router.navigate('/')
+          else
+            app.dialog.alert('Credenciais incorretas, tente novamente!')
+        })
       }
     }
-  };
+  }
 </script>

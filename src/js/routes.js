@@ -22,14 +22,13 @@ import TaskCompletedPage from '../pages/task-completed.f7.html';
 
 import LoginPage from '../pages/login.f7.html';
 
-import StatsPage from '../pages/stats.f7.html';
 import NotFoundPage from '../pages/404.f7.html';
 
-import { getUserCredentials } from '../js/storage.js'
+import storage from '../js/storage.js'
 import IsEnabled from './isenabled';
 
 const authenticated = function (to, from, resolve, reject) {
-  if (getUserCredentials()) {
+  if (storage.getUserCredentials()) {
     resolve()
   } else {
     reject()
@@ -38,7 +37,7 @@ const authenticated = function (to, from, resolve, reject) {
 }
 
 const unauthenticated = function (to, from, resolve, reject) {
-  if (!getUserCredentials()) {
+  if (!storage.getUserCredentials()) {
     resolve()
   } else {
     reject()

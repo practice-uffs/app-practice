@@ -81,8 +81,6 @@
   </div>
 </template>
 <script>
-  import { getRecordings, addRecording, removeRecordings } from '../js/storage.js';
-
   export default {
     data: function () {
       return {
@@ -95,15 +93,15 @@
     },
     methods: {
       loadData: function () {
-        var self = this
-        var app = self.$app
+        let self = this
+        let app = self.$app
 
         self.$setState({
-          recordings: getRecordings(),
+          recordings: app.storage.getRecordings(),
         })
       },
       initRecorder: function () {
-        var self = this;
+        let self = this;
 
         navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
           let mediaRecorder = new MediaRecorder(stream);
@@ -118,8 +116,8 @@
         });
       },
       startRecording: function () {
-        var self = this
-        var app = self.$app
+        let self = this
+        let app = self.$app
 
         self.$setState({
           recording: true,
@@ -131,8 +129,8 @@
         self.mediaRecorder.start()
       },
       stopRecording: function () {
-        var self = this
-        var app = self.$app
+        let self = this
+        let app = self.$app
 
         self.$setState({
           recording: false,
@@ -149,7 +147,8 @@
         });
       },
       saveRecording: function (title) {
-        var self = this;
+        let self = this
+        let app = self.$app
 
         let audioBlob = new Blob(self.audioChunks, { 'type': 'audio/wav;' });
         let audioUrl = window.URL.createObjectURL(audioBlob)
@@ -157,21 +156,21 @@
         reader.readAsDataURL(audioBlob)
         reader.onloadend = function () {
           let base64 = reader.result
-          addRecording({title: title, base64: base64})
+          app.storage.addRecording({title: title, base64: base64})
           self.loadData()
         }
       },
       removeRecordings: function () {
-        var self = this
-        var app = self.$app
+        let self = this
+        let app = self.$app
 
         app.dialog.confirm("Tem certeza que deseja deletar todas as gravações?", function () {
-          removeRecordings()
+          app.storage.clearRecordings()
           self.loadData()
         })
       },
       removeRecorder: function () {
-        var self = this
+        let self = this
 
         if(self.mediaRecorder.state === 'recording')
           self.mediaRecorder.stop()

@@ -10,10 +10,10 @@
         </div>
         <div class="col-65 margin-top padding-top">
           <div class="row">
-            <div class="col-100"><strong>Fulano da Silva</strong></div>
+            <div class="col-100"><strong>{{name}}</strong></div>
           </div>
           <div class="row">
-            <div class="col-100">fulano.silva</div>
+            <div class="col-100">{{username}}</div>
           </div>
         </div>
       </div>
@@ -60,16 +60,6 @@
               </a>
             </li>
           {{/if}}
-          {{#if isEnabled.settingsPage}}
-            <li>
-              <a href="/settings/" class="item-link item-content">
-                <div class="item-media"><i class="f7-icons">gear_alt</i></div>
-                <div class="item-inner">
-                  <div class="item-title">Configurações</div>
-                </div>
-              </a>
-            </li>
-          {{/if}}
           {{#if isEnabled.aboutPage}}
             <li>
               <a href="/about/" class="item-link item-content">
@@ -91,39 +81,71 @@
             </li>
           {{/if}}
             <hr class="no-margin" />
+          {{#if isEnabled.settingsPage}}
             <li>
-              <a href="#" class="item-link item-content" @click="logout()">
-                <div class="item-media"><i class="f7-icons">square_arrow_left</i></div>
+              <a href="/settings/" class="item-link item-content">
+                <div class="item-media"><i class="f7-icons">gear_alt</i></div>
                 <div class="item-inner">
-                  <div class="item-title">Sair</div>
+                  <div class="item-title">Configurações</div>
                 </div>
               </a>
             </li>
+          {{/if}}
+          <hr class="no-margin" />
+          <li>
+            <a href="#" class="item-link item-content" @click="logout()">
+              <div class="item-media"><i class="f7-icons">square_arrow_left</i></div>
+              <div class="item-inner">
+                <div class="item-title">Sair</div>
+              </div>
+            </a>
+          </li>
         </ul>
       </div>
     </div>
   </div>
 </template>
 <script>
-  import { removeUserCredentials } from '../js/storage.js'
   import IsEnabled from '../js/isenabled.js'
 
   export default {
     data: function() {
       return {
+        name: null,
+        username: null,
+        email: null,
         isEnabled: IsEnabled,
       }
     },
+
     methods: {
+      loadUser: function () {
+        let self = this
+        let app = self.$app
+
+        const user = app.storage.getUserCredentials().user
+        self.$setState({
+          name: user.name,
+          username: user.username,
+          email: user.email,
+        })
+      },
+
       logout: function () {
         let self = this
         let app = self.$app
 
         app.dialog.confirm("Tem certeza que deseja sair?", function () {
-          removeUserCredentials()
+          app.storage.clearUserCredentials()
           app.view.main.router.navigate('/')
         });
+      },
+    },
+
+    on: {
+      panelInit: function () {
+        this.loadUser()
       }
     }
-  };
+  }
 </script>
