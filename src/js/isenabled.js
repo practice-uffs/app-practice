@@ -17,6 +17,10 @@ var IsEnabled = {
 
     envPage: false,
 
+    profilePage: false,
+    scores: false,
+    achievements: false,
+
     servicesPage: false,
     servicePage: false,
 
@@ -28,7 +32,7 @@ var IsEnabled = {
 
     notificationsPage: false,
 
-    settingsPage: false,
+    settingsPage: true,
 
     aboutPage: true,
     recordAudioPage: true,

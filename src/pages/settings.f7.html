@@ -14,10 +14,111 @@
     </div>
 
     <div class="page-content">
-      <h3>Settings: T001-A</h3>
-    </div>
+      
+      <div class="block-title">
+        <h3><i class="f7-icons">archivebox</i> Armazenamento</h3>
+      </div>
+      <div class="list">
+        <ul>
+          <li>
+            <div class="item-content">
+              <div class="item-media">
+                <i class="f7-icons">cloud_download</i>
+              </div>
+              <div class="item-inner">
+                <div class="item-title">Baixar dados para acesso offline</div>
+                <div class="item-after">
+                  <label class="toggle toggle-init color-blue">
+                    <input type="checkbox" name="offlineStorage" {{#if settings}}{{#if settings.offlineStorage}}checked{{/if}}{{/if}} @change="toogleCheckbox">
+                    <span class="toggle-icon"></span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li>
+            <a href="#" class="item-link item-content" @click="clearStorage">
+              <div class="item-media">
+                <i class="f7-icons">trash</i>
+              </div>
+              <div class="item-inner">
+                Limpar armazenamento
+              </div>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="block-title">
+        <h3><i class="f7-icons">chevron_left_slash_chevron_right</i> Desenvolvimento</h3>
+      </div>
+      <div class="list">
+        <ul>
+          <li>
+            <div class="item-content">
+              <div class="item-media">
+                <i class="f7-icons">exclamationmark_triangle</i>
+              </div>
+              <div class="item-inner">
+                <div class="item-title">Funcionalidades em versão beta</div>
+                <div class="item-after">
+                  <label class="toggle toggle-init color-blue">
+                    <input type="checkbox" name="betaFunctions" {{#if settings}}{{#if settings.betaFunctions}}checked{{/if}}{{/if}} @change="toogleCheckbox">
+                    <span class="toggle-icon"></span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+  
   </div>
 </template>
 <script>
-  export default {};
+  export default {
+    data: function () {
+      return {
+        settings: null
+      }
+    },
+
+    methods: {
+
+      loadData: function () {
+        var self = this
+        var app = self.$app
+
+        self.$setState({
+          settings: app.storage.getSettings(),
+        })
+      },
+
+      clearStorage: function () {
+        let self = this
+        let app = self.$app
+
+        app.dialog.confirm("Tem certeza que deseja limpar todos os dados salvos?", function () {
+          app.storage.clearAll()
+          app.view.main.router.navigate('/')
+        })
+      },
+
+      toogleCheckbox: function (e) {
+        let self = this
+        let app = self.$app
+        
+        self.settings[e.target.name] = !self.settings[e.target.name]
+        app.storage.setSettings(self.settings)
+      }
+
+    },
+    on: {
+
+      pageInit: function () {
+        this.loadData()
+      },
+
+    }
+  }
 </script>

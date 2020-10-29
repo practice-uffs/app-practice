@@ -1,49 +1,102 @@
-// User credentials
 
-const getUserCredentials = function () {
-  let userCredentials = localStorage['userCredentials']
-  return userCredentials
-}
+const storage = {
 
-const setUserCredentials = function (userCredentials) {
-  localStorage['userCredentials'] = userCredentials
-}
+  init: function (app) {
+    storage.app = app
+    app.storage = storage
+  },
 
-const removeUserCredentials = function () {
-  localStorage.removeItem('userCredentials')
-}
+  // LocalStorage methods
 
-export { getUserCredentials, setUserCredentials, removeUserCredentials }
+  clearAll: function () {
+    localStorage.clear()
+  },
 
-// Audio recording methods
+  // Settings methods
 
-const getRecordings = function () {
-  let recordings = localStorage['recordings']
+  getSettings: function () {
+    let settings = localStorage['settings']
 
-  if (!recordings) {
-    recordings = []
-    localStorage['recordings'] = JSON.stringify(recordings)
-  }
-  else
-    recordings = JSON.parse(recordings)
+    if (!settings) {
+      settings = {
+        offlineStorage: true,
+        betaFunctions: false
+      }
+      localStorage['settings'] = JSON.stringify(settings)
+    }
+    else
+      settings = JSON.parse(settings)
+    
+    return settings
+  },
+
+  setSettings: function (settings) {
+    localStorage['settings'] = JSON.stringify(settings)
+  },
   
-  return recordings
+  // User credentials methods
+
+  authorizeUser: function (user, password, callback=()=>{}) {
+    storage.app.request.promise.post('https://api.uffs.cc/v0/auth', {user: user, password: password})
+    .then(function (res) {
+      let data = JSON.parse(res.data)
+      if (data.token) {
+        storage.setUserCredentials(data)
+        callback(true)
+      }
+      else
+        callback(false)
+    })
+  },
+
+  getUserCredentials: function () {
+    let userCredentials = localStorage['userCredentials']
+
+    if (userCredentials)
+      userCredentials = JSON.parse(userCredentials)
+      
+    return userCredentials
+  },
+
+  setUserCredentials: function (userCredentials) {
+    localStorage['userCredentials'] = JSON.stringify(userCredentials)
+  },
+  
+  clearUserCredentials: function () {
+    localStorage.removeItem('userCredentials')
+  },
+  
+  // Audio recording methods
+  
+  getRecordings: function () {
+    let recordings = localStorage['recordings']
+  
+    if (!recordings) {
+      recordings = []
+      localStorage['recordings'] = JSON.stringify(recordings)
+    }
+    else
+      recordings = JSON.parse(recordings)
+    
+    return recordings
+  },
+  
+  addRecording: function (recording) {
+    let recordings = localStorage['recordings']
+  
+    if (!recordings)
+      recordings = []
+  
+    recordings = JSON.parse(recordings)
+    recordings.push(recording)
+  
+    localStorage['recordings'] = JSON.stringify(recordings)
+  },
+  
+  clearRecordings: function () {
+    localStorage.removeItem('recordings')
+  },
+
 }
 
-const addRecording = function (recording) {
-  let recordings = localStorage['recordings']
-
-  if (!recordings)
-    recordings = []
-
-  recordings = JSON.parse(recordings)
-  recordings.push(recording)
-
-  localStorage['recordings'] = JSON.stringify(recordings)
-}
-
-const removeRecordings = function () {
-  localStorage.removeItem('recordings')
-}
-
-export { getRecordings, addRecording, removeRecordings }
+export default storage
