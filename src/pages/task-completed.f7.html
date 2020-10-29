@@ -1,0 +1,88 @@
+<template>
+  <div class="page" data-name="task-completed">
+    <div class="navbar">
+      <div class="navbar-bg"></div>
+      <div class="navbar-inner sliding">
+        <div class="left">
+          <a href="#" class="link back">
+            <i class="icon icon-back"></i>
+            <span class="if-not-md">Voltar</span>
+          </a>
+        </div>
+        <div class="title">Tarefa concluída</div>
+      </div>
+    </div>
+
+
+
+
+
+    <div class="page-content">
+      <div class="block">
+        <p>
+          <button type="button">
+            <a href="#" class="button login-screen-open" data-login-screen=".login-screen">Ação deve ser ativada quando usuário concluir uma tarefa</a>
+          </button>
+        </p>
+      </div>
+    </div>
+    ...
+    <div class="login-screen">
+      <div class="view">
+        <div class="page">
+
+          <div class="block grid-resizable-demo" style="padding-top: 20%;">
+            <div class="row align-items-stretch" style="height: 400px;">
+              <div class="col resizable display-flex flex-direction-column">
+
+                <div class="row resizable" style="height: 150%;">
+                  <div class="col demo-col-center-content" style="height: 100%">
+                    <div class="row">
+                      <div class="col-20"></div><div class="col-60">
+                        <lottie-player
+                          src="https://assets8.lottiefiles.com/datafiles/jXqHQIXI6oO6V47/data.json"
+                          style="width:200px; height: 200px;"
+                          background="transparent" speed="1" mode="normal" loop autoplay
+                        ></lottie-player>
+                      </div><div class="col-20"></div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row resizable" style="height: 180%;">
+                  <div class="col demo-col-center-content" style="height: 100%">
+                    <div class="row">
+                      <div class="col-15"></div><div class="col-85"><h1>Tarefa concluída!</h1></div>
+                      <p>Parabéns, você acaba de finalizar esta tarefa, receba seu prêmio.</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row resizable" style="height: 20%;">
+                  <div class="col demo-col-center-content">
+                    <div class="row">
+                      <div class="col-33"></div>
+                      <div class="col-33"><button class="col button button-fill button-small color-blue link login-screen-close">Continuar</button></div>
+                      <div class="col-33"></div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    ...
+
+
+
+
+  </div>
+</template>
+<script>
+  export default {
+  };
+</script>

@@ -18,6 +18,8 @@ import SettingsPage from '../pages/settings.f7.html';
 import AboutPage from '../pages/about.f7.html';
   import RecordAudioPage from '../pages/record-audio.f7.html';
 
+import TaskCompletedPage from '../pages/task-completed.f7.html';
+
 import LoginPage from '../pages/login.f7.html';
 
 import NotFoundPage from '../pages/404.f7.html';
@@ -58,28 +60,28 @@ const homePageRoute = function () {
       id: 'news',
       component: NewsPage,
     })
-  
+
   if (IsEnabled.envPage)
     tabs.push({
       path: '/env/',
       id: 'env',
       component: EnvPage,
     })
-  
+
   if (IsEnabled.scanPage)
     tabs.push({
       path: '/scan/',
       id: 'scan',
       component: ScanPage,
     })
-  
+
   if (IsEnabled.chatsPage)
     tabs.push({
       path: '/chats/',
       id: 'chats',
       component: ChatsPage,
     })
-  
+
   if (IsEnabled.profilePage)
     tabs.push({
       path: '/profile/',
@@ -194,6 +196,17 @@ const aboutPageRoute = function () {
     return route
 }
 
+const taskCompletedPageRoute = function () {
+  let route = {
+    path: '/task-completed/',
+    component: TaskCompletedPage,
+    beforeEnter: authenticated,
+  }
+
+  if (IsEnabled.taskCompletedPage)
+    return route
+}
+
 const recordAudioPageRoute = function () {
   let route = {
     path: '/about/record-audio/',
@@ -242,6 +255,7 @@ var routes = [
   notificationsPageRoute(),
   settingsPageRoute(),
   aboutPageRoute(),
+  taskCompletedPageRoute(),
   recordAudioPageRoute(),
   // Unauthenticated routes
   initialPageRoute(),
