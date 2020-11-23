@@ -71,6 +71,8 @@
           app.dialog.close()
           if (res)
             app.view.main.router.navigate('/')
+          else if (res === null)
+            app.dialog.alert('Falha em sua conexão, tente novamente!')
           else
             app.dialog.alert('Credenciais incorretas, tente novamente!')
         })

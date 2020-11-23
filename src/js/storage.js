@@ -47,6 +47,9 @@ const storage = {
       else
         callback(false)
     })
+    .catch(function () {
+      callback(null)
+    })
   },
 
   getUserCredentials: function () {
