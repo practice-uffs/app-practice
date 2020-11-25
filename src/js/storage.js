@@ -100,6 +100,19 @@ const storage = {
     localStorage.removeItem('recordings')
   },
 
+  // Services methods
+
+  getServiceCategories: function (callback=()=>{}) {
+    storage.app.request.promise.get('https://qa.mural.practice.uffs.cc/api/specifications')
+      .then(function (res) {
+        res.data = JSON.parse(res.data)
+        callback(res)
+      })
+      .catch(function (err) {
+        callback(err)
+      })
+  },
+
 }
 
 export default storage

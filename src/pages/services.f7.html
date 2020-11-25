@@ -48,15 +48,14 @@
         var self = this;
         var app = self.$app;
 
-        app.request.json('../static/example-data/services.json', function (data) {
-          // Sleeping only to show loading effects
-          setTimeout(function () {
-            // Setting services
-            self.$setState({
-              services: data,
-            });
-          }, 100);
-        });
+        app.dialog.preloader("Carregando...")
+        app.storage.getServiceCategories(function (res) {
+          app.dialog.close()
+          if (res.data)
+            console.log(res.data)
+          else
+            app.dialog.alert('Falha em sua conexão, tente novamente!')
+        })
       }
     },
     on: {
@@ -64,5 +63,5 @@
         this.loadServices();
       }
     }
-  };
+  }
 </script>
