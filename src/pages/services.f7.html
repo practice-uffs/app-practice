@@ -15,23 +15,48 @@
 
     <div class="page-content">
 
-      {{#each services}}
-        <div class="list card demo-facebook-card margin-bottom">
-          <a href="/services/{{this.id}}/" class="item-link service">
-            <div class="card-content card-content"><img src="{{this.picture}}" width="100%" height="120"/></div>
-            <div class="card-content card-content-padding">
-              <p>{{this.description}}</p>
-            </div>
-            <div class="row card-header">
-              <div class="col-20 demo-facebook-avatar"><img src="{{this.imageProfile}}" width="50" height="50"/></div>
-              <div class="row col-80">
-                <div class="col-100 tablet-50 item-title">{{this.title}}</div>
-                <div class="col-100 tablet-50 item-text no-wrap">{{this.subtitle}}</div>
+      {{#if services}}
+        {{#each services}}
+          <!-- Type of service -->
+          <div class="block-title">
+            <h3 class="no-margin margin-bottom">{{@key}}</h3>
+          </div>
+          <!-- Services of this type -->
+          {{#each this}}
+            <div class="card">
+              <div class="row card-content card-content-padding">
+                <div class="col-40">
+                  <div class="block-title no-margin margin-bottom">{{this.name}}</div>
+                  <img src="{{this.image}}" style="width: 100%; height: auto;" />
+                  <p><small>Prazo: {{this.deadline}} dias úteis</small></p>
+                  <a href="#" class="button button-raised button-fill">Solicitar</a>
+                </div>
+                <div class="col-60 text-align-justify">
+                  <p>{{this.description}}</p>
+                </div>
               </div>
             </div>
-          </a>
+          {{/each}}
+        {{/each}}
+      {{else}}
+        <div class="skeleton-text skeleton-effect-blink">
+          <div class="block-title">
+            <h3>__________</h3>
+          </div>
+          {{#each '01'}}
+            <div class="card">
+              <div class="card-content">
+                <div class="card-expandable-header">
+                  <div class="thumb-image skeleton-block"></div>
+                </div>
+                <div class="card-content-padding">
+                  <h4 class="no-margin margin-bottom margin-right">_____________________________________</h4>
+                </div>
+              </div>
+            </div>
+          {{/each}}
         </div>
-      {{/each}}
+      {{/if}}
 
     </div>
   </div>
@@ -49,10 +74,19 @@
         var app = self.$app;
 
         app.dialog.preloader("Carregando...")
-        app.storage.getServiceCategories(function (res) {
+        app.storage.getServiceCategories(function (services) {
           app.dialog.close()
-          if (res.data)
-            console.log(res.data)
+          if (services) {
+            // Grouping elements by type
+            services = services.reduce(function(list, x) {
+              (list[x['type']] = list[x['type']] || []).push(x);
+              return list;
+            }, {})
+            // Updating state
+            self.$setState({
+              services: services
+            })
+          }
           else
             app.dialog.alert('Falha em sua conexão, tente novamente!')
         })

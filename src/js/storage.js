@@ -103,13 +103,44 @@ const storage = {
   // Services methods
 
   getServiceCategories: function (callback=()=>{}) {
+    callback([
+      {
+        name: 'Cartilha',
+        type: 'Texto',
+        image: '../static/images/cartilha.png',
+        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Amet tellus cras adipiscing enim eu turpis. Aliquam ultrices sagittis orci a scelerisque purus semper eget.',
+        deadline: 7,
+      },
+      {
+        name: 'Manual',
+        type: 'Texto',
+        image: '../static/images/manual.png',
+        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Amet tellus cras adipiscing enim eu turpis. Aliquam ultrices sagittis orci a scelerisque purus semper eget.',
+        deadline: 7,
+      },
+      {
+        name: 'Identidade visual',
+        type: 'Imagem',
+        image: '../static/images/imagem.png',
+        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Amet tellus cras adipiscing enim eu turpis. Aliquam ultrices sagittis orci a scelerisque purus semper eget.',
+        deadline: 15,
+      },
+      {
+        name: 'Podcast',
+        type: 'Mídia',
+        image: '../static/images/podcast.png',
+        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Amet tellus cras adipiscing enim eu turpis. Aliquam ultrices sagittis orci a scelerisque purus semper eget.',
+        deadline: 15,
+      },
+    ])
+    return
     storage.app.request.promise.get('https://qa.mural.practice.uffs.cc/api/specifications')
       .then(function (res) {
         res.data = JSON.parse(res.data)
         callback(res)
       })
       .catch(function (err) {
-        callback(err)
+        callback(false)
       })
   },
 
