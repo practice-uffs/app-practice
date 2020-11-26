@@ -1,31 +1,32 @@
-import InitialPage from '../pages/initial.f7.html';
-import HomePage from '../pages/home.f7.html';
-import RightPanelPage from '../pages/right-panel.f7.html';
+import InitialPage from '../pages/initial.f7.html'
+import HomePage from '../pages/home.f7.html'
+import RightPanelPage from '../pages/right-panel.f7.html'
 
-import EnvPage from '../pages/env.f7.html';
-import ScanPage from '../pages/scan.f7.html';
-import ChatsPage from '../pages/chats.f7.html';
-  import ChatPage from '../pages/chat.f7.html';
-import NewsPage from '../pages/news.f7.html';
-import ProfilePage from '../pages/profile.f7.html';
+import EnvPage from '../pages/env.f7.html'
+import ScanPage from '../pages/scan.f7.html'
+import ChatsPage from '../pages/chats.f7.html'
+  import ChatPage from '../pages/chat.f7.html'
+import NewsPage from '../pages/news.f7.html'
+import ProfilePage from '../pages/profile.f7.html'
 
-import IdeasPage from '../pages/ideas.f7.html';
-import ServicesPage from '../pages/services.f7.html';
-  import ServicePage from '../pages/service.f7.html';
-import CoinPage from '../pages/coin.f7.html';
-import NotificationsPage from '../pages/notifications.f7.html';
-import SettingsPage from '../pages/settings.f7.html';
-import AboutPage from '../pages/about.f7.html';
-  import RecordAudioPage from '../pages/record-audio.f7.html';
+import IdeasPage from '../pages/ideas.f7.html'
+import ServicesPage from '../pages/services.f7.html'
+  import ServiceOptionsPage from '../pages/service-options.f7.html'
+  import ServicePage from '../pages/service.f7.html'
+import CoinPage from '../pages/coin.f7.html'
+import NotificationsPage from '../pages/notifications.f7.html'
+import SettingsPage from '../pages/settings.f7.html'
+import AboutPage from '../pages/about.f7.html'
+  import RecordAudioPage from '../pages/record-audio.f7.html'
 
-import TaskCompletedPage from '../pages/task-completed.f7.html';
+import TaskCompletedPage from '../pages/task-completed.f7.html'
 
-import LoginPage from '../pages/login.f7.html';
+import LoginPage from '../pages/login.f7.html'
 
-import NotFoundPage from '../pages/404.f7.html';
+import NotFoundPage from '../pages/404.f7.html'
 
 import storage from '../js/storage.js'
-import IsEnabled from './isenabled';
+import IsEnabled from './isenabled'
 
 const authenticated = function (to, from, resolve, reject) {
   if (storage.getUserCredentials()) {
@@ -82,11 +83,11 @@ const homePageRoute = function () {
       component: ChatsPage,
     })
 
-  if (IsEnabled.profilePage)
+  if (IsEnabled.servicesPage)
     tabs.push({
-      path: '/profile/',
-      id: 'profile',
-      component: ProfilePage,
+      path: '/services/',
+      id: 'services',
+      component: ServicesPage,
     })
 
   route.tabs = tabs
@@ -105,18 +106,6 @@ const chatPageRoute = function () {
     return route
 }
 
-const servicesPageRoute = function () {
-  let route = {
-    path: '/services/',
-    id: 'services',
-    component: ServicesPage,
-    beforeEnter: authenticated,
-  }
-
-  if (IsEnabled.servicesPage)
-    return route
-}
-
 const servicePageRoute = function () {
   let route = {
     path: '/services/:id/',
@@ -124,7 +113,18 @@ const servicePageRoute = function () {
     beforeEnter: authenticated,
   }
 
-  if (IsEnabled.servicePage)
+  if (IsEnabled.servicesPage)
+    return route
+}
+
+const serviceOptionsPageRoute = function () {
+  let route = {
+    path: '/services/service-options/',
+    component: ServiceOptionsPage,
+    beforeEnter: authenticated,
+  }
+
+  if (IsEnabled.servicesPage)
     return route
 }
 
@@ -247,7 +247,7 @@ var routes = [
   // Authenticated routes
   homePageRoute(),
   chatPageRoute(),
-  servicesPageRoute(),
+  serviceOptionsPageRoute(),
   servicePageRoute(),
   rightPanelRoute(),
   ideasPageRoute(),
