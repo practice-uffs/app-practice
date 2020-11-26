@@ -17,8 +17,11 @@
     <!-- Tabs toolbar -->
     <div class="toolbar tabbar toolbar-bottom">
       <div class="toolbar-inner">
+        {{#if isEnabled.servicesPage}}
+          <a href="/" class="tab-link" data-route-tab-id="services"><i class="f7-icons">briefcase</i></a>
+        {{/if}}
         {{#if isEnabled.newsPage}}
-          <a href="/" class="tab-link" data-route-tab-id="news"><i class="f7-icons">doc</i></a>
+          <a href="/news/" class="tab-link" data-route-tab-id="news"><i class="f7-icons">doc</i></a>
         {{/if}}
         {{#if isEnabled.envPage}}
           <a href="/env/" class="tab-link" data-route-tab-id="env"><i class="f7-icons">book</i></a>
@@ -29,14 +32,14 @@
         {{#if isEnabled.chatsPage}}
           <a href="/chats/" class="tab-link" data-route-tab-id="chats"><i class="f7-icons">bubble_left </i></a>
         {{/if}}
-        {{#if isEnabled.servicesPage}}
-          <a href="/services/" class="tab-link" data-route-tab-id="services"><i class="f7-icons">briefcase</i></a>
-        {{/if}}
       </div>
     </div>
     <!-- Tabs content -->
     <div class="tabs-animated-wrap">
       <div class="tabs tabs-routable">
+        {{#if isEnabled.servicesPage}}
+          <div class="page-content tab" id="services"></div>
+        {{/if}}
         {{#if isEnabled.newsPage}}
           <div class="page-content tab" id="news"></div>
         {{/if}}
@@ -48,9 +51,6 @@
         {{/if}}
         {{#if isEnabled.chatsPage}}
           <div class="page-content tab" id="chats"></div>
-        {{/if}}
-        {{#if isEnabled.servicesPage}}
-          <div class="page-content tab" id="services"></div>
         {{/if}}
       </div>
     </div>

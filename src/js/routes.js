@@ -55,9 +55,16 @@ const homePageRoute = function () {
 
   let tabs = []
 
-  if (IsEnabled.newsPage)
+  if (IsEnabled.servicesPage)
     tabs.push({
       path: '/',
+      id: 'services',
+      component: ServicesPage,
+    })
+
+  if (IsEnabled.newsPage)
+    tabs.push({
+      path: '/news/',
       id: 'news',
       component: NewsPage,
     })
@@ -81,13 +88,6 @@ const homePageRoute = function () {
       path: '/chats/',
       id: 'chats',
       component: ChatsPage,
-    })
-
-  if (IsEnabled.servicesPage)
-    tabs.push({
-      path: '/services/',
-      id: 'services',
-      component: ServicesPage,
     })
 
   route.tabs = tabs
