@@ -1,0 +1,104 @@
+<template>
+  <div class="page" data-name="service-options">
+    
+    <div class="navbar">
+      <div class="navbar-bg"></div>
+      <div class="navbar-inner sliding">
+        <div class="left">
+          <a href="/" class="link back">
+            <i class="icon icon-back"></i>
+            <span class="if-not-md">Voltar</span>
+          </a>
+        </div>
+        <div class="title">Serviços disponíveis</div>
+      </div>
+    </div>
+
+    <div class="page-content">
+
+      {{#if services}}
+        {{#each services}}
+          <!-- Type of service -->
+          <div class="block-title">
+            <h3 class="no-margin margin-bottom">{{@key}}</h3>
+          </div>
+          <!-- Services of this type -->
+          {{#each this}}
+            <div class="card">
+              <div class="row card-content card-content-padding">
+                <div class="col-40">
+                  <div class="block-title no-margin margin-bottom">{{this.name}}</div>
+                  <img src="{{this.image}}" style="width: 100%; height: auto;" />
+                  <p><small>Prazo: {{this.deadline}} dias úteis</small></p>
+                  <a href="#" class="button button-raised button-fill">Solicitar</a>
+                </div>
+                <div class="col-60 text-align-justify">
+                  <p>{{this.description}}</p>
+                </div>
+              </div>
+            </div>
+          {{/each}}
+        {{/each}}
+      {{else}}
+        <div class="skeleton-text skeleton-effect-blink">
+          <div class="block-title">
+            <h3>__________</h3>
+          </div>
+          {{#each '01'}}
+            <div class="card">
+              <div class="row card-content card-content-padding">
+                <div class="col-40">
+                  <div class="block-title no-margin margin-bottom">_______</div>
+                  <div class="thumb-image skeleton-block"></div>
+                  <p>______________</p>
+                </div>
+                <div class="col-60 text-align-justify">
+                  <p>_____________________________________________________________________________________</p>
+                </div>
+              </div>
+            </div>
+          {{/each}}
+        </div>
+      {{/if}}
+
+    </div>
+  </div>
+</template>
+<script>
+  export default {
+    data: function () {
+      return {
+        services: null,
+      }
+    },
+    methods: {
+      loadServices: function () {
+        var self = this;
+        var app = self.$app;
+
+        app.dialog.preloader("Carregando...")
+        app.storage.getServiceCategories(function (services) {
+          app.dialog.close()
+          if (services) {
+            // Grouping elements by type
+            services = services.reduce(function(list, x) {
+              (list[x['type']] = list[x['type']] || []).push(x);
+              return list;
+            }, {})
+            // Updating state
+            self.$setState({
+              services: services
+            })
+          }
+          else
+            app.dialog.alert('Falha em sua conexão, tente novamente!')
+        })
+      }
+    },
+    on: {
+      pageInit: function(e, page) {
+        this.loadServices();
+      }
+    }
+  }
+</script>
