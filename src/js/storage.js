@@ -102,7 +102,7 @@ const storage = {
 
   // Services methods
 
-  getServiceCategories: function (callback=()=>{}) {
+  getServiceOptions: function (callback=()=>{}) {
     callback([
       {
         name: 'Cartilha',
@@ -135,14 +135,23 @@ const storage = {
     ])
     return
     storage.app.request.promise.get('https://qa.mural.practice.uffs.cc/api/specifications')
-      .then(function (res) {
-        res.data = JSON.parse(res.data)
-        callback(res)
-      })
-      .catch(function (err) {
-        callback(false)
-      })
+    .then(function (res) {
+      callback(JSON.parse(res.data))
+    })
+    .catch(function (err) {
+      callback(false)
+    })
   },
+
+  getRequestedServices: function (callback=()=>{}) {
+    storage.app.request.promise.get('https://qa.mural.practice.uffs.cc/api/services?user_id=2')
+    .then(function (res) {
+      callback(JSON.parse(res.data))
+    })
+    .catch(function (err) {
+      callback(false)
+    })
+  }
 
 }
 
