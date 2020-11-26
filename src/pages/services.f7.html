@@ -17,7 +17,6 @@
                       <div class="item-after">{{this.created_at}}</div>
                     </div>
                     <div class="item-text no-wrap">{{this.description}}</div>
-                    <div class="item-text margin-top-half">Última atualização há {{this.updated_at}}</div>
                   </div>
                 </a>
               </li>
@@ -29,7 +28,7 @@
                   <div class="item-inner">
                     <div class="item-title-row">
                       <div class="item-title">____________</div>
-                      <div class="item-after">____</div>
+                      <div class="item-after">_____</div>
                     </div>
                     <div class="item-text no-wrap">____________________________________</div>
                   </div>
@@ -97,9 +96,8 @@
             // Processing data
             for (let i=0; i<services.length; i++) {
               services[i].created_at = self.processDate(services[i].created_at)
-              services[i].updated_at = self.processDate(services[i].updated_at)
             }
-
+            // Updating state
             self.$setState({
               services: services
             })
