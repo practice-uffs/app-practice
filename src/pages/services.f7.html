@@ -14,8 +14,10 @@
                   <div class="item-inner">
                     <div class="item-title-row">
                       <div class="item-title">{{this.title}}</div>
+                      <div class="item-after">{{this.created_at}}</div>
                     </div>
                     <div class="item-text no-wrap">{{this.description}}</div>
+                    <div class="item-text margin-top-half">Última atualização há {{this.updated_at}}</div>
                   </div>
                 </a>
               </li>
@@ -27,6 +29,7 @@
                   <div class="item-inner">
                     <div class="item-title-row">
                       <div class="item-title">____________</div>
+                      <div class="item-after">____</div>
                     </div>
                     <div class="item-text no-wrap">____________________________________</div>
                   </div>
@@ -48,6 +51,40 @@
       }
     },
     methods: {
+      processDate: function (date) {
+        date = new Date(date)
+        const now = new Date()
+        let difference = now - date
+        // Years
+        const years = Math.floor(difference / (1000*60*60*24*30*12))
+        if (years > 0)
+          if (years == 1)
+            return years + ' ano'
+          else
+            return years + ' anos'
+        // Months
+        const months = Math.floor(difference / (1000*60*60*24*30))
+        if (months > 0)
+          if (months == 1)
+            return months + ' mês'
+          else
+            return months + ' meses'
+        // Days
+        const days = Math.floor(difference / (1000*60*60*24))
+        if (days > 0)
+          if (days == 1)
+            return days + ' dia'
+          else
+            return days + ' dias'
+        // Seconds
+        const seconds = Math.floor(difference / (1000*60*60))
+        if (seconds > 0)
+          if (seconds == 1)
+            return seconds + ' segundo'
+          else
+            return seconds + ' segundos'
+        return date.toUpperCase().charAt(0).toUpperCase() + date.slice(1)
+      },
       loadServices: function () {
         var self = this
         var app = self.$app
@@ -55,8 +92,16 @@
         app.storage.getRequestedServices(function (services) {
           if (services) {
             console.log(services)
+            services = services.data
+            console.log(services.length)
+            // Processing data
+            for (let i=0; i<services.length; i++) {
+              services[i].created_at = self.processDate(services[i].created_at)
+              services[i].updated_at = self.processDate(services[i].updated_at)
+            }
+
             self.$setState({
-              services: services.data
+              services: services
             })
           }
           else {
