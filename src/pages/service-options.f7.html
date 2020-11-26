@@ -20,7 +20,7 @@
         {{#each services}}
           <!-- Type of service -->
           <div class="block-title">
-            <h3 class="no-margin margin-bottom">{{@key}}</h3>
+            <h3 class="no-margin padding-bottom-half">{{@key}}</h3>
           </div>
           <!-- Services of this type -->
           {{#each this}}
@@ -73,16 +73,16 @@
     },
     methods: {
       loadServices: function () {
-        var self = this;
-        var app = self.$app;
+        var self = this
+        var app = self.$app
 
         app.dialog.preloader("Carregando...")
-        app.storage.getServiceCategories(function (services) {
+        app.storage.getServiceOptions(function (services) {
           app.dialog.close()
           if (services) {
             // Grouping elements by type
             services = services.reduce(function(list, x) {
-              (list[x['type']] = list[x['type']] || []).push(x);
+              (list[x['type']] = list[x['type']] || []).push(x)
               return list;
             }, {})
             // Updating state
@@ -97,7 +97,7 @@
     },
     on: {
       pageInit: function(e, page) {
-        this.loadServices();
+        this.loadServices()
       }
     }
   }
