@@ -1,8 +1,43 @@
 <template>
   <div data-name="services">
     <div class="block">
-      <a href="service-options/" class="button button-raised button-fill">Solicitar serviços</a>
+      <a href="/services/service-options/" class="button button-raised button-fill">Solicitar serviços</a>
     </div>
+
+    <div class="card">
+      <div class="list media-list no-margin">
+        <ul>
+          {{#if services}}
+            {{#each services}}
+              <li>
+                <a href="/services/{{this.id}}/" class="item-link item-content chat">
+                  <div class="item-inner">
+                    <div class="item-title-row">
+                      <div class="item-title">{{this.title}}</div>
+                    </div>
+                    <div class="item-text no-wrap">{{this.description}}</div>
+                  </div>
+                </a>
+              </li>
+            {{/each}}
+          {{else}}
+            {{#each '123'}}
+              <li>
+                <a class="item-link item-content skeleton-text skeleton-effect-blink">
+                  <div class="item-inner">
+                    <div class="item-title-row">
+                      <div class="item-title">____________</div>
+                    </div>
+                    <div class="item-text no-wrap">____________________________________</div>
+                  </div>
+                </a>
+            </li>
+            {{/each}}
+          {{/if}}
+        </ul>
+      </div>
+    </div>
+
   </div>
 </template>
 <script>
@@ -14,14 +49,25 @@
     },
     methods: {
       loadServices: function () {
-        var self = this;
-        var app = self.$app;
+        var self = this
+        var app = self.$app
 
-      }
+        app.storage.getRequestedServices(function (services) {
+          if (services) {
+            console.log(services)
+            self.$setState({
+              services: services.data
+            })
+          }
+          else {
+            app.dialog.alert('Falha em sua conexão, tente novamente!')
+          }
+        })
+      },
     },
     on: {
       tabInit: function(e, page) {
-        this.loadServices();
+        this.loadServices()
       }
     }
   }
