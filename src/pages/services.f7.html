@@ -1,26 +1,49 @@
 <template>
   <div data-name="services">
     <div class="block">
-      <a href="/services/service-options/" class="button button-raised button-fill">Solicitar serviços</a>
+      <div class="row">
+        <div class="col-50">
+          <img src="../static/images/work.png" style="width: 100%; height: auto;" />
+        </div>
+        <div class="col-50">
+          <p class="text-color-gray text-align-justify no-margin">Conheça os serviços que o PRACTICE oferece!</p>
+          <a href="/services/service-options/" class="button button-raised button-fill margin-top-half">Solicitar serviço</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="block-title">
+      <h3 class="no-margin margin-bottom-half">Serviços que você solicitou</h3>
     </div>
 
     <div class="card">
       <div class="list media-list no-margin">
         <ul>
           {{#if services}}
-            {{#each services}}
-              <li>
-                <a href="/services/{{this.id}}/" class="item-link item-content chat">
-                  <div class="item-inner">
-                    <div class="item-title-row">
-                      <div class="item-title">{{this.title}}</div>
-                      <div class="item-after">{{this.created_at}}</div>
-                    </div>
-                    <div class="item-text no-wrap">{{this.description}}</div>
+            {{#unless services.length}}
+              <li class="item-content">
+                <div class="item-inner">
+                  <div class="item-title">Nada para mostrar aqui...</div>
+                  <div class="item-text no-wrap">
+                    <a href="/services/service-options/">Clique aqui para solicitar seu primeiro serviço!</a>
                   </div>
-                </a>
+                </div>
               </li>
-            {{/each}}
+            {{else}}
+              {{#each services}}
+                <li>
+                  <a href="/services/{{this.id}}/" class="item-link item-content">
+                    <div class="item-inner">
+                      <div class="item-title-row">
+                        <div class="item-title">{{this.title}}</div>
+                        <div class="item-after">{{this.created_at}}</div>
+                      </div>
+                      <div class="item-text no-wrap">{{this.description}}</div>
+                    </div>
+                  </a>
+                </li>
+              {{/each}}
+            {{/unless}}
           {{else}}
             {{#each '123'}}
               <li>
@@ -92,7 +115,6 @@
           if (services) {
             console.log(services)
             services = services.data
-            console.log(services.length)
             // Processing data
             for (let i=0; i<services.length; i++) {
               services[i].created_at = self.processDate(services[i].created_at)
