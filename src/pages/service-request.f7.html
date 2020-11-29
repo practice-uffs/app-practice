@@ -98,7 +98,7 @@
                 <!-- Buttons -->
                 <li class="item-content item-input">
                   <div class="item-inner">
-                    <input type="submit" class="button button-raised button-fill sheet-close" value="Solicitar">
+                    <input type="submit" class="button button-raised button-fill" value="Solicitar">
                   </div>
                 </li>
               </ul>
@@ -154,18 +154,21 @@
         var self = this
         var app = self.$app
 
-        app.dialog.preloader("Realizando solicitação...")
-        let serviceData = app.form.convertToData('#service-request-form')
+        app.dialog.confirm("Tem certeza que deseja fazer esta solicitação?", function () {
+          app.dialog.preloader("Realizando solicitação...")
+          let serviceData = app.form.convertToData('#service-request-form')
 
-        app.storage.postServiceRequest(serviceData, function (res) {
-          app.dialog.close()
-          // Check response
-          if (res) {
-            app.dialog.alert('Solicitação feita com sucesso!')
-            app.form.fillFromData('#service-request-form', {category_id: "", specification_id: "", location_id: "", title: "", descrition: ""})
-          }
-          else
-            app.dialog.alert('Ocorreu um erro inesperado, tente novamente!')
+          app.storage.postServiceRequest(serviceData, function (res) {
+            app.dialog.close()
+            // Check response
+            if (res) {
+              app.sheet.close()
+              app.view.main.router.navigate('/')
+              app.dialog.alert('Solicitação feita com sucesso!')
+            }
+            else
+              app.dialog.alert('Ocorreu um erro inesperado, tente novamente!')
+          })
         })
       }
     },
