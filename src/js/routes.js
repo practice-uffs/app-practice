@@ -11,7 +11,7 @@ import ProfilePage from '../pages/profile.f7.html'
 
 import IdeasPage from '../pages/ideas.f7.html'
 import ServicesPage from '../pages/services.f7.html'
-  import ServiceOptionsPage from '../pages/service-options.f7.html'
+  import ServiceRequestPage from '../pages/service-request.f7.html'
   import ServicePage from '../pages/service.f7.html'
 import CoinPage from '../pages/coin.f7.html'
 import NotificationsPage from '../pages/notifications.f7.html'
@@ -117,10 +117,10 @@ const servicePageRoute = function () {
     return route
 }
 
-const serviceOptionsPageRoute = function () {
+const serviceRequestPageRoute = function () {
   let route = {
-    path: '/services/service-options/',
-    component: ServiceOptionsPage,
+    path: '/services/service-request/',
+    component: ServiceRequestPage,
     beforeEnter: authenticated,
   }
 
@@ -247,7 +247,7 @@ var routes = [
   // Authenticated routes
   homePageRoute(),
   chatPageRoute(),
-  serviceOptionsPageRoute(),
+  serviceRequestPageRoute(),
   servicePageRoute(),
   rightPanelRoute(),
   ideasPageRoute(),
