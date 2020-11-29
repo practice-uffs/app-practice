@@ -47,6 +47,9 @@ const storage = {
       else
         callback(false)
     })
+    .catch(function () {
+      callback(null)
+    })
   },
 
   getUserCredentials: function () {
@@ -95,6 +98,70 @@ const storage = {
   
   clearRecordings: function () {
     localStorage.removeItem('recordings')
+  },
+
+  // Services methods
+
+  getServiceOptions: function (callback=()=>{}) {
+    callback([
+      {
+        category: 'Texto',
+        specification: 'Cartilha',
+        image: '../static/images/cartilha.png',
+        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Amet tellus cras adipiscing enim eu turpis. Aliquam ultrices sagittis orci a scelerisque purus semper eget.',
+        deadline: 7,
+      },
+      {
+        category: 'Texto',
+        specification: 'Manual',
+        image: '../static/images/manual.png',
+        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Amet tellus cras adipiscing enim eu turpis. Aliquam ultrices sagittis orci a scelerisque purus semper eget.',
+        deadline: 7,
+      },
+      {
+        category: 'Imagem',
+        specification: 'Identidade visual',
+        image: '../static/images/imagem.png',
+        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Amet tellus cras adipiscing enim eu turpis. Aliquam ultrices sagittis orci a scelerisque purus semper eget.',
+        deadline: 15,
+      },
+      {
+        category: 'Mídia',
+        specification: 'Podcast',
+        image: '../static/images/podcast.png',
+        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Amet tellus cras adipiscing enim eu turpis. Aliquam ultrices sagittis orci a scelerisque purus semper eget.',
+        deadline: 15,
+      },
+    ])
+    return
+    storage.app.request.promise.get('https://qa.mural.practice.uffs.cc/api/specifications')
+    .then(function (res) {
+      callback(JSON.parse(res.data))
+    })
+    .catch(function (err) {
+      callback(false)
+    })
+  },
+
+  getRequestedServices: function (callback=()=>{}) {
+    storage.app.request.promise.get('https://qa.mural.practice.uffs.cc/api/services?user_id=1')
+    .then(function (res) {
+      callback(JSON.parse(res.data))
+    })
+    .catch(function (err) {
+      callback(false)
+    })
+  },
+
+  postServiceRequest: function (service, callback=()=>{}) {
+    service.user_id = 1
+    storage.app.request.promise.post('https://qa.mural.practice.uffs.cc/api/services', service)
+    .then(function (res) {
+      callback(true)
+    })
+    .catch(function () {
+      callback(false)
+    })
   },
 
 }
