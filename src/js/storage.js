@@ -105,29 +105,29 @@ const storage = {
   getServiceOptions: function (callback=()=>{}) {
     callback([
       {
-        name: 'Cartilha',
-        type: 'Texto',
+        category: 'Texto',
+        specification: 'Cartilha',
         image: '../static/images/cartilha.png',
         description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Amet tellus cras adipiscing enim eu turpis. Aliquam ultrices sagittis orci a scelerisque purus semper eget.',
         deadline: 7,
       },
       {
-        name: 'Manual',
-        type: 'Texto',
+        category: 'Texto',
+        specification: 'Manual',
         image: '../static/images/manual.png',
         description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Amet tellus cras adipiscing enim eu turpis. Aliquam ultrices sagittis orci a scelerisque purus semper eget.',
         deadline: 7,
       },
       {
-        name: 'Identidade visual',
-        type: 'Imagem',
+        category: 'Imagem',
+        specification: 'Identidade visual',
         image: '../static/images/imagem.png',
         description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Amet tellus cras adipiscing enim eu turpis. Aliquam ultrices sagittis orci a scelerisque purus semper eget.',
         deadline: 15,
       },
       {
-        name: 'Podcast',
-        type: 'Mídia',
+        category: 'Mídia',
+        specification: 'Podcast',
         image: '../static/images/podcast.png',
         description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Amet tellus cras adipiscing enim eu turpis. Aliquam ultrices sagittis orci a scelerisque purus semper eget.',
         deadline: 15,
@@ -151,7 +151,18 @@ const storage = {
     .catch(function (err) {
       callback(false)
     })
-  }
+  },
+
+  postServiceRequest: function (service, callback=()=>{}) {
+    service.user_token = storage.getUserCredentials().token
+    storage.app.request.promise.post('https://qa.mural.practice.uffs.cc/api/services', service)
+    .then(function (res) {
+      callback(true)
+    })
+    .catch(function () {
+      callback(false)
+    })
+  },
 
 }
 
