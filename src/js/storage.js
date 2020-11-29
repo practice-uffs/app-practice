@@ -154,7 +154,7 @@ const storage = {
   },
 
   postServiceRequest: function (service, callback=()=>{}) {
-    service.user_token = storage.getUserCredentials().token
+    service.user_id = 1
     storage.app.request.promise.post('https://qa.mural.practice.uffs.cc/api/services', service)
     .then(function (res) {
       callback(true)
