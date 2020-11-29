@@ -144,7 +144,7 @@ const storage = {
   },
 
   getRequestedServices: function (callback=()=>{}) {
-    storage.app.request.promise.get('https://qa.mural.practice.uffs.cc/api/services?user_id=2')
+    storage.app.request.promise.get('https://qa.mural.practice.uffs.cc/api/services?user_id=1')
     .then(function (res) {
       callback(JSON.parse(res.data))
     })

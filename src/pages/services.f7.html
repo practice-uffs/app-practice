@@ -12,25 +12,26 @@
       </div>
     </div>
 
+    <!-- Active services -->
     <div class="block-title">
-      <h3 class="no-margin margin-bottom-half">Serviços que você solicitou</h3>
+      <h3 class="no-margin margin-bottom-half"><i class="f7-icons">timer</i> Serviços solicitados</h3>
     </div>
 
     <div class="card">
       <div class="list media-list no-margin">
         <ul>
-          {{#if services}}
-            {{#unless services.length}}
+          {{#if activeServices}}
+            {{#unless activeServices.length}}
               <li class="item-content">
                 <div class="item-inner">
                   <div class="item-title">Nada para mostrar aqui...</div>
                   <div class="item-text no-wrap">
-                    <a href="/services/service-request/">Clique aqui para solicitar seu primeiro serviço!</a>
+                    <a href="/services/service-request/">Clique aqui para solicitar um serviço!</a>
                   </div>
                 </div>
               </li>
             {{else}}
-              {{#each services}}
+              {{#each activeServices}}
                 <li>
                   <a href="/services/{{this.id}}/" class="item-link item-content">
                     <div class="item-inner">
@@ -63,13 +64,44 @@
       </div>
     </div>
 
+    <!-- Done services -->
+    
+    {{#if doneServices}}
+      {{#unless doneServices.length}} {{else}}
+        <div class="block-title">
+          <h3 class="no-margin margin-bottom-half"><i class="f7-icons">checkmark_circle</i> Serviços concluídos</h3>
+        </div>
+
+        <div class="card">
+          <div class="list media-list no-margin">
+            <ul>
+              {{#each doneServices}}
+                <li>
+                  <a href="/services/{{this.id}}/" class="item-link item-content">
+                    <div class="item-inner">
+                      <div class="item-title-row">
+                        <div class="item-title">{{this.title}}</div>
+                        <div class="item-after">{{this.created_at}}</div>
+                      </div>
+                      <div class="item-text no-wrap">{{this.description}}</div>
+                    </div>
+                  </a>
+                </li>
+              {{/each}}
+            </ul>
+          </div>
+        </div>
+      {{/unless}}
+    {{/if}}
+
   </div>
 </template>
 <script>
   export default {
     data: function () {
       return {
-        services: null,
+        activeServices: null,
+        doneServices: null,
       }
     },
     methods: {
@@ -113,15 +145,21 @@
 
         app.storage.getRequestedServices(function (services) {
           if (services) {
-            console.log(services)
             services = services.data
+            let activeServices = []
+            let doneServices = []
             // Processing data
             for (let i=0; i<services.length; i++) {
               services[i].created_at = self.processDate(services[i].created_at)
+              if (services[i].status === 3) 
+                doneServices.push(services[i])
+              else
+                activeServices.push(services[i])
             }
             // Updating state
             self.$setState({
-              services: services
+              doneServices: doneServices,
+              activeServices: activeServices,
             })
           }
         })
