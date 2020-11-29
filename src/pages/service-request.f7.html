@@ -85,6 +85,7 @@
                     </div>
                   </div>
                 </li>
+                <!-- Description -->
                 <li class="item-content item-input item-input-outline">
                   <div class="item-inner">
                     <div class="item-title item-floating-label">Descrição</div>
@@ -94,12 +95,10 @@
                     </div>
                   </div>
                 </li>
+                <!-- Buttons -->
                 <li class="item-content item-input">
                   <div class="item-inner">
-                    <div class="row">
-                      <input type="submit" class="button button-raised button-fill sheet-close" value="Solicitar">
-                      <a class="button button-raised margin-left sheet-close" href="#">Cancelar</a>
-                    </div>
+                    <input type="submit" class="button button-raised button-fill sheet-close" value="Solicitar">
                   </div>
                 </li>
               </ul>
@@ -159,7 +158,6 @@
         let serviceData = app.form.convertToData('#service-request-form')
 
         app.storage.postServiceRequest(serviceData, function (res) {
-          // Close preloader
           app.dialog.close()
           // Check response
           if (res) {
@@ -175,9 +173,6 @@
       pageInit: function (e, page) {
         this.loadServices()
       },
-      sheetClosed: function (sheet) {
-        console.log(sheet)
-      }
     }
   }
 </script>
