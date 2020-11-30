@@ -102,16 +102,16 @@ const storage = {
 
   // Services methods
 
-  getServiceOptions: function (callback=()=>{}) {
+  getServiceSpecifications: function (callback=()=>{}) {
     storage.app.request.promise.get('https://qa.mural.practice.uffs.cc/api/specifications')
     .then(function (res) {
       // Grouping services by category
-      let services = JSON.parse(res.data)
-      services = services.reduce(function(list, x) {
+      let service_specifications = JSON.parse(res.data)
+      service_specifications = service_specifications.reduce(function(list, x) {
         (list[x['category_id']] = list[x['category_id']] || []).push(x)
         return list;
       }, {})
-      callback(services)
+      callback(service_specifications)
     })
     .catch(function (err) {
       callback(false)
@@ -120,6 +120,16 @@ const storage = {
 
   getRequestedServices: function (callback=()=>{}) {
     storage.app.request.promise.get('https://qa.mural.practice.uffs.cc/api/services?user_id=1')
+    .then(function (res) {
+      callback(JSON.parse(res.data))
+    })
+    .catch(function (err) {
+      callback(false)
+    })
+  },
+
+  getLocations: function (callback=()=>{}) {
+    storage.app.request.promise.get('https://qa.mural.practice.uffs.cc/api/locations')
     .then(function (res) {
       callback(JSON.parse(res.data))
     })
