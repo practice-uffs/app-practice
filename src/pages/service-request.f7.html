@@ -4,6 +4,7 @@
     <div class="navbar">
       <div class="navbar-bg"></div>
       <div class="navbar-inner sliding">
+        <!-- Link to go back -->
         <div class="left">
           <a href="/" class="link back">
             <i class="icon icon-back"></i>
@@ -16,44 +17,45 @@
 
     <div class="page-content">
 
+      <div class="block-title">
+        <h3 class="no-margin padding-bottom-half">Solicite um dos serviços abaixo</h3>
+      </div>
+
       {{#if services}}
-        {{#each services}}
-          <!-- Type of service -->
-          <div class="block-title">
-            <h3 class="no-margin padding-bottom-half">{{@key}}</h3>
-          </div>
-          <!-- Services of this type -->
-          {{#each this}}
-            <div class="card">
-              <div class="row card-content card-content-padding">
-                <div class="col-40">
-                  <div class="block-title no-margin margin-bottom">{{this.specification}}</div>
-                  <img src="{{this.image}}" style="width: 100%; height: auto;" />
-                  <p><small>Prazo: {{this.deadline}} dias úteis</small></p>
-                  <a href="#" class="button button-raised button-fill sheet-open" data-sheet=".service-request-modal" @click="setServiceRequest('{{this.category}}', '{{this.specification}}', 1, 2, 3)">Solicitar</a>
-                </div>
-                <div class="col-60 text-align-justify">
-                  <p>{{this.description}}</p>
+          {{#each services}}
+            <!-- Services of this category -->
+            {{#each this}}
+              <div class="card">
+                <div class="card-header">{{this.title}}</div>
+                <div class="row card-content card-content-padding">
+                  <div class="col-40">
+                    <img src="https://qa.mural.practice.uffs.cc/img/undraw.co/{{this.img}}" style="width: 100%; height: auto;" />
+                    <p><small>Prazo: {{this.deadline}} dias úteis</small></p>
+                    <a href="#" class="button button-raised button-fill sheet-open" data-sheet=".service-request-modal" @click="setServiceRequest('{{this.title}}', {{this.location_id}}, {{this.category_id}}, {{this.id}})">Solicitar</a>
+                  </div>
+                  <div class="col-60 text-align-justify">
+                    <p>{{this.description}}</p>
+                  </div>
                 </div>
               </div>
-            </div>
+            {{/each}}
           {{/each}}
-        {{/each}}
+        </div>
       {{else}}
         <div class="skeleton-text skeleton-effect-blink">
-          <div class="block-title">
-            <h3>__________</h3>
-          </div>
           {{#each '01'}}
             <div class="card">
+              <div class="card-header">_________________________</div>
               <div class="row card-content card-content-padding">
                 <div class="col-40">
-                  <div class="block-title no-margin margin-bottom">_______</div>
-                  <div class="thumb-image skeleton-block"></div>
+                  <div class="thumb-image skeleton-block" style="height: 125px;"></div>
                   <p>______________</p>
                 </div>
                 <div class="col-60 text-align-justify">
-                  <p>_____________________________________________________________________________________</p>
+                  <p>____________________________</p>
+                  <p>____________________________</p>
+                  <p>____________________________</p>
+                  <p>____________________________</p>
                 </div>
               </div>
             </div>
@@ -69,7 +71,7 @@
                 <!-- Category and specification -->
                 <li class="item-content">
                   <div class="item-inner">
-                    <div class="item-title text-align-center">Requisitando {{requestedService.specification}} ({{requestedService.category}})</div>
+                    <div class="item-title text-align-center">Solicitando {{requestedService.title}}</div>
                     <input type="hidden" name="category_id" value="{{requestedService.category_id}}">
                     <input type="hidden" name="specification_id" value="{{requestedService.specification_id}}">
                     <input type="hidden" name="location_id" value="{{requestedService.location_id}}">
@@ -78,7 +80,7 @@
                 <!-- Title -->
                 <li class="item-content item-input item-input-outline">
                   <div class="item-inner">
-                    <div class="item-title item-floating-label">Título</div>
+                    <div class="item-title item-floating-label">Título da solicitação</div>
                     <div class="item-input-wrap">
                       <input type="text" name="title" required validate>
                     </div>
@@ -87,7 +89,7 @@
                 <!-- Description -->
                 <li class="item-content item-input item-input-outline">
                   <div class="item-inner">
-                    <div class="item-title item-floating-label">Descrição</div>
+                    <div class="item-title item-floating-label">Descrição detalhada da solicitação</div>
                     <div class="item-input-wrap">
                       <textarea name="descrition" required validate></textarea>
                     </div>
@@ -123,25 +125,18 @@
 
         app.storage.getServiceOptions(function (services) {
           if (services) {
-            // Grouping elements by category
-            services = services.reduce(function(list, x) {
-              (list[x['category']] = list[x['category']] || []).push(x)
-              return list;
-            }, {})
-            // Updating state
             self.$setState({
               services: services
             })
           }
         })
       },
-      setServiceRequest: function (category, specification, location_id, category_id, specification_id) {
+      setServiceRequest: function (title, location_id, category_id, specification_id) {
         var self = this
 
         self.$setState({
           requestedService: {
-            category: category, 
-            specification: specification,
+            title: title,
             location_id: location_id,
             category_id: category_id,
             specification_id: specification_id
