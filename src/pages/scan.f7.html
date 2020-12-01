@@ -29,12 +29,13 @@
 
 <script>
   import QrScanner from 'qr-scanner'
-  //QrScanner.WORKER_PATH = '../js/qr-scanner-worker.min.js';
+  import qrScannerWorkerSource from '!!raw-loader!../../node_modules/qr-scanner/qr-scanner-worker.min.js'
+  QrScanner.WORKER_PATH = URL.createObjectURL(new Blob([qrScannerWorkerSource]))
 
   export default {
     data: function () {
       return {
-        scan: null
+        scanner: null
       }
     },
     methods: {
@@ -44,24 +45,36 @@
 
         if(QrScanner.hasCamera()){
           const scannerVideo = document.getElementById('scanner-video')
-          const scanner = new QrScanner(scannerVideo, function (result){
+          const scanner = new QrScanner(scannerVideo, function (result) {
             console.log('decoded qr code:', result)
-          });
+          })
           
           self.$setState({
             scanner: scanner,
-          });
+          })
 
           self.scanner.start()
         }
         else
           app.dialog.alert('Nenhuma câmera encontrada!')
-      }
+      },
+      removeScan: function () {
+        var self = this
+
+        self.scanner.stop()
+        self.scanner.destroy()
+        self.$setState({
+          scanner: null,
+        });
+      },
     },
     on: {
-      tabInit: function(e, page) {
+      tabInit: function (e) {
         this.initScan()
       },
+      tabHide: function (e) {
+        this.removeScan()
+      }
     }
   }
 </script>
