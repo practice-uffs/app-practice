@@ -36,7 +36,7 @@ const storage = {
   
   // User credentials methods
 
-  authorizeUser: function (username, password, callback=()=>{}) {
+  requestUserCredentials: function (username, password, callback=()=>{}) {
     storage.app.request.promise.post('https://qa.mural.practice.uffs.cc/api/auth/login', {username: username, password: password})
     .then(function (res) {
       let data = JSON.parse(res.data)
