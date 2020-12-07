@@ -36,18 +36,19 @@ const storage = {
   
   // User credentials methods
 
-  authorizeUser: function (user, password, callback=()=>{}) {
-    storage.app.request.promise.post('https://api.uffs.cc/v0/auth', {user: user, password: password})
+  authorizeUser: function (username, password, callback=()=>{}) {
+    storage.app.request.promise.post('https://qa.mural.practice.uffs.cc/api/auth/login', {username: username, password: password})
     .then(function (res) {
       let data = JSON.parse(res.data)
-      if (data.token) {
+      if (data.access_token) {
         storage.setUserCredentials(data)
         callback(true)
       }
       else
         callback(false)
     })
-    .catch(function () {
+    .catch(function (err) {
+      console.log(err)
       callback(null)
     })
   },
