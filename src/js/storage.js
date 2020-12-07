@@ -42,13 +42,13 @@ const storage = {
       let data = JSON.parse(res.data)
       if (data.access_token) {
         storage.setUserCredentials(data)
+        storage.requestUserData()
         callback(true)
       }
       else
         callback(false)
     })
     .catch(function (err) {
-      console.log(err)
       callback(null)
     })
   },
@@ -99,6 +99,40 @@ const storage = {
   
   clearRecordings: function () {
     localStorage.removeItem('recordings')
+  },
+
+  // User data methods
+
+  setUserData: function (user_data) {
+    localStorage['userData'] = JSON.stringify(user_data)
+  },
+
+  getUserData: function (callback=()=>{}) {
+    let user_data = localStorage['userData']
+
+    if (!user_data)
+      storage.requestUserData(function (res) {
+        if (res)
+          callback(res)
+        else
+          callback(false)
+      })
+    else
+      callback(JSON.parse(user_data))
+  },
+
+  requestUserData: function (callback=()=>{}) {
+    const access_token = storage.getUserCredentials().access_token
+    
+    storage.app.request.promise.post('https://qa.mural.practice.uffs.cc/api/auth/me', {token: access_token})
+    .then(function (res) {
+      const user_data = JSON.parse(res.data)
+      storage.setUserData(user_data)
+      callback(user_data)
+    })
+    .catch(function (err) {
+      callback(false)
+    })
   },
 
   // Services methods
