@@ -49,17 +49,37 @@ const storage = {
         callback(false)
     })
     .catch(function (err) {
-      callback(null)
+      if (err.status == 401)
+        callback(false)
+      else
+        callback(null)
     })
   },
 
-  getUserCredentials: function () {
+  requestLogout: function (callback=()=>{}) {
+    storage.getUserCredentials(function (auth) {
+      storage.app.request.promise.post('https://qa.mural.practice.uffs.cc/api/auth/logout', {token: auth.access_token})
+      .then(function (res) {
+        if (res.data) {
+          storage.clearUserCredentials()
+          callback(true)
+        }
+        else
+          callback(false)
+      })
+      .catch(function (err) {
+        callback(null)
+      })
+    })
+  },
+
+  getUserCredentials: function (callback=()=>{}) {
     let userCredentials = localStorage['userCredentials']
 
     if (userCredentials)
-      userCredentials = JSON.parse(userCredentials)
-      
-    return userCredentials
+      callback(JSON.parse(userCredentials))
+    else
+      callback(false)  
   },
 
   setUserCredentials: function (userCredentials) {
@@ -68,6 +88,40 @@ const storage = {
   
   clearUserCredentials: function () {
     localStorage.removeItem('userCredentials')
+  },
+
+  // User data methods
+
+  requestUserData: function (callback=()=>{}) {
+    storage.getUserCredentials(function (auth) {
+      storage.app.request.promise.post('https://qa.mural.practice.uffs.cc/api/auth/me', {token: auth.access_token})
+      .then(function (res) {
+        const user_data = JSON.parse(res.data)
+        storage.setUserData(user_data)
+        callback(user_data)
+      })
+      .catch(function (err) {
+        callback(false)
+      })
+    })
+  },
+
+  getUserData: function (callback=()=>{}) {
+    let user_data = localStorage['userData']
+
+    if (!user_data)
+      storage.requestUserData(function (res) {
+        if (res)
+          callback(res)
+        else
+          callback(false)
+      })
+    else
+      callback(JSON.parse(user_data))
+  },
+
+  setUserData: function (user_data) {
+    localStorage['userData'] = JSON.stringify(user_data)
   },
   
   // Audio recording methods
@@ -101,40 +155,6 @@ const storage = {
     localStorage.removeItem('recordings')
   },
 
-  // User data methods
-
-  requestUserData: function (callback=()=>{}) {
-    const token = storage.getUserCredentials().access_token
-    
-    storage.app.request.promise.post('https://qa.mural.practice.uffs.cc/api/auth/me', {token: token})
-    .then(function (res) {
-      const user_data = JSON.parse(res.data)
-      storage.setUserData(user_data)
-      callback(user_data)
-    })
-    .catch(function (err) {
-      callback(false)
-    })
-  },
-
-  setUserData: function (user_data) {
-    localStorage['userData'] = JSON.stringify(user_data)
-  },
-
-  getUserData: function (callback=()=>{}) {
-    let user_data = localStorage['userData']
-
-    if (!user_data)
-      storage.requestUserData(function (res) {
-        if (res)
-          callback(res)
-        else
-          callback(false)
-      })
-    else
-      callback(JSON.parse(user_data))
-  },
-
   // Services methods
 
   getServiceSpecifications: function (callback=()=>{}) {
@@ -154,14 +174,21 @@ const storage = {
   },
 
   getRequestedServices: function (callback=()=>{}) {
-    storage.getUserData(function (user_data) {
-      const access_token = storage.getUserCredentials().access_token
-      storage.app.request.promise.get('https://qa.mural.practice.uffs.cc/api/services', {user_id: user_data.id, token: access_token})
-      .then(function (res) {
-        callback(JSON.parse(res.data))
-      })
-      .catch(function (err) {
-        callback(false)
+    storage.getUserCredentials(function (auth) {
+      storage.getUserData(function (user_data) {
+        storage.app.request.promise.get(
+          'https://qa.mural.practice.uffs.cc/api/services', 
+          {
+            user_id: user_data.id,
+            token: auth.access_token
+          }
+        )
+        .then(function (res) {
+          callback(JSON.parse(res.data))
+        })
+        .catch(function (err) {
+          callback(false)
+        })
       })
     })
   },
