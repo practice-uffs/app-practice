@@ -67,7 +67,7 @@
         let loginData = app.form.convertToData('#login-form')
 
         // Request login
-        app.storage.requestUserCredentials(loginData.iduffs, loginData.password, function (res) {
+        app.storage.requestLogin(loginData.iduffs, loginData.password, function (res) {
           app.dialog.close()
           if (res)
             app.view.main.router.navigate('/')
