@@ -121,9 +121,13 @@
         let app = self.$app
 
         app.dialog.confirm("Tem certeza que deseja sair?", function () {
-          app.storage.clearUserCredentials()
-          app.view.main.router.navigate('/')
-        });
+          app.storage.requestLogout(function (res) {
+            if (res)
+              app.view.main.router.navigate('/')
+            else
+              app.dialog.alert("Um erro inesperado ocorreu, tente novamente!")
+          })
+        })
       },
     },
 
