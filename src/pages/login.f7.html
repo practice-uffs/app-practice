@@ -69,7 +69,6 @@
         // Request login
         app.storage.requestLogin(loginData.iduffs, loginData.password, function (res) {
           app.dialog.close()
-          console.log(res)
           if (res)
             app.view.main.router.navigate('/')
           else if (res === null)
