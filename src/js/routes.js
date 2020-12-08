@@ -29,21 +29,27 @@ import storage from '../js/storage.js'
 import IsEnabled from './isenabled'
 
 const authenticated = function (to, from, resolve, reject) {
-  if (storage.getUserCredentials()) {
-    resolve()
-  } else {
-    reject()
-    this.navigate('/initial/')
-  }
+  let self = this
+  storage.getUserCredentials(function (user_credentials) {
+    if (user_credentials) {
+      resolve()
+    } else {
+      reject()
+      self.navigate('/initial/')
+    }
+  })
 }
 
 const unauthenticated = function (to, from, resolve, reject) {
-  if (!storage.getUserCredentials()) {
-    resolve()
-  } else {
-    reject()
-    this.navigate('/')
-  }
+  let self = this
+  storage.getUserCredentials(function (user_credentials) {
+    if (!user_credentials) {
+      resolve()
+    } else {
+      reject()
+      self.navigate('/')
+    }
+  })
 }
 
 const homePageRoute = function () {
