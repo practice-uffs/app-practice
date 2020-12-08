@@ -36,7 +36,7 @@ const storage = {
   
   // User credentials methods
 
-  requestUserCredentials: function (username, password, callback=()=>{}) {
+  requestLogin: function (username, password, callback=()=>{}) {
     storage.app.request.promise.post('https://qa.mural.practice.uffs.cc/api/auth/login', {username: username, password: password})
     .then(function (res) {
       let data = JSON.parse(res.data)
@@ -103,6 +103,20 @@ const storage = {
 
   // User data methods
 
+  requestUserData: function (callback=()=>{}) {
+    const token = storage.getUserCredentials().access_token
+    
+    storage.app.request.promise.post('https://qa.mural.practice.uffs.cc/api/auth/me', {token: token})
+    .then(function (res) {
+      const user_data = JSON.parse(res.data)
+      storage.setUserData(user_data)
+      callback(user_data)
+    })
+    .catch(function (err) {
+      callback(false)
+    })
+  },
+
   setUserData: function (user_data) {
     localStorage['userData'] = JSON.stringify(user_data)
   },
@@ -119,20 +133,6 @@ const storage = {
       })
     else
       callback(JSON.parse(user_data))
-  },
-
-  requestUserData: function (callback=()=>{}) {
-    const access_token = storage.getUserCredentials().access_token
-    
-    storage.app.request.promise.post('https://qa.mural.practice.uffs.cc/api/auth/me', {token: access_token})
-    .then(function (res) {
-      const user_data = JSON.parse(res.data)
-      storage.setUserData(user_data)
-      callback(user_data)
-    })
-    .catch(function (err) {
-      callback(false)
-    })
   },
 
   // Services methods
@@ -154,12 +154,15 @@ const storage = {
   },
 
   getRequestedServices: function (callback=()=>{}) {
-    storage.app.request.promise.get('https://qa.mural.practice.uffs.cc/api/services?user_id=1')
-    .then(function (res) {
-      callback(JSON.parse(res.data))
-    })
-    .catch(function (err) {
-      callback(false)
+    storage.getUserData(function (user_data) {
+      const access_token = storage.getUserCredentials().access_token
+      storage.app.request.promise.get('https://qa.mural.practice.uffs.cc/api/services', {user_id: user_data.id, token: access_token})
+      .then(function (res) {
+        callback(JSON.parse(res.data))
+      })
+      .catch(function (err) {
+        callback(false)
+      })
     })
   },
 
