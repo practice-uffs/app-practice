@@ -258,6 +258,30 @@ const storage = {
     })
   },
 
+  getServiceById: function (id, callback=()=>{}) {
+    storage.getUserData(function (user_data) {
+      storage.app.request.promise.get('https://qa.mural.practice.uffs.cc/api/service/'+id)
+      .then(function (res) {
+        let service = JSON.parse(res.data)
+        console.log(service)
+        service.timestamp = storage.dateDifference(service.created_at)
+        service.created_at = storage.formatDateDifference(service.timestamp)
+        service.user_id = Number(service.user_id)
+        service.category_id = Number(service.category_id)
+        service.location_id = Number(service.location_id)
+        service.specification_id = Number(service.specification_id)
+        service.status = Number(service.status)
+        service.type = Number(service.type)
+        service.hidden = Number(service.hidden)
+        service.user = user_data
+        callback(service)
+      })
+      .catch(function () {
+        callback(false)
+      })
+    })
+  }
+
 }
 
 export default storage
