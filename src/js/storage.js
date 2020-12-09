@@ -15,60 +15,27 @@ const storage = {
   },
 
   formatDateDifference: function (difference) {
-    // Seconds
-    difference /= 1000
-    if (difference < 60) {
-      difference = Math.floor(difference)
-      if (difference === 1)
-        return difference + ' segundo'
-      else if (difference === 0)
-        return 'agora mesmo'
-      else
-        return difference + ' segundos'
-    }
-    // Minutes
-    difference /= 60
-    if (difference < 60) {
-      difference = Math.floor(difference)
-      if (difference === 1)
-        return difference + ' minuto'
-      else
-        return difference + ' minutos'
-    }
-    // Hour
-    difference /= 60
-    if (difference < 24) {
-      difference = Math.floor(difference)
-      if (difference === 1)
-        return difference + ' hora'
-      else
-        return difference + ' horas'
-    }
-    // Day
-    difference /= 24
-    if (difference < 30) {
-      difference = Math.floor(difference)
-      if (difference === 1)
-        return difference + ' dia'
-      else
-        return difference + ' dias'
-    }
-    // Months
-    difference /= 30
-    if (difference < 12) {
-      difference = Math.floor(difference)
-      if (difference === 1)
-        return difference + ' mês'
-      else
-        return difference + ' meses'
-    }
-    // Years
-    difference /= 12
-    difference = Math.floor(difference)
-    if (difference === 1)
-      return difference + ' ano'
+    let seconds = Math.floor(difference/1000)
+    let minutes = Math.floor(difference/(1000*60))
+    let hours = Math.floor(difference/(1000*60*60))
+    let days = Math.floor(difference/(1000*60*60*24))
+    let months = Math.floor(difference/(1000*60*60*24*30))
+    let years = Math.floor(difference/(1000*60*60*24*30*12))
+    
+    if (years > 0)
+      return (years === 1 ? years+' ano' : years+' anos')
+    else if (months > 0)
+      return (months === 1 ? months+' mês' : months+' meses')
+    else if (days > 0)
+      return (days === 1 ? days+' dias' : days+' dia')
+    else if (hours > 0)
+      return (hours === 1 ? hours+' hora' : hours+' horas')
+    else if (minutes > 0)
+      return (minutes === 1 ? minutes+' minuto' : minutes+' minutos')
+    else if (seconds > 0)
+      return (seconds === 1 ? seconds+' segundo' : seconds+' segundos')
     else
-      return difference + ' anos'
+      return "agora mesmo"
   },
 
   // LocalStorage methods
