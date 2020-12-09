@@ -42,8 +42,13 @@ const storage = {
       let data = JSON.parse(res.data)
       if (data.access_token) {
         storage.setUserCredentials(data)
-        storage.requestUserData()
         callback(true)
+        storage.app.request.setup({
+          headers: {
+            Authorization: 'Bearer '+data.access_token
+          }
+        })
+        storage.requestUserData()
       }
       else
         callback(false)
@@ -62,6 +67,11 @@ const storage = {
       .then(function (res) {
         if (res.data) {
           storage.clearUserCredentials()
+          storage.app.request.setup({
+            headers: {
+              Authorization: ''
+            }
+          })
           callback(true)
         }
         else
@@ -174,21 +184,13 @@ const storage = {
   },
 
   getRequestedServices: function (callback=()=>{}) {
-    storage.getUserCredentials(function (auth) {
-      storage.getUserData(function (user_data) {
-        storage.app.request.promise.get(
-          'https://qa.mural.practice.uffs.cc/api/services', 
-          {
-            user_id: user_data.id,
-            token: auth.access_token
-          }
-        )
-        .then(function (res) {
-          callback(JSON.parse(res.data))
-        })
-        .catch(function (err) {
-          callback(false)
-        })
+    storage.getUserData(function (user_data) {
+      storage.app.request.promise.get('https://qa.mural.practice.uffs.cc/api/services', { user_id: user_data.id })
+      .then(function (res) {
+        callback(JSON.parse(res.data))
+      })
+      .catch(function (err) {
+        callback(false)
       })
     })
   },
@@ -204,13 +206,17 @@ const storage = {
   },
 
   postServiceRequest: function (service, callback=()=>{}) {
-    service.user_id = 1
-    storage.app.request.promise.post('https://qa.mural.practice.uffs.cc/api/services', service)
-    .then(function (res) {
-      callback(true)
-    })
-    .catch(function () {
-      callback(false)
+    storage.getUserData(function (user_data) {
+      service.user_id = user_data.id
+      
+      storage.app.request.promise.post('https://qa.mural.practice.uffs.cc/api/services', service)
+      .then(function (res) {
+        console.log(res)
+        callback(true)
+      })
+      .catch(function () {
+        callback(false)
+      })
     })
   },
 
