@@ -6,6 +6,65 @@ const storage = {
     app.storage = storage
   },
 
+  // Value processing methods
+
+  processDate: function (date) {
+    date = new Date(date)
+    const now = new Date()
+    // Seconds
+    let difference = (now - date) / 1000
+    if (difference < 60) {
+      difference = Math.floor(difference)
+      if (difference === 1)
+        return difference + ' segundo'
+      else
+        return difference + ' segundo'
+    }
+    // Minutes
+    difference /= 60
+    if (difference < 60) {
+      difference = Math.floor(difference)
+      if (difference === 1)
+        return difference + ' minuto'
+      else
+        return difference + ' minutos'
+    }
+    // Hour
+    difference /= 60
+    if (difference < 24) {
+      difference = Math.floor(difference)
+      if (difference === 1)
+        return difference + ' hora'
+      else
+        return difference + ' horas'
+    }
+    // Day
+    difference /= 24
+    if (difference < 30) {
+      difference = Math.floor(difference)
+      if (difference === 1)
+        return difference + ' dia'
+      else
+        return difference + ' dias'
+    }
+    // Months
+    difference /= 30
+    if (difference < 12) {
+      difference = Math.floor(difference)
+      if (difference === 1)
+        return difference + ' mês'
+      else
+        return difference + ' meses'
+    }
+    // Years
+    difference /= 12
+    difference = Math.floor(difference)
+    if (difference === 1)
+      return difference + ' ano'
+    else
+      return difference + ' anos'
+  },
+
   // LocalStorage methods
 
   clearAll: function () {
@@ -183,8 +242,16 @@ const storage = {
     storage.getUserData(function (user_data) {
       storage.app.request.promise.get('https://qa.mural.practice.uffs.cc/api/services', { user_id: user_data.id })
       .then(function (res) {
-        const data = JSON.parse(res.data)
-        callback(data.data)
+        let services = JSON.parse(res.data).data
+        for (let i=0; i<services.length; i++) {
+          services[i].created_at = storage.processDate(services[i].created_at)
+          services[i].user_id = Number(services[i].user_id)
+          services[i].category_id = Number(services[i].category_id)
+          services[i].location_id = Number(services[i].location_id)
+          services[i].specification_id = Number(services[i].specification_id)
+          services[i].status = Number(services[i].status)
+        }
+        callback(services)
       })
       .catch(function (err) {
         callback(false)
