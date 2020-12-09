@@ -32,7 +32,7 @@
           </div>
         {{/js_if}}
     
-        <div class="block no-margin margin-top-half margin-bottom-half">
+        <div class="block no-margin margin-top-half margin-bottom">
           <h3 class="text-color-gray">{{service.title}}</h3>
         </div>
         
@@ -41,8 +41,8 @@
             <div class="timeline-item-divider"></div>
             <div class="timeline-item-content">
               <div class="row">
-                <div class="timeline-item-time">{{service.user.name}}</div>
-                <div class="timeline-item-time">há {{service.created_at}}</div>
+                <div class="timeline-item-time">{{service.user.name}}&nbsp;</div>
+                <div class="timeline-item-time">&nbsp;há {{service.created_at}}</div>
               </div>
               <div class="card">
                 <div class="card-content card-content-padding">
@@ -52,26 +52,7 @@
             </div>
           </div>
 
-          <div class="skeleton-text skeleton-effect-blink">
-            {{#each "123"}}
-              <div class="timeline-item">
-                <div class="timeline-item-divider"></div>
-                <div class="timeline-item-content">
-                  <div class="row">
-                    <div class="timeline-item-time">____________________</div>
-                    <div class="timeline-item-time">___________</div>
-                  </div>
-                  <div class="card">
-                    <div class="card-content card-content-padding">_______________________________________</div>
-                  </div>
-                  <small>__________________</small>
-                </div>
-              </div>
-            {{/each}}
-          </div>
-          
-          {{#each comments}
-          {{else}}
+          {{#unless comments}}
             <div class="skeleton-text skeleton-effect-blink">
               {{#each "123"}}
                 <div class="timeline-item">
@@ -82,14 +63,33 @@
                       <div class="timeline-item-time">___________</div>
                     </div>
                     <div class="card">
-                      <div class="card-content card-content-padding">_______________________________________</div>
+                      <div class="card-content card-content-padding">________________________________</div>
                     </div>
                     <small>__________________</small>
                   </div>
                 </div>
               {{/each}}
             </div>
-          {{/each}}
+          {{/unless}}
+
+          {{#if comments}
+            {{#each comments}}
+              <div class="timeline-item">
+                <div class="timeline-item-divider"></div>
+                <div class="timeline-item-content">
+                  <div class="row">
+                    <div class="timeline-item-time">{{this.user.name}}&nbsp;</div>
+                    <div class="timeline-item-time">há {{this.created_at}}</div>
+                  </div>
+                  <div class="card">
+                    <div class="card-content card-content-padding">
+                      {{this.description}}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            {{/each}}
+          {{/if}}
         </div>
       {{else}}
         <div class="skeleton-text skeleton-effect-blink">
@@ -98,7 +98,7 @@
             <div class="skeleton-block" style="height: 40px; width: 100%;"></div>
           </div>
 
-          <div class="block no-margin margin-top-half margin-bottom-half">
+          <div class="block no-margin margin-top-half margin-bottom">
             <h3>_________________________</h3>
           </div>
           
@@ -142,6 +142,13 @@
           if (service) 
             self.$setState({
               service: service,
+            })
+        })
+
+        app.storage.getServiceComments(self.$route.params.id, function (comments) {
+          if (comments) 
+            self.$setState({
+              comments: comments,
             })
         })
       },
