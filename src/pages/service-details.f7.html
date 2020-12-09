@@ -10,75 +10,153 @@
           </a>
         </div>
         <div class="title">Visualização de serviço</div>
-        <div class="right">
-          <a href="#" class="link">
-            <i class="f7-icons">square_pencil</i>
-          </a>
-        </div>
       </div>
     </div>
 
     <div class="page-content">
 
-      <div class="card list demo-facebook-card">
-        <div class="card-header padding">Título do serviço oferecido!</div>
-        <div class="card-content card-content-padding">
-          <p>Texto/explicação e o próprio serviço. Como é oferecido. Com possibilidades para comentar logo abaixo.</p>
-        </div>
-
-        <div class="row card-footer padding-top">
-          <div class="col-50 item-text"><span class="item-text">17/08/2020 16:00h</span></div>
-          <div class="col-25">
-            <a href="#" class="link"><i class="f7-icons">hand_thumbsup_fill</i><span class="badge color-green">564</span></a>
+      {{#if service}}
+        {{#js_if "this.service.status === 1"}}
+          <div class="block no-margin padding-half text-align-center" style="background-color: var(--color-3);">
+            <h3 class="text-color-white">Aguardando na fila</h3>
           </div>
-          <div class="col-25">
-            <a href="#" class="link"><i class="f7-icons">hand_thumbsdown</i><span class="badge color-red">115</span></a>
+        {{/js_if}}
+        {{#js_if "this.service.status === 2"}}
+          <div class="block no-margin padding-half text-align-center" style="background-color: var(--color-2);">
+            <h3 class="text-color-white">Em progresso</h3>
           </div>
-        </div>
-
-        <div class="toolbar messagebar">
-          <div class="toolbar-inner">
-            <div class="messagebar-area">
-              <textarea class="resizable" placeholder="Escrever comentário..."></textarea>
-            </div><a class="link send-link" href="#">Comentar</a>
+        {{/js_if}}
+        {{#js_if "this.service.status === 3"}}
+          <div class="block no-margin padding-half text-align-center" style="background-color: var(--color-5);">
+            <h3 class="text-color-white">Concluído</h3>
           </div>
+        {{/js_if}}
+    
+        <div class="block no-margin margin-top-half margin-bottom">
+          <h3 class="text-color-gray">{{service.title}}</h3>
         </div>
-      </div>
-
-      <div class="col-100 text-align-center"><i class="f7-icons">chevron_compact_down</i></div>
-
-      <div class="timeline no-padding-left no-margin-top">
-        {{#each '123'}}
+        
+        <div class="timeline no-padding-left no-margin-top">
           <div class="timeline-item">
             <div class="timeline-item-divider"></div>
-            <div class="timeline-item-content card list">
-              <div class="row card-header">
-                <div class="col-20"><img src="static/images/default-profile-image.png" width="35" height="35"/></div>
-                <div class="row col-80">
-                  <div class="col-100 tablet-50 item-subtitle">Fulano da Silva</div>
-                  <div class="col-100 tablet-50 item-text no-wrap">fulano.silva</div>
-                </div>
+            <div class="timeline-item-content">
+              <div class="row">
+                <div class="timeline-item-time">{{service.user.name}}&nbsp;</div>
+                <div class="timeline-item-time">&nbsp;há {{service.created_at}}</div>
               </div>
-              <div class="card-content card-content-padding">
-                <p>Nesse local eu comento a respeito desse serviço. Abaixo outros usuários podem avaliar meu comentário com um "like" ou "unlike"</p>
-              </div>
-              <div class="row card-footer padding-top">
-                <div class="col-50 item-subtitle item-text text-align-left">17/08/2020 16:00h</div>
-                <div class="col-25">
-                  <a href="#" class="link"><i class="f7-icons">hand_thumbsup_fill</i><span class="badge color-green">564</span></a>
-                </div>
-                <div class="col-25">
-                  <a href="#" class="link"><i class="f7-icons">hand_thumbsdown</i><span class="badge color-red">115</span></a>
+              <div class="card">
+                <div class="card-content card-content-padding">
+                  {{service.description}}
                 </div>
               </div>
             </div>
           </div>
-        {{/each}}
-      </div>
 
+          {{#unless comments}}
+            <div class="skeleton-text skeleton-effect-blink">
+              {{#each "123"}}
+                <div class="timeline-item">
+                  <div class="timeline-item-divider"></div>
+                  <div class="timeline-item-content">
+                    <div class="row">
+                      <div class="timeline-item-time">____________________</div>
+                      <div class="timeline-item-time">___________</div>
+                    </div>
+                    <div class="card">
+                      <div class="card-content card-content-padding">________________________________</div>
+                    </div>
+                    <small>__________________</small>
+                  </div>
+                </div>
+              {{/each}}
+            </div>
+          {{/unless}}
+
+          {{#if comments}
+            {{#each comments}}
+              <div class="timeline-item">
+                <div class="timeline-item-divider"></div>
+                <div class="timeline-item-content">
+                  <div class="row">
+                    <div class="timeline-item-time">{{this.user.name}}&nbsp;</div>
+                    <div class="timeline-item-time">há {{this.created_at}}</div>
+                  </div>
+                  <div class="card">
+                    <div class="card-content card-content-padding">
+                      {{this.description}}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            {{/each}}
+          {{/if}}
+        </div>
+      {{else}}
+        <div class="skeleton-text skeleton-effect-blink">
+
+          <div class="block no-margin no-padding">
+            <div class="skeleton-block" style="height: 40px; width: 100%;"></div>
+          </div>
+
+          <div class="block no-margin margin-top-half margin-bottom">
+            <h3>_________________________</h3>
+          </div>
+          
+          <div class="timeline no-padding-left no-margin-top">
+            {{#each "1234"}}
+              <div class="timeline-item">
+                <div class="timeline-item-divider"></div>
+                <div class="timeline-item-content">
+                  <div class="row">
+                    <div class="timeline-item-time">____________________</div>
+                    <div class="timeline-item-time">___________</div>
+                  </div>
+                  <div class="card">
+                    <div class="card-content card-content-padding">________________________________</div>
+                  </div>
+                  <small>__________________</small>
+                </div>
+              </div>
+            {{/each}}
+          </div>
+        </div>
+      {{/if}}
+      
     </div>
   </div>
 </template>
 <script>
-  export default {};
+  export default {
+    data: function () {
+      return {
+        service: null,
+        comments: null,
+      }
+    },
+    methods: {
+      loadServices: function () {
+        var self = this
+        var app = self.$app
+
+        app.storage.getServiceById(self.$route.params.id, function (service) {
+          if (service) 
+            self.$setState({
+              service: service,
+            })
+        })
+
+        app.storage.getServiceComments(self.$route.params.id, function (comments) {
+          if (comments) 
+            self.$setState({
+              comments: comments,
+            })
+        })
+      },
+    },
+    on: {
+      pageInit: function(e, page) {
+        this.loadServices()
+      }
+    }
+  }
 </script>

@@ -21,8 +21,7 @@ var IsEnabled = {
     scores: false,
     achievements: false,
 
-    servicesPage: false,
-    servicePage: false,
+    servicesPage: true,
 
     rightPanel: true,
 

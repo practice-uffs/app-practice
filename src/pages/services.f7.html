@@ -36,6 +36,11 @@
                   <a href="/services/{{this.id}}/" class="item-link item-content">
                     <div class="item-inner">
                       <div class="item-title-row">
+                        {{#js_if "this.status === 1"}}
+                          <div style="color: var(--color-3); position: absolute; left: -9px;">&#8226;</div>
+                        {{else}}
+                          <div style="color: var(--color-2); position: absolute; left: -9px;">&#8226;</div>
+                        {{/js_if}}
                         <div class="item-title">{{this.title}}</div>
                         <div class="item-after">{{this.created_at}}</div>
                       </div>
@@ -65,20 +70,27 @@
     </div>
 
     <!-- Done services -->
-    
-    {{#if doneServices}}
-      {{#unless doneServices.length}} {{else}}
-        <div class="block-title">
-          <h3 class="no-margin margin-bottom-half"><i class="f7-icons">checkmark_circle</i> Serviços concluídos</h3>
-        </div>
 
-        <div class="card">
-          <div class="list media-list no-margin">
-            <ul>
+    <div class="block-title">
+      <h3 class="no-margin margin-bottom-half"><i class="f7-icons">checkmark_circle</i> Serviços concluídos</h3>
+    </div>
+
+    <div class="card">
+      <div class="list media-list no-margin">
+        <ul>
+          {{#if doneServices}}
+            {{#unless doneServices.length}}
+              <li class="item-content">
+                <div class="item-inner">
+                  <div class="item-title">Nenhum serviço foi concluído ainda...</div>
+                </div>
+              </li>
+            {{else}}
               {{#each doneServices}}
                 <li>
                   <a href="/services/{{this.id}}/" class="item-link item-content">
                     <div class="item-inner">
+                      <div style="color: var(--color-5); position: absolute; top:0px; left: -9px;">&#8226;</div>
                       <div class="item-title-row">
                         <div class="item-title">{{this.title}}</div>
                         <div class="item-after">{{this.created_at}}</div>
@@ -88,11 +100,25 @@
                   </a>
                 </li>
               {{/each}}
-            </ul>
-          </div>
-        </div>
-      {{/unless}}
-    {{/if}}
+            {{/unless}}
+          {{else}}
+            {{#each '123'}}
+              <li>
+                <a class="item-link item-content skeleton-text skeleton-effect-blink">
+                  <div class="item-inner">
+                    <div class="item-title-row">
+                      <div class="item-title">____________</div>
+                      <div class="item-after">_____</div>
+                    </div>
+                    <div class="item-text no-wrap">____________________________________</div>
+                  </div>
+                </a>
+            </li>
+            {{/each}}
+          {{/if}}
+        </ul>
+      </div>
+    </div>
 
   </div>
 </template>
@@ -105,52 +131,16 @@
       }
     },
     methods: {
-      processDate: function (date) {
-        date = new Date(date)
-        const now = new Date()
-        let difference = now - date
-        // Years
-        const years = Math.floor(difference / (1000*60*60*24*30*12))
-        if (years > 0)
-          if (years == 1)
-            return years + ' ano'
-          else
-            return years + ' anos'
-        // Months
-        const months = Math.floor(difference / (1000*60*60*24*30))
-        if (months > 0)
-          if (months == 1)
-            return months + ' mês'
-          else
-            return months + ' meses'
-        // Days
-        const days = Math.floor(difference / (1000*60*60*24))
-        if (days > 0)
-          if (days == 1)
-            return days + ' dia'
-          else
-            return days + ' dias'
-        // Seconds
-        const seconds = Math.floor(difference / (1000*60*60))
-        if (seconds > 0)
-          if (seconds == 1)
-            return seconds + ' segundo'
-          else
-            return seconds + ' segundos'
-        return date.toUpperCase().charAt(0).toUpperCase() + date.slice(1)
-      },
       loadServices: function () {
         var self = this
         var app = self.$app
 
         app.storage.getRequestedServices(function (services) {
           if (services) {
-            services = services.data
             let activeServices = []
             let doneServices = []
             // Processing data
             for (let i=0; i<services.length; i++) {
-              services[i].created_at = self.processDate(services[i].created_at)
               if (services[i].status === 3) 
                 doneServices.push(services[i])
               else

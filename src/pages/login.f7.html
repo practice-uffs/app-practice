@@ -67,12 +67,12 @@
         let loginData = app.form.convertToData('#login-form')
 
         // Request login
-        app.storage.authorizeUser(loginData.iduffs, loginData.password, function (res) {
+        app.storage.requestLogin(loginData.iduffs, loginData.password, function (res) {
           app.dialog.close()
           if (res)
             app.view.main.router.navigate('/')
           else if (res === null)
-            app.dialog.alert('Falha em sua conexão, tente novamente!')
+            app.dialog.alert('Um erro inesperado ocorreu, tente novamente!')
           else
             app.dialog.alert('Credenciais incorretas, tente novamente!')
         })

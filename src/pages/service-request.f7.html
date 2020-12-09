@@ -104,7 +104,7 @@
                   <div class="item-inner">
                     <div class="item-title item-floating-label">Descrição detalhada da solicitação</div>
                     <div class="item-input-wrap">
-                      <textarea name="descrition" required validate></textarea>
+                      <textarea name="description" required validate></textarea>
                     </div>
                   </div>
                 </li>
@@ -171,6 +171,10 @@
         app.dialog.confirm("Tem certeza que deseja fazer esta solicitação?", function () {
           app.dialog.preloader("Realizando solicitação...")
           let serviceData = app.form.convertToData('#service-request-form')
+
+          serviceData.location_id = Number(serviceData.location_id)
+          serviceData.category_id = Number(serviceData.category_id)
+          serviceData.specification_id = Number(serviceData.specification_id)
 
           app.storage.postServiceRequest(serviceData, function (res) {
             app.dialog.close()

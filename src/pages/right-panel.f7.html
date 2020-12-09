@@ -2,19 +2,15 @@
   <div class="panel panel-right panel-cover">
     <div class="content-block">
 
-      <div class="row no-gutter padding" style="background-color: #BFCCD9;">
-        <div class="col-35 margin-top margin-bottom">
-          <div class="card circle">
-            <img src="static/images/default-profile-image.png">
-          </div>
-        </div>
-        <div class="col-65 margin-top padding-top">
-          <div class="row">
-            <div class="col-100"><strong>{{name}}</strong></div>
-          </div>
-          <div class="row">
-            <div class="col-100">{{username}}</div>
-          </div>
+      <div class="no-gutter padding" style="background-color: var(--color-3);">
+        <div class="margin-top padding-top">
+          {{#if user}}
+            <p class="no-margin"><strong>{{user.name}}</strong></p>
+            <p class="no-margin">{{user.username}}</p>
+          {{else}}
+            <p class="no-margin"><strong>_________________________________</strong></p>
+            <p class="no-margin">____________</p>
+          {{/if}}
         </div>
       </div>
 
@@ -101,9 +97,7 @@
   export default {
     data: function() {
       return {
-        name: null,
-        username: null,
-        email: null,
+        user: null,
         isEnabled: IsEnabled,
       }
     },
@@ -113,11 +107,12 @@
         let self = this
         let app = self.$app
 
-        const user = app.storage.getUserCredentials().user
-        self.$setState({
-          name: user.name,
-          username: user.username,
-          email: user.email,
+        app.storage.getUserData(function (user) {
+          if (user) {
+            self.$setState({
+              user: user,
+            })
+          }
         })
       },
 
@@ -126,9 +121,13 @@
         let app = self.$app
 
         app.dialog.confirm("Tem certeza que deseja sair?", function () {
-          app.storage.clearUserCredentials()
-          app.view.main.router.navigate('/')
-        });
+          app.storage.requestLogout(function (res) {
+            if (res)
+              app.view.main.router.navigate('/')
+            else
+              app.dialog.alert("Um erro inesperado ocorreu, tente novamente!")
+          })
+        })
       },
     },
 
