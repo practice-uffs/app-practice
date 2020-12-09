@@ -250,7 +250,6 @@ const storage = {
       
       storage.app.request.promise.post('https://qa.mural.practice.uffs.cc/api/services', service)
       .then(function (res) {
-        console.log(res)
         callback(true)
       })
       .catch(function () {
