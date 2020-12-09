@@ -62,24 +62,22 @@ const storage = {
   },
 
   requestLogout: function (callback=()=>{}) {
-    storage.getUserCredentials(function (auth) {
-      storage.app.request.promise.post('https://qa.mural.practice.uffs.cc/api/auth/logout', {token: auth.access_token})
-      .then(function (res) {
-        if (res.data) {
-          storage.clearUserCredentials()
-          storage.app.request.setup({
-            headers: {
-              Authorization: ''
-            }
-          })
-          callback(true)
-        }
-        else
-          callback(false)
-      })
-      .catch(function (err) {
-        callback(null)
-      })
+    storage.app.request.promise.post('https://qa.mural.practice.uffs.cc/api/auth/logout')
+    .then(function (res) {
+      if (res.data) {
+        storage.clearUserCredentials()
+        storage.app.request.setup({
+          headers: {
+            Authorization: ''
+          }
+        })
+        callback(true)
+      }
+      else
+        callback(false)
+    })
+    .catch(function (err) {
+      callback(null)
     })
   },
 
@@ -103,16 +101,14 @@ const storage = {
   // User data methods
 
   requestUserData: function (callback=()=>{}) {
-    storage.getUserCredentials(function (auth) {
-      storage.app.request.promise.post('https://qa.mural.practice.uffs.cc/api/auth/me', {token: auth.access_token})
-      .then(function (res) {
-        const user_data = JSON.parse(res.data)
-        storage.setUserData(user_data)
-        callback(user_data)
-      })
-      .catch(function (err) {
-        callback(false)
-      })
+    storage.app.request.promise.post('https://qa.mural.practice.uffs.cc/api/auth/me')
+    .then(function (res) {
+      const user_data = JSON.parse(res.data)
+      storage.setUserData(user_data)
+      callback(user_data)
+    })
+    .catch(function (err) {
+      callback(false)
     })
   },
 
@@ -187,7 +183,8 @@ const storage = {
     storage.getUserData(function (user_data) {
       storage.app.request.promise.get('https://qa.mural.practice.uffs.cc/api/services', { user_id: user_data.id })
       .then(function (res) {
-        callback(JSON.parse(res.data))
+        const data = JSON.parse(res.data)
+        callback(data.data)
       })
       .catch(function (err) {
         callback(false)
