@@ -263,7 +263,6 @@ const storage = {
       storage.app.request.promise.get('https://qa.mural.practice.uffs.cc/api/service/'+id)
       .then(function (res) {
         let service = JSON.parse(res.data)
-        console.log(service)
         service.timestamp = storage.dateDifference(service.created_at)
         service.created_at = storage.formatDateDifference(service.timestamp)
         service.user_id = Number(service.user_id)
@@ -275,6 +274,19 @@ const storage = {
         service.hidden = Number(service.hidden)
         service.user = user_data
         callback(service)
+      })
+      .catch(function () {
+        callback(false)
+      })
+    })
+  },
+
+  getServiceComments: function (service_id, callback=()=>{}) {
+    storage.getUserData(function (user_data) {
+      storage.app.request.promise.get('https://qa.mural.practice.uffs.cc/api/service/'+service_id+'/comments')
+      .then(function (res) {
+        let comments = JSON.parse(res.data).data
+        callback(comments)
       })
       .catch(function () {
         callback(false)
