@@ -8,17 +8,23 @@ const storage = {
 
   // Value processing methods
 
-  processDate: function (date) {
+  dateDifference: function (date) {
     date = new Date(date)
     const now = new Date()
+    return now - date
+  },
+
+  formatDateDifference: function (difference) {
     // Seconds
-    let difference = (now - date) / 1000
+    difference /= 1000
     if (difference < 60) {
       difference = Math.floor(difference)
       if (difference === 1)
         return difference + ' segundo'
+      else if (difference === 0)
+        return 'agora mesmo'
       else
-        return difference + ' segundo'
+        return difference + ' segundos'
     }
     // Minutes
     difference /= 60
@@ -244,13 +250,15 @@ const storage = {
       .then(function (res) {
         let services = JSON.parse(res.data).data
         for (let i=0; i<services.length; i++) {
-          services[i].created_at = storage.processDate(services[i].created_at)
+          services[i].timestamp = storage.dateDifference(services[i].created_at)
+          services[i].created_at = storage.formatDateDifference(services[i].timestamp)
           services[i].user_id = Number(services[i].user_id)
           services[i].category_id = Number(services[i].category_id)
           services[i].location_id = Number(services[i].location_id)
           services[i].specification_id = Number(services[i].specification_id)
           services[i].status = Number(services[i].status)
         }
+        services.sort((a, b) => (a.timestamp > b.timestamp) ? 1 : -1)
         callback(services)
       })
       .catch(function (err) {
