@@ -35,12 +35,12 @@
                 <li>
                   <a href="/services/{{this.id}}/" class="item-link item-content">
                     <div class="item-inner">
-                        {{#js_if "this.status === 1"}}
-                          <div style="color: var(--color-3); position: absolute; top:0px; left: -9px;">&#8226;</div>
-                        {{else}}
-                          <div style="color: var(--color-2); position: absolute; top:0px; left: -9px;">&#8226;</div>
-                        {{/js_if}}
                       <div class="item-title-row">
+                        {{#js_if "this.status === 1"}}
+                          <div style="color: var(--color-3); position: absolute; left: -9px;">&#8226;</div>
+                        {{else}}
+                          <div style="color: var(--color-2); position: absolute; left: -9px;">&#8226;</div>
+                        {{/js_if}}
                         <div class="item-title">{{this.title}}</div>
                         <div class="item-after">{{this.created_at}}</div>
                       </div>
