@@ -183,6 +183,8 @@
             self.$setState({
               service: service,
             })
+          else
+            app.dialog.alert('Ocorreu um erro inesperado, tente novamente!')
         })
 
         app.storage.getServiceComments(self.$route.params.id, function (comments) {
@@ -190,6 +192,8 @@
             self.$setState({
               comments: comments,
             })
+          else
+            app.dialog.alert('Ocorreu um erro inesperado, tente novamente!')
         })
       },
       newComment: function () {

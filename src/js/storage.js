@@ -38,6 +38,22 @@ const storage = {
       return "agora mesmo"
   },
 
+  formatDate: function (date) {
+    date = date.split(" ")
+    date = new Date(Date.parse(date[2] + " " + date[1] + ", " + date[3]))
+
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    date = date.toLocaleDateString(undefined, options)
+
+    return date.toUpperCase().charAt(0).toUpperCase() + date.slice(1)
+  },
+
+  processHTML: function (input) {
+    var e = document.createElement('div');
+    e.innerHTML = input;
+    return e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue;
+  },
+
   // LocalStorage methods
 
   clearAll: function () {
@@ -191,6 +207,34 @@ const storage = {
   
   clearRecordings: function () {
     localStorage.removeItem('recordings')
+  },
+
+  // News methods
+
+  getNews: function (callback=()=>{}) {
+    storage.app.request.promise.get('https://practice.uffs.cc/feed.xml')
+    .then(function (res) {
+      try {
+        let xml_parser = require('fast-xml-parser');
+        let obj = xml_parser.parse(res.data)
+        let news = obj.rss.channel.item
+
+        for (let i = 0; i < news.length; i++) {
+          const content = storage.processHTML(news[i].content)
+          news[i].content = content
+
+          const pubDate = storage.formatDate(news[i].pubDate)
+          news[i].pubDate = pubDate
+        }
+
+        callback(news)
+      } catch (error) {
+        callback(false)
+      }
+    })
+    .catch(function (err) {
+      callback(false)
+    })
   },
 
   // Services methods
