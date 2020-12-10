@@ -128,16 +128,14 @@
           </div>
         </div>
       {{/if}}
+    </div>
 
-      {{#if comments}}
-        <!-- New comment FAB -->
-        <div class="fab fab-right-bottom">
-          <a class="sheet-open" href="#" data-sheet=".new-comment-modal">
-            <i class="icon f7-icons">plus_bubble</i>
-          </a>
-        </div>
-      {{/if}}
-
+    {{#if comments}}
+      <!-- New comment FAB -->
+      <div class="fab fab-right-bottom color-teal">
+        <a class="sheet-open" href="#" data-sheet=".new-comment-modal"><span><i class="icon f7-icons">plus_bubble</i></span></a>
+      </div>
+      <!-- New comment modal -->
       <div class="sheet-modal new-comment-modal" style="height:auto;">
         <div class="sheet-modal-inner">
           <form class="list no-margin" id="new-comment-form" onSubmit="return false;" @submit="newComment()">
@@ -153,7 +151,7 @@
               </li>
               <!-- Buttons -->
               <li class="item-content item-input">
-                <div class="item-inner">
+                <div class="item-inner row">
                   <input type="submit" class="button button-raised button-fill" value="Confirmar">
                 </div>
               </li>
@@ -161,8 +159,8 @@
           </form>
         </div>
       </div>
-      
-    </div>
+    {{/if}}
+
   </div>
 </template>
 <script>
