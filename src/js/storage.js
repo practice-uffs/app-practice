@@ -292,7 +292,22 @@ const storage = {
         callback(false)
       })
     })
-  }
+  },
+
+  postCommentByServiceId: function (service_id, comment, callback=()=>{}) {
+    storage.getUserData(function (user_data) {
+      comment.user_id = user_data.id
+      comment.user = user_data.username
+
+      storage.app.request.promise.post('https://qa.mural.practice.uffs.cc/api/service/'+service_id+'/comments', comment)
+      .then(function (res) {
+        callback(true)
+      })
+      .catch(function () {
+        callback(false)
+      })
+    })
+  },
 
 }
 
