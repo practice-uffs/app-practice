@@ -282,17 +282,34 @@ const storage = {
   },
 
   getServiceComments: function (service_id, callback=()=>{}) {
+    storage.app.request.promise.get('https://qa.mural.practice.uffs.cc/api/service/'+service_id+'/comments')
+    .then(function (res) {
+      let comments = JSON.parse(res.data).data
+      for (let i=0; i<comments.length; i++) {
+        comments[i].timestamp = storage.dateDifference(comments[i].date)
+        comments[i].date = storage.formatDateDifference(comments[i].timestamp)
+      }
+      callback(comments)
+    })
+    .catch(function () {
+      callback(false)
+    })
+  },
+
+  postCommentByServiceId: function (service_id, comment, callback=()=>{}) {
     storage.getUserData(function (user_data) {
-      storage.app.request.promise.get('https://qa.mural.practice.uffs.cc/api/service/'+service_id+'/comments')
+      comment.user_id = user_data.id
+      comment.user = user_data.username
+
+      storage.app.request.promise.post('https://qa.mural.practice.uffs.cc/api/service/'+service_id+'/comments', comment)
       .then(function (res) {
-        let comments = JSON.parse(res.data).data
-        callback(comments)
+        callback(true)
       })
       .catch(function () {
         callback(false)
       })
     })
-  }
+  },
 
 }
 
