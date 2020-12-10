@@ -16,6 +16,7 @@
     <div class="page-content">
 
       {{#if service}}
+
         <!-- Service status -->
         {{#js_if "this.service.status === 1"}}
           <div class="block no-margin padding-half text-align-center" style="background-color: var(--color-3);">
@@ -44,14 +45,14 @@
             <div class="timeline-item-divider"></div>
             <div class="timeline-item-content">
               <div class="row">
-                <div class="timeline-item-time">{{service.user.name}}&nbsp;</div>
-                <div class="timeline-item-time">&nbsp;há {{service.created_at}}</div>
+                <div class="timeline-item-time">{{service.user.name}}</div>
               </div>
               <div class="card">
                 <div class="card-content card-content-padding">
                   {{service.description}}
                 </div>
               </div>
+              <div class="timeline-item-time">{{service.created_at}}</div>
             </div>
           </div>
 
@@ -83,14 +84,14 @@
                 <div class="timeline-item-divider"></div>
                 <div class="timeline-item-content">
                   <div class="row">
-                    <div class="timeline-item-time">{{this.user.name}}&nbsp;</div>
-                    <div class="timeline-item-time">há {{this.created_at}}</div>
+                    <div class="timeline-item-time">{{this.user}}&nbsp;</div>
                   </div>
                   <div class="card">
                     <div class="card-content card-content-padding">
                       {{this.text}}
                     </div>
                   </div>
+                  <div class="timeline-item-time">{{this.date}}</div>
                 </div>
               </div>
             {{/each}}
@@ -135,6 +136,7 @@
       <div class="fab fab-right-bottom color-teal">
         <a class="sheet-open" href="#" data-sheet=".new-comment-modal"><span><i class="icon f7-icons">plus_bubble</i></span></a>
       </div>
+
       <!-- New comment modal -->
       <div class="sheet-modal new-comment-modal" style="height:auto;">
         <div class="sheet-modal-inner">
