@@ -282,15 +282,13 @@ const storage = {
   },
 
   getServiceComments: function (service_id, callback=()=>{}) {
-    storage.getUserData(function (user_data) {
-      storage.app.request.promise.get('https://qa.mural.practice.uffs.cc/api/service/'+service_id+'/comments')
-      .then(function (res) {
-        let comments = JSON.parse(res.data).data
-        callback(comments)
-      })
-      .catch(function () {
-        callback(false)
-      })
+    storage.app.request.promise.get('https://qa.mural.practice.uffs.cc/api/service/'+service_id+'/comments')
+    .then(function (res) {
+      let comments = JSON.parse(res.data).data
+      callback(comments)
+    })
+    .catch(function () {
+      callback(false)
     })
   },
 
