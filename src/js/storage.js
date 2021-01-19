@@ -1,6 +1,18 @@
 
 const storage = {
 
+  prodApiURL: 'https://mural.practice.uffs.cc/api/',
+  testApiURL: 'https://qa.mural.practice.uffs.cc/api/',
+
+  api: function () {
+    const settings = storage.getSettings()
+
+    if (settings.devMode && settings.testApi)
+      return storage.testApiURL
+    else
+      return storage.prodApiURL
+  },
+
   init: function (app) {
     storage.app = app
     app.storage = storage
@@ -68,7 +80,9 @@ const storage = {
     if (!settings) {
       settings = {
         offlineStorage: true,
-        betaFunctions: false
+        // Dev options
+        devMode: false,
+        testApi: false,
       }
       localStorage['settings'] = JSON.stringify(settings)
     }
@@ -85,7 +99,7 @@ const storage = {
   // User credentials methods
 
   requestLogin: function (username, password, callback=()=>{}) {
-    storage.app.request.promise.post('https://qa.mural.practice.uffs.cc/api/auth/login', {username: username, password: password})
+    storage.app.request.promise.post(storage.api()+'auth/login', {username: username, password: password})
     .then(function (res) {
       let data = JSON.parse(res.data)
       if (data.access_token) {
@@ -110,7 +124,7 @@ const storage = {
   },
 
   requestLogout: function (callback=()=>{}) {
-    storage.app.request.promise.post('https://qa.mural.practice.uffs.cc/api/auth/logout')
+    storage.app.request.promise.post(storage.api()+'auth/logout')
     .then(function (res) {
       if (res.data) {
         storage.clearUserCredentials()
@@ -149,7 +163,7 @@ const storage = {
   // User data methods
 
   requestUserData: function (callback=()=>{}) {
-    storage.app.request.promise.post('https://qa.mural.practice.uffs.cc/api/auth/me')
+    storage.app.request.promise.post(storage.api()+'auth/me')
     .then(function (res) {
       const user_data = JSON.parse(res.data)
       storage.setUserData(user_data)
@@ -240,7 +254,7 @@ const storage = {
   // Services methods
 
   getServiceSpecifications: function (callback=()=>{}) {
-    storage.app.request.promise.get('https://qa.mural.practice.uffs.cc/api/specifications')
+    storage.app.request.promise.get(storage.api()+'specifications')
     .then(function (res) {
       // Grouping services by category
       let service_specifications = JSON.parse(res.data)
@@ -257,7 +271,7 @@ const storage = {
 
   getRequestedServices: function (callback=()=>{}) {
     storage.getUserData(function (user_data) {
-      storage.app.request.promise.get('https://qa.mural.practice.uffs.cc/api/services', { user_id: user_data.id })
+      storage.app.request.promise.get(storage.api()+'services', { user_id: user_data.id })
       .then(function (res) {
         let services = JSON.parse(res.data).data
         for (let i=0; i<services.length; i++) {
@@ -279,7 +293,7 @@ const storage = {
   },
 
   getLocations: function (callback=()=>{}) {
-    storage.app.request.promise.get('https://qa.mural.practice.uffs.cc/api/locations')
+    storage.app.request.promise.get(storage.api()+'locations')
     .then(function (res) {
       callback(JSON.parse(res.data))
     })
@@ -292,7 +306,7 @@ const storage = {
     storage.getUserData(function (user_data) {
       service.user_id = user_data.id
       
-      storage.app.request.promise.post('https://qa.mural.practice.uffs.cc/api/services', service)
+      storage.app.request.promise.post(storage.api()+'services', service)
       .then(function (res) {
         callback(true)
       })
@@ -304,7 +318,7 @@ const storage = {
 
   getServiceById: function (id, callback=()=>{}) {
     storage.getUserData(function (user_data) {
-      storage.app.request.promise.get('https://qa.mural.practice.uffs.cc/api/service/'+id)
+      storage.app.request.promise.get(storage.api()+'service/'+id)
       .then(function (res) {
         let service = JSON.parse(res.data)
         service.timestamp = storage.dateDifference(service.created_at)
@@ -326,7 +340,7 @@ const storage = {
   },
 
   getServiceComments: function (service_id, callback=()=>{}) {
-    storage.app.request.promise.get('https://qa.mural.practice.uffs.cc/api/service/'+service_id+'/comments')
+    storage.app.request.promise.get(storage.api()+'service/'+service_id+'/comments')
     .then(function (res) {
       let comments = JSON.parse(res.data).data
       for (let i=0; i<comments.length; i++) {
@@ -345,7 +359,7 @@ const storage = {
       comment.user_id = user_data.id
       comment.user = user_data.username
 
-      storage.app.request.promise.post('https://qa.mural.practice.uffs.cc/api/service/'+service_id+'/comments', comment)
+      storage.app.request.promise.post(storage.api()+'service/'+service_id+'/comments', comment)
       .then(function (res) {
         callback(true)
       })
