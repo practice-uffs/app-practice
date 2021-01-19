@@ -81,8 +81,8 @@ const storage = {
       settings = {
         offlineStorage: true,
         // Dev options
-        devMode: false,
-        testApi: false,
+        devMode: true,
+        testApi: true,
       }
       localStorage['settings'] = JSON.stringify(settings)
     }
