@@ -145,11 +145,24 @@ const storage = {
 
   getUserCredentials: function (callback=()=>{}) {
     let userCredentials = localStorage['userCredentials']
-
-    if (userCredentials)
-      callback(JSON.parse(userCredentials))
-    else
+    
+    if (userCredentials) {
+      userCredentials = JSON.parse(userCredentials)
+      storage.app.request.setup({
+        headers: {
+          Authorization: 'Bearer '+userCredentials.access_token
+        }
+      })
+      callback(userCredentials)
+    }
+    else {
+      storage.app.request.setup({
+        headers: {
+          Authorization: ''
+        }
+      })
       callback(false)  
+    }
   },
 
   setUserCredentials: function (userCredentials) {
