@@ -28,11 +28,11 @@ const storage = {
 
   formatDateDifference: function (difference) {
     let seconds = Math.floor(difference/1000)
-    let minutes = Math.floor(difference/(1000*60))
-    let hours = Math.floor(difference/(1000*60*60))
-    let days = Math.floor(difference/(1000*60*60*24))
-    let months = Math.floor(difference/(1000*60*60*24*30))
-    let years = Math.floor(difference/(1000*60*60*24*30*12))
+    let minutes = Math.floor(seconds/60)
+    let hours = Math.floor(minutes/60)
+    let days = Math.floor(hours/24)
+    let months = Math.floor(days/30)
+    let years = Math.floor(months/12)
     
     if (years > 0)
       return (years === 1 ? years+' ano' : years+' anos')
