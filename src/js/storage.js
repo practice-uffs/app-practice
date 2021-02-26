@@ -77,7 +77,9 @@ const storage = {
         testApi: true,
       };
       localStorage["settings"] = JSON.stringify(settings);
-    } else settings = JSON.parse(settings);
+    } else {
+      settings = JSON.parse(settings);
+    }
 
     return settings;
   },
@@ -88,8 +90,8 @@ const storage = {
 
   // User credentials methods
 
-  requestLogin: (username, password, callback = () => {}) => {
-    storage.app.request.promise
+  requestLogin: async (username, password) => {
+    return await storage.app.request.promise
       .post(storage.api() + "auth/login", {
         username: username,
         password: password,
@@ -98,23 +100,21 @@ const storage = {
         let data = JSON.parse(res.data);
         if (data.access_token) {
           storage.setUserCredentials(data);
-          callback(true);
           storage.app.request.setup({
             headers: {
               Authorization: "Bearer " + data.access_token,
             },
           });
           storage.requestUserData();
-        } else callback(false);
+          return true;
+        } else {
+          return false;
+        }
       })
-      .catch((err) => {
-        if (err.status == 401) callback(false);
-        else callback(null);
-      });
   },
 
-  requestLogout: (callback = () => {}) => {
-    storage.app.request.promise
+  requestLogout: async () => {
+    return await storage.app.request.promise
       .post(storage.api() + "auth/logout")
       .then((res) => {
         if (res.data) {
@@ -124,15 +124,14 @@ const storage = {
               Authorization: "",
             },
           });
-          callback(true);
-        } else callback(false);
+          return true;
+        } else {
+          return false;
+        }
       })
-      .catch((err) => {
-        callback(null);
-      });
   },
 
-  getUserCredentials: (callback = () => {}) => {
+  getUserCredentials: () => {
     let userCredentials = localStorage["userCredentials"];
 
     if (userCredentials) {
@@ -142,14 +141,14 @@ const storage = {
           Authorization: "Bearer " + userCredentials.access_token,
         },
       });
-      callback(userCredentials);
+      return userCredentials;
     } else {
       storage.app.request.setup({
         headers: {
           Authorization: "",
         },
       });
-      callback(false);
+      return false;
     }
   },
 
