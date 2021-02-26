@@ -14,155 +14,171 @@
     </div>
 
     <div class="page-content">
-
       {{#if service}}
 
-        <!-- Service status -->
-        {{#js_if "this.service.status === 1"}}
-          <div class="block no-margin padding-half text-align-center" style="background-color: var(--color-3);">
-            <h3 class="text-color-white">Aguardando na fila</h3>
+      <!-- Service status -->
+      {{#js_if "this.service.status === 1"}}
+      <div
+        class="block no-margin padding-half text-align-center"
+        style="background-color: var(--color-3)"
+      >
+        <h3 class="text-color-white">Aguardando na fila</h3>
+      </div>
+      {{/js_if}} {{#js_if "this.service.status === 2"}}
+      <div
+        class="block no-margin padding-half text-align-center"
+        style="background-color: var(--color-2)"
+      >
+        <h3 class="text-color-white">Em progresso</h3>
+      </div>
+      {{/js_if}} {{#js_if "this.service.status === 3"}}
+      <div
+        class="block no-margin padding-half text-align-center"
+        style="background-color: var(--color-5)"
+      >
+        <h3 class="text-color-white">Concluído</h3>
+      </div>
+      {{/js_if}}
+
+      <!-- Service title -->
+      <div class="block no-margin margin-top-half margin-bottom">
+        <h3 class="text-color-gray">{{service.title}}</h3>
+      </div>
+
+      <!-- Service content -->
+      <div class="timeline no-padding-left no-margin-top">
+        <div class="timeline-item">
+          <div class="timeline-item-divider"></div>
+          <div class="timeline-item-content">
+            <div class="row">
+              <div class="timeline-item-time">{{service.user.name}}</div>
+            </div>
+            <div class="card">
+              <div class="card-content card-content-padding">
+                {{service.description}}
+              </div>
+            </div>
+            <div class="timeline-item-time">{{service.created_at}}</div>
           </div>
-        {{/js_if}}
-        {{#js_if "this.service.status === 2"}}
-          <div class="block no-margin padding-half text-align-center" style="background-color: var(--color-2);">
-            <h3 class="text-color-white">Em progresso</h3>
-          </div>
-        {{/js_if}}
-        {{#js_if "this.service.status === 3"}}
-          <div class="block no-margin padding-half text-align-center" style="background-color: var(--color-5);">
-            <h3 class="text-color-white">Concluído</h3>
-          </div>
-        {{/js_if}}
-    
-        <!-- Service title -->
-        <div class="block no-margin margin-top-half margin-bottom">
-          <h3 class="text-color-gray">{{service.title}}</h3>
         </div>
-        
-        <!-- Service content -->
-        <div class="timeline no-padding-left no-margin-top">
+
+        <!-- Comment skeletons -->
+        {{#unless comments}}
+        <div class="skeleton-text skeleton-effect-blink">
+          {{#each "123"}}
           <div class="timeline-item">
             <div class="timeline-item-divider"></div>
             <div class="timeline-item-content">
               <div class="row">
-                <div class="timeline-item-time">{{service.user.name}}</div>
+                <div class="timeline-item-time">____________________</div>
+                <div class="timeline-item-time">___________</div>
               </div>
               <div class="card">
                 <div class="card-content card-content-padding">
-                  {{service.description}}
+                  ________________________________
                 </div>
               </div>
-              <div class="timeline-item-time">{{service.created_at}}</div>
+              <small>__________________</small>
             </div>
           </div>
-
-          <!-- Comment skeletons -->
-          {{#unless comments}}
-            <div class="skeleton-text skeleton-effect-blink">
-              {{#each "123"}}
-                <div class="timeline-item">
-                  <div class="timeline-item-divider"></div>
-                  <div class="timeline-item-content">
-                    <div class="row">
-                      <div class="timeline-item-time">____________________</div>
-                      <div class="timeline-item-time">___________</div>
-                    </div>
-                    <div class="card">
-                      <div class="card-content card-content-padding">________________________________</div>
-                    </div>
-                    <small>__________________</small>
-                  </div>
-                </div>
-              {{/each}}
-            </div>
-          {{/unless}}
-
-          <!-- Comments -->
-          {{#if comments}
-            {{#each comments}}
-              <div class="timeline-item">
-                <div class="timeline-item-divider"></div>
-                <div class="timeline-item-content">
-                  <div class="row">
-                    <div class="timeline-item-time">{{this.user}}&nbsp;</div>
-                  </div>
-                  <div class="card">
-                    <div class="card-content card-content-padding">
-                      {{this.text}}
-                    </div>
-                  </div>
-                  <div class="timeline-item-time">{{this.date}}</div>
-                </div>
-              </div>
-            {{/each}}
-          {{/if}}
+          {{/each}}
         </div>
+        {{/unless}}
+
+        <!-- Comments -->
+        {{#if comments} {{#each comments}}
+        <div class="timeline-item">
+          <div class="timeline-item-divider"></div>
+          <div class="timeline-item-content">
+            <div class="row">
+              <div class="timeline-item-time">{{this.user}}&nbsp;</div>
+            </div>
+            <div class="card">
+              <div class="card-content card-content-padding">{{this.text}}</div>
+            </div>
+            <div class="timeline-item-time">{{this.date}}</div>
+          </div>
+        </div>
+        {{/each}} {{/if}}
+      </div>
       {{else}}
-        <div class="skeleton-text skeleton-effect-blink">
-          <!-- Service status skeleton -->
-          <div class="block no-margin no-padding">
-            <div class="skeleton-block" style="height: 40px; width: 100%;"></div>
-          </div>
+      <div class="skeleton-text skeleton-effect-blink">
+        <!-- Service status skeleton -->
+        <div class="block no-margin no-padding">
+          <div class="skeleton-block" style="height: 40px; width: 100%"></div>
+        </div>
 
-          <!-- Service title skeleton -->
-          <div class="block no-margin margin-top-half margin-bottom">
-            <h3>_________________________</h3>
-          </div>
-          
-          <!-- Service and comment skeletons -->
-          <div class="timeline no-padding-left no-margin-top">
-            {{#each "1234"}}
-              <div class="timeline-item">
-                <div class="timeline-item-divider"></div>
-                <div class="timeline-item-content">
-                  <div class="row">
-                    <div class="timeline-item-time">____________________</div>
-                    <div class="timeline-item-time">___________</div>
-                  </div>
-                  <div class="card">
-                    <div class="card-content card-content-padding">________________________________</div>
-                  </div>
-                  <small>__________________</small>
+        <!-- Service title skeleton -->
+        <div class="block no-margin margin-top-half margin-bottom">
+          <h3>_________________________</h3>
+        </div>
+
+        <!-- Service and comment skeletons -->
+        <div class="timeline no-padding-left no-margin-top">
+          {{#each "1234"}}
+          <div class="timeline-item">
+            <div class="timeline-item-divider"></div>
+            <div class="timeline-item-content">
+              <div class="row">
+                <div class="timeline-item-time">____________________</div>
+                <div class="timeline-item-time">___________</div>
+              </div>
+              <div class="card">
+                <div class="card-content card-content-padding">
+                  ________________________________
                 </div>
               </div>
-            {{/each}}
+              <small>__________________</small>
+            </div>
           </div>
+          {{/each}}
         </div>
+      </div>
       {{/if}}
     </div>
 
     {{#if comments}}
-      <!-- New comment FAB -->
-      <div class="fab fab-right-bottom color-teal">
-        <a class="sheet-open" href="#" data-sheet=".new-comment-modal"><span><i class="icon f7-icons">plus_bubble</i></span></a>
-      </div>
+    <!-- New comment FAB -->
+    <div class="fab fab-right-bottom color-teal">
+      <a class="sheet-open" href="#" data-sheet=".new-comment-modal"
+        ><span><i class="icon f7-icons">plus_bubble</i></span></a
+      >
+    </div>
 
-      <!-- New comment modal -->
-      <div class="sheet-modal new-comment-modal" style="height:auto;">
-        <div class="sheet-modal-inner">
-          <form class="list no-margin" id="new-comment-form" onSubmit="return false;" @submit="newComment()">
-            <ul>
-              <!-- Text -->
-              <li class="item-content item-input item-input-outline">
-                <div class="item-inner">
-                  <div class="item-title item-floating-label">Comentário</div>
-                  <div class="item-input-wrap">
-                    <textarea name="text" required validate></textarea>
-                  </div>
+    <!-- New comment modal -->
+    <div class="sheet-modal new-comment-modal" style="height: auto">
+      <div class="sheet-modal-inner">
+        <form
+          class="list no-margin"
+          id="new-comment-form"
+          onSubmit="return false;"
+          @submit="newComment()"
+        >
+          <ul>
+            <!-- Text -->
+            <li class="item-content item-input item-input-outline">
+              <div class="item-inner">
+                <div class="item-title item-floating-label">Comentário</div>
+                <div class="item-input-wrap">
+                  <textarea name="text" required validate></textarea>
                 </div>
-              </li>
-              <!-- Buttons -->
-              <li class="item-content item-input">
-                <div class="item-inner row">
-                  <input type="submit" class="button button-raised button-fill" value="Confirmar">
-                </div>
-              </li>
-            </ul>
-          </form>
-        </div>
+              </div>
+            </li>
+            <!-- Buttons -->
+            <li class="item-content item-input">
+              <div class="item-inner row">
+                <input
+                  type="submit"
+                  class="button button-raised button-fill"
+                  value="Confirmar"
+                />
+              </div>
+            </li>
+          </ul>
+        </form>
       </div>
+    </div>
     {{/if}}
-
   </div>
 </template>
 <script>
@@ -171,53 +187,63 @@
       return {
         service: null,
         comments: null,
-      }
+      };
     },
     methods: {
       loadServices: function () {
-        var self = this
-        var app = self.$app
+        var self = this;
+        var app = self.$app;
 
-        app.storage.getServiceById(self.$route.params.id, function (service) {
-          if (service) 
+        app.storage
+          .getServiceById(self.$route.params.id)
+          .then((service) => {
             self.$setState({
               service: service,
-            })
-          else
-            app.dialog.alert('Ocorreu um erro inesperado, tente novamente!')
-        })
+            });
+          })
+          .catch(() => {
+            app.dialog.alert("Ocorreu um erro inesperado, tente novamente!");
+          });
 
-        app.storage.getServiceComments(self.$route.params.id, function (comments) {
-          if (comments) 
+        app.storage
+          .getServiceComments(self.$route.params.id)
+          .then((comments) => {
             self.$setState({
               comments: comments,
-            })
-          else
-            app.dialog.alert('Ocorreu um erro inesperado, tente novamente!')
-        })
+            });
+          })
+          .catch(() => {
+            app.dialog.alert("Ocorreu um erro inesperado, tente novamente!");
+          });
       },
       newComment: function () {
-        var self = this
-        var app = self.$app
+        var self = this;
+        var app = self.$app;
 
-        app.dialog.confirm("Tem certeza que deseja criar este comentário?", function () {
-          let comment = app.form.convertToData('#new-comment-form')
-          
-          app.storage.postCommentByServiceId(self.$route.params.id, comment, function (res) {
-            if (res) {
-              app.sheet.close()
-              app.view.main.router.refreshPage()
-            }
-            else
-              app.dialog.alert('Ocorreu um erro inesperado, tente novamente!')
-          })
-        })
+        app.dialog.confirm(
+          "Tem certeza que deseja criar este comentário?",
+          function () {
+            let comment = app.form.convertToData("#new-comment-form");
+
+            app.storage
+              .postCommentByServiceId(self.$route.params.id, comment)
+              .then(() => {
+                app.sheet.close();
+                app.view.main.router.refreshPage();
+              })
+              .catch(() => {
+                app.dialog.alert(
+                  "Ocorreu um erro inesperado, tente novamente!"
+                );
+              });
+          }
+        );
       },
     },
     on: {
-      pageInit: function(e, page) {
-        this.loadServices()
-      }
-    }
-  }
+      pageInit: function (e, page) {
+        this.loadServices();
+      },
+    },
+  };
 </script>

@@ -16,15 +16,30 @@
         <!-- Content -->
         <div class="page-content login-screen-content">
           <div class="login-screen-title">
-            <img src="../static/images/logo/logo 915x286.png" style="width: 100%; height: auto;" />
+            <img
+              src="../static/images/logo/logo 915x286.png"
+              style="width: 100%; height: auto"
+            />
           </div>
-          <form class="list" id="login-form" onSubmit="return false;" @submit="login()">
+          <form
+            class="list"
+            id="login-form"
+            onSubmit="return false;"
+            @submit="login()"
+          >
             <ul>
               <li class="item-content item-input item-input-outline">
                 <div class="item-inner">
                   <div class="item-title item-floating-label">idUFFS</div>
                   <div class="item-input-wrap">
-                    <input type="text" name="iduffs" pattern="[a-zA-Z.]+" data-error-message="Digite apenas letras ou pontos." required validate>
+                    <input
+                      type="text"
+                      name="iduffs"
+                      pattern="[a-zA-Z.]+"
+                      data-error-message="Digite apenas letras ou pontos."
+                      required
+                      validate
+                    />
                     <span class="input-clear-button"></span>
                   </div>
                 </div>
@@ -33,19 +48,29 @@
                 <div class="item-inner">
                   <div class="item-title item-floating-label">Senha</div>
                   <div class="item-input-wrap">
-                    <input type="password" name="password" required validate>
+                    <input type="password" name="password" required validate />
                     <span class="input-clear-button"></span>
                   </div>
                 </div>
               </li>
               <li class="item-content item-input">
                 <div class="item-inner">
-                  <input type="submit" class="button button-raised button-fill" value="Acessar">
+                  <input
+                    type="submit"
+                    class="button button-raised button-fill"
+                    value="Acessar"
+                  />
                 </div>
               </li>
               <li class="item-content">
                 <div class="item-inner">
-                  <a href="#" class="link text-align-center login-screen-close" style="width: 100%;"> Clique aqui para redefinir sua senha</a>
+                  <a
+                    href="#"
+                    class="link text-align-center login-screen-close"
+                    style="width: 100%"
+                  >
+                    Clique aqui para redefinir sua senha</a
+                  >
                 </div>
               </li>
             </ul>
@@ -60,23 +85,27 @@
   export default {
     methods: {
       login: function () {
-        let self = this
-        let app = self.$app
+        let self = this;
+        let app = self.$app;
 
-        app.dialog.preloader("Carregando...")
-        let loginData = app.form.convertToData('#login-form')
+        app.dialog.preloader("Carregando...");
+        let loginData = app.form.convertToData("#login-form");
 
         // Request login
-        app.storage.requestLogin(loginData.iduffs, loginData.password, function (res) {
-          app.dialog.close()
-          if (res)
-            app.view.main.router.navigate('/')
-          else if (res === null)
-            app.dialog.alert('Um erro inesperado ocorreu, tente novamente!')
-          else
-            app.dialog.alert('Credenciais incorretas, tente novamente!')
-        })
-      }
-    }
-  }
+        app.storage
+          .requestLogin(loginData.iduffs, loginData.password)
+          .then((res) => {
+            app.dialog.close();
+            if (res) {
+              app.view.main.router.navigate("/");
+            } else {
+              app.dialog.alert("Credenciais incorretas, tente novamente!");
+            }
+          })
+          .catch(() => {
+            app.dialog.alert("Ocorreu um ero em sua rede, tente novamente!");
+          });
+      },
+    },
+  };
 </script>
