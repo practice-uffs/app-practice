@@ -137,20 +137,22 @@
         var self = this
         var app = self.$app
         // Load service specifications
-        app.storage.getServiceSpecifications(function (serviceSpecifications) {
+        app.storage.getServiceSpecifications().then((serviceSpecifications) => {
           if (serviceSpecifications) {
             self.$setState({
               serviceSpecifications: serviceSpecifications
             })
           }
+        }).catch(() => {
+          app.dialog.alert("Ocorreu um erro em sua rede, tente novamente!");
         })
         // Load locations
-        app.storage.getLocations(function (locations) {
-          if (locations) {
-            self.$setState({
-              locations: locations
-            })
-          }
+        app.storage.getLocations().then((locations) => {
+          self.$setState({
+            locations: locations
+          })
+        }).catch(()=>{
+          app.dialog.alert("Ocorreu um erro em sua rede, tente novamente!");
         })
       },
       setServiceRequest: function (title, specification_id, category_id) {
@@ -176,15 +178,13 @@
           serviceData.category_id = Number(serviceData.category_id)
           serviceData.specification_id = Number(serviceData.specification_id)
 
-          app.storage.postServiceRequest(serviceData, function (res) {
+          app.storage.postServiceRequest(serviceData).then((res) => {
             app.dialog.close()
-            // Check response
-            if (res) {
-              app.sheet.close()
-              app.view.main.router.navigate('/')
-            }
-            else
-              app.dialog.alert('Ocorreu um erro inesperado, tente novamente!')
+            app.sheet.close()
+            app.view.main.router.navigate('/')
+          }).catch(() => {
+            app.dialog.close()
+            app.dialog.alert('Ocorreu um erro inesperado, tente novamente!')
           })
         })
       }

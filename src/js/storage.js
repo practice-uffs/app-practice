@@ -236,8 +236,8 @@ const storage = {
 
   // Services methods
 
-  getServiceSpecifications: (callback = () => {}) => {
-    storage.app.request.promise
+  getServiceSpecifications: async () => {
+    return await storage.app.request.promise
       .get(storage.api() + "specifications")
       .then((res) => {
         // Grouping services by category
@@ -246,16 +246,13 @@ const storage = {
           (list[x["category_id"]] = list[x["category_id"]] || []).push(x);
           return list;
         }, {});
-        callback(service_specifications);
-      })
-      .catch((err) => {
-        callback(false);
+        return service_specifications;
       });
   },
 
-  getRequestedServices: (callback = () => {}) => {
-    storage.getUserData().then((userData) => {
-      storage.app.request.promise
+  getRequestedServices: async () => {
+    return await storage.getUserData().then(async (userData) => {
+      return await storage.app.request.promise
         .get(storage.api() + "services", { user_id: userData.id })
         .then((res) => {
           let services = JSON.parse(res.data).data;
@@ -273,43 +270,31 @@ const storage = {
             services[i].status = Number(services[i].status);
           }
           services.sort((a, b) => (a.timestamp > b.timestamp ? 1 : -1));
-          callback(services);
-        })
-        .catch((err) => {
-          callback(false);
+          return services;
         });
     });
   },
 
-  getLocations: (callback = () => {}) => {
-    storage.app.request.promise
+  getLocations: async () => {
+    return await storage.app.request.promise
       .get(storage.api() + "locations")
       .then((res) => {
-        callback(JSON.parse(res.data));
-      })
-      .catch((err) => {
-        callback(false);
+        return JSON.parse(res.data);
       });
   },
 
-  postServiceRequest: (service, callback = () => {}) => {
-    storage.getUserData().then((userData) => {
+  postServiceRequest: async (service) => {
+    return await storage.getUserData().then(async (userData) => {
       service.user_id = userData.id;
-
-      storage.app.request.promise
+      return await storage.app.request.promise
         .post(storage.api() + "services", service)
-        .then((res) => {
-          callback(true);
-        })
-        .catch(() => {
-          callback(false);
-        });
+        .then((res) => true);
     });
   },
 
-  getServiceById: (id, callback = () => {}) => {
-    storage.getUserData().then((userData) => {
-      storage.app.request.promise
+  getServiceById: async (id) => {
+    return await storage.getUserData().then(async (userData) => {
+      return await storage.app.request.promise
         .get(storage.api() + "service/" + id)
         .then((res) => {
           let service = JSON.parse(res.data);
@@ -323,16 +308,14 @@ const storage = {
           service.type = Number(service.type);
           service.hidden = Number(service.hidden);
           service.user = userData;
-          callback(service);
-        })
-        .catch(() => {
-          callback(false);
+
+          return service;
         });
     });
   },
 
-  getServiceComments: (service_id, callback = () => {}) => {
-    storage.app.request.promise
+  getServiceComments: async (service_id) => {
+    return await storage.app.request.promise
       .get(storage.api() + "service/" + service_id + "/comments")
       .then((res) => {
         let comments = JSON.parse(res.data).data;
@@ -342,26 +325,18 @@ const storage = {
             comments[i].timestamp
           );
         }
-        callback(comments);
-      })
-      .catch(() => {
-        callback(false);
+        return comments;
       });
   },
 
-  postCommentByServiceId: (service_id, comment, callback = () => {}) => {
-    storage.getUserData().then((userData) => {
+  postCommentByServiceId: async (service_id, comment) => {
+    return await storage.getUserData().then(async (userData) => {
       comment.user_id = userData.id;
       comment.user = userData.username;
 
-      storage.app.request.promise
+      return await storage.app.request.promise
         .post(storage.api() + "service/" + service_id + "/comments", comment)
-        .then((res) => {
-          callback(true);
-        })
-        .catch(() => {
-          callback(false);
-        });
+        .then((res) => true);
     });
   },
 };
