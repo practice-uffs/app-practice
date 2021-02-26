@@ -13,7 +13,7 @@ import cordovaApp from './cordova-app.js'
 import routes from './routes.js'
 // Import analytics stuff 
 import Abalytics from './abalytics.js'
-import storage from './storage.js'
+import { storage } from './storage.js'
 
 // Import main app component
 import App from '../app.f7.html'

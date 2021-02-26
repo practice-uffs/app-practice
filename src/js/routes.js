@@ -1,253 +1,240 @@
-import InitialPage from '../pages/initial.f7.html'
-import HomePage from '../pages/home.f7.html'
-import RightPanelPage from '../pages/right-panel.f7.html'
+import InitialPage from "../pages/initial.f7.html";
+import HomePage from "../pages/home.f7.html";
+import RightPanelPage from "../pages/right-panel.f7.html";
 
-import EnvPage from '../pages/env.f7.html'
-import ScanPage from '../pages/scan.f7.html'
-import ChatsPage from '../pages/chats.f7.html'
-  import ChatPage from '../pages/chat.f7.html'
-import NewsPage from '../pages/news.f7.html'
-import ProfilePage from '../pages/profile.f7.html'
+import EnvPage from "../pages/env.f7.html";
+import ScanPage from "../pages/scan.f7.html";
+import ChatsPage from "../pages/chats.f7.html";
+import ChatPage from "../pages/chat.f7.html";
+import NewsPage from "../pages/news.f7.html";
+import ProfilePage from "../pages/profile.f7.html";
 
-import IdeasPage from '../pages/ideas.f7.html'
-import ServicesPage from '../pages/services.f7.html'
-  import ServiceRequestPage from '../pages/service-request.f7.html'
-  import ServiceDetailsPage from '../pages/service-details.f7.html'
-import CoinPage from '../pages/coin.f7.html'
-import NotificationsPage from '../pages/notifications.f7.html'
-import SettingsPage from '../pages/settings.f7.html'
-import AboutPage from '../pages/about.f7.html'
-  import RecordAudioPage from '../pages/record-audio.f7.html'
+import IdeasPage from "../pages/ideas.f7.html";
+import ServicesPage from "../pages/services.f7.html";
+import ServiceRequestPage from "../pages/service-request.f7.html";
+import ServiceDetailsPage from "../pages/service-details.f7.html";
+import CoinPage from "../pages/coin.f7.html";
+import NotificationsPage from "../pages/notifications.f7.html";
+import SettingsPage from "../pages/settings.f7.html";
+import AboutPage from "../pages/about.f7.html";
+import RecordAudioPage from "../pages/record-audio.f7.html";
 
-import TaskCompletedPage from '../pages/task-completed.f7.html'
+import TaskCompletedPage from "../pages/task-completed.f7.html";
 
-import LoginPage from '../pages/login.f7.html'
+import LoginPage from "../pages/login.f7.html";
 
-import NotFoundPage from '../pages/404.f7.html'
+import NotFoundPage from "../pages/404.f7.html";
 
-import storage from '../js/storage.js'
-import IsEnabled from './isenabled'
+import { storage } from "../js/storage.js";
+import IsEnabled from "./isenabled";
 
 const authenticated = function (to, from, resolve, reject) {
-  let self = this
-  storage.getUserCredentials(function (user_credentials) {
-    if (user_credentials) {
-      resolve()
-    } else {
-      reject()
-      self.navigate('/initial/')
-    }
-  })
-}
+  let self = this;
+
+  if (storage.getUserCredentials()) {
+    resolve();
+  } else {
+    reject();
+    self.navigate("/initial/");
+  }
+};
 
 const unauthenticated = function (to, from, resolve, reject) {
-  let self = this
-  storage.getUserCredentials(function (user_credentials) {
-    if (!user_credentials) {
-      resolve()
-    } else {
-      reject()
-      self.navigate('/')
-    }
-  })
-}
+  let self = this;
+  
+  if (!storage.getUserCredentials()) {
+    resolve();
+  } else {
+    reject();
+    self.navigate("/");
+  }
+};
 
 const homePageRoute = function () {
   let route = {
-    path: '/',
+    path: "/",
     component: HomePage,
     beforeEnter: authenticated,
-  }
+  };
 
-  let tabs = []
+  let tabs = [];
 
   if (IsEnabled.servicesPage)
     tabs.push({
-      path: '/',
-      id: 'services',
+      path: "/",
+      id: "services",
       component: ServicesPage,
-    })
+    });
 
   if (IsEnabled.newsPage)
     tabs.push({
-      path: '/news/',
-      id: 'news',
+      path: "/news/",
+      id: "news",
       component: NewsPage,
-    })
+    });
 
   if (IsEnabled.envPage)
     tabs.push({
-      path: '/env/',
-      id: 'env',
+      path: "/env/",
+      id: "env",
       component: EnvPage,
-    })
+    });
 
   if (IsEnabled.scanPage)
     tabs.push({
-      path: '/scan/',
-      id: 'scan',
+      path: "/scan/",
+      id: "scan",
       component: ScanPage,
-    })
+    });
 
   if (IsEnabled.chatsPage)
     tabs.push({
-      path: '/chats/',
-      id: 'chats',
+      path: "/chats/",
+      id: "chats",
       component: ChatsPage,
-    })
+    });
 
-  route.tabs = tabs
+  route.tabs = tabs;
 
-  return route
-}
+  return route;
+};
 
 const chatPageRoute = function () {
   let route = {
-    path: '/chats/:id/',
+    path: "/chats/:id/",
     component: ChatPage,
     beforeEnter: authenticated,
-  }
+  };
 
-  if (IsEnabled.chatPage)
-    return route
-}
+  if (IsEnabled.chatPage) return route;
+};
 
 const serviceDetailsPageRoute = function () {
   let route = {
-    path: '/services/:id/',
+    path: "/services/:id/",
     component: ServiceDetailsPage,
     beforeEnter: authenticated,
-  }
+  };
 
-  if (IsEnabled.servicesPage)
-    return route
-}
+  if (IsEnabled.servicesPage) return route;
+};
 
 const serviceRequestPageRoute = function () {
   let route = {
-    path: '/services/service-request/',
+    path: "/services/service-request/",
     component: ServiceRequestPage,
     beforeEnter: authenticated,
-  }
+  };
 
-  if (IsEnabled.servicesPage)
-    return route
-}
+  if (IsEnabled.servicesPage) return route;
+};
 
 const rightPanelRoute = function () {
   let route = {
-    path: '/right-panel/',
+    path: "/right-panel/",
     panel: {
       component: RightPanelPage,
     },
     beforeEnter: authenticated,
-  }
+  };
 
-  if (IsEnabled.rightPanel)
-    return route
-}
+  if (IsEnabled.rightPanel) return route;
+};
 
 const ideasPageRoute = function () {
   let route = {
-    path: '/ideas/',
+    path: "/ideas/",
     component: IdeasPage,
     beforeEnter: authenticated,
-  }
+  };
 
-  if (IsEnabled.ideasPage)
-    return route
-}
+  if (IsEnabled.ideasPage) return route;
+};
 
 const coinPageRoute = function () {
   let route = {
-    path: '/coin/',
+    path: "/coin/",
     component: CoinPage,
     beforeEnter: authenticated,
-  }
+  };
 
-  if (IsEnabled.coinPage)
-    return route
-}
+  if (IsEnabled.coinPage) return route;
+};
 
 const notificationsPageRoute = function () {
   let route = {
-    path: '/notifications/',
+    path: "/notifications/",
     component: NotificationsPage,
     beforeEnter: authenticated,
-  }
+  };
 
-  if (IsEnabled.notificationsPage)
-    return route
-}
+  if (IsEnabled.notificationsPage) return route;
+};
 
 const settingsPageRoute = function () {
   let route = {
-    path: '/settings/',
+    path: "/settings/",
     component: SettingsPage,
     beforeEnter: authenticated,
-  }
+  };
 
-  if (IsEnabled.settingsPage)
-    return route
-}
+  if (IsEnabled.settingsPage) return route;
+};
 
 const aboutPageRoute = function () {
   let route = {
-    path: '/about/',
+    path: "/about/",
     component: AboutPage,
     beforeEnter: authenticated,
-  }
+  };
 
-  if (IsEnabled.aboutPage)
-    return route
-}
+  if (IsEnabled.aboutPage) return route;
+};
 
 const taskCompletedPageRoute = function () {
   let route = {
-    path: '/task-completed/',
+    path: "/task-completed/",
     component: TaskCompletedPage,
     beforeEnter: authenticated,
-  }
+  };
 
-  if (IsEnabled.taskCompletedPage)
-    return route
-}
+  if (IsEnabled.taskCompletedPage) return route;
+};
 
 const recordAudioPageRoute = function () {
   let route = {
-    path: '/about/record-audio/',
+    path: "/about/record-audio/",
     component: RecordAudioPage,
     beforeEnter: authenticated,
-  }
+  };
 
-  if (IsEnabled.recordAudioPage)
-    return route
-}
+  if (IsEnabled.recordAudioPage) return route;
+};
 
 const initialPageRoute = function () {
   return {
-    path: '/initial/',
+    path: "/initial/",
     component: InitialPage,
     beforeEnter: unauthenticated,
-  }
-}
+  };
+};
 
 const loginPageRoute = function () {
   return {
-    path: '/login/',
+    path: "/login/",
     loginScreen: {
       component: LoginPage,
     },
     beforeEnter: unauthenticated,
-  }
-}
+  };
+};
 
 const notFoundPageRoute = function () {
   return {
-    path: '(.*)',
+    path: "(.*)",
     component: NotFoundPage,
-  }
-}
+  };
+};
 
 var routes = [
   // Authenticated routes
@@ -267,11 +254,11 @@ var routes = [
   initialPageRoute(),
   loginPageRoute(),
   notFoundPageRoute(),
-]
+];
 
 // Removing undefined routes
 var routes = routes.filter(function (el) {
-  return el != null
-})
+  return el != null;
+});
 
-export default routes
+export default routes;
