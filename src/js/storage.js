@@ -105,12 +105,11 @@ const storage = {
               Authorization: "Bearer " + data.access_token,
             },
           });
-          storage.requestUserData();
           return true;
         } else {
           return false;
         }
-      })
+      });
   },
 
   requestLogout: async () => {
@@ -128,7 +127,7 @@ const storage = {
         } else {
           return false;
         }
-      })
+      });
   },
 
   getUserCredentials: () => {
@@ -162,32 +161,28 @@ const storage = {
 
   // User data methods
 
-  requestUserData: (callback = () => {}) => {
-    storage.app.request.promise
+  requestUserData: async () => {
+    return await storage.app.request.promise
       .post(storage.api() + "auth/me")
       .then((res) => {
-        const user_data = JSON.parse(res.data);
-        storage.setUserData(user_data);
-        callback(user_data);
-      })
-      .catch((err) => {
-        callback(false);
+        const userData = JSON.parse(res.data);
+        storage.setUserData(userData);
+        return userData;
       });
   },
 
-  getUserData: (callback = () => {}) => {
-    let user_data = localStorage["userData"];
+  getUserData: async () => {
+    let userData = localStorage["userData"];
 
-    if (!user_data)
-      storage.requestUserData((res) => {
-        if (res) callback(res);
-        else callback(false);
-      });
-    else callback(JSON.parse(user_data));
+    if (!userData) {
+      return await storage.requestUserData();
+    } else {
+      return JSON.parse(userData);
+    }
   },
 
-  setUserData: (user_data) => {
-    localStorage["userData"] = JSON.stringify(user_data);
+  setUserData: (userData) => {
+    localStorage["userData"] = JSON.stringify(userData);
   },
 
   // Audio recording methods
@@ -267,9 +262,9 @@ const storage = {
   },
 
   getRequestedServices: (callback = () => {}) => {
-    storage.getUserData((user_data) => {
+    storage.getUserData().then((userData) => {
       storage.app.request.promise
-        .get(storage.api() + "services", { user_id: user_data.id })
+        .get(storage.api() + "services", { user_id: userData.id })
         .then((res) => {
           let services = JSON.parse(res.data).data;
           for (let i = 0; i < services.length; i++) {
@@ -306,8 +301,8 @@ const storage = {
   },
 
   postServiceRequest: (service, callback = () => {}) => {
-    storage.getUserData((user_data) => {
-      service.user_id = user_data.id;
+    storage.getUserData().then((userData) => {
+      service.user_id = userData.id;
 
       storage.app.request.promise
         .post(storage.api() + "services", service)
@@ -321,7 +316,7 @@ const storage = {
   },
 
   getServiceById: (id, callback = () => {}) => {
-    storage.getUserData((user_data) => {
+    storage.getUserData().then((userData) => {
       storage.app.request.promise
         .get(storage.api() + "service/" + id)
         .then((res) => {
@@ -335,7 +330,7 @@ const storage = {
           service.status = Number(service.status);
           service.type = Number(service.type);
           service.hidden = Number(service.hidden);
-          service.user = user_data;
+          service.user = userData;
           callback(service);
         })
         .catch(() => {
@@ -363,9 +358,9 @@ const storage = {
   },
 
   postCommentByServiceId: (service_id, comment, callback = () => {}) => {
-    storage.getUserData((user_data) => {
-      comment.user_id = user_data.id;
-      comment.user = user_data.username;
+    storage.getUserData().then((userData) => {
+      comment.user_id = userData.id;
+      comment.user = userData.username;
 
       storage.app.request.promise
         .post(storage.api() + "service/" + service_id + "/comments", comment)

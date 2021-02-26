@@ -109,13 +109,16 @@
         let self = this;
         let app = self.$app;
 
-        app.storage.getUserData(function (user) {
-          if (user) {
+        app.storage
+          .getUserData()
+          .then((userData) => {
             self.$setState({
-              user: user,
+              user: userData,
             });
-          }
-        });
+          })
+          .catch(() => {
+            app.dialog.alert("Ocorreu um erro em sua rede, tente novamente!");
+          });
       },
 
       logout: function () {
@@ -135,7 +138,7 @@
               }
             })
             .catch(() => {
-              app.dialog.alert("Ocorreu um ero em sua rede, tente novamente!");
+              app.dialog.alert("Ocorreu um erro em sua rede, tente novamente!");
             });
         });
       },
