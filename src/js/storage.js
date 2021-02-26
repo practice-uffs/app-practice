@@ -215,30 +215,22 @@ const storage = {
 
   // News methods
 
-  getNews: (callback = () => {}) => {
-    storage.app.request.promise
+  getNews: async () => {
+    return await storage.app.request.promise
       .get("https://practice.uffs.cc/feed.xml")
       .then((res) => {
-        try {
-          let xml_parser = require("fast-xml-parser");
-          let obj = xml_parser.parse(res.data);
-          let news = obj.rss.channel.item;
+        let xml_parser = require("fast-xml-parser");
+        let obj = xml_parser.parse(res.data);
+        let news = obj.rss.channel.item;
 
-          for (let i = 0; i < news.length; i++) {
-            const content = storage.processHTML(news[i].content);
-            news[i].content = content;
+        for (let i = 0; i < news.length; i++) {
+          const content = storage.processHTML(news[i].content);
+          news[i].content = content;
 
-            const pubDate = storage.formatDate(news[i].pubDate);
-            news[i].pubDate = pubDate;
-          }
-
-          callback(news);
-        } catch (error) {
-          callback(false);
+          const pubDate = storage.formatDate(news[i].pubDate);
+          news[i].pubDate = pubDate;
         }
-      })
-      .catch((err) => {
-        callback(false);
+        return news;
       });
   },
 
