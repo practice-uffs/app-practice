@@ -13,7 +13,7 @@ var IsEnabled = {
     chatsPage: false,
     chatPage: false,
 
-    scanPage: false,
+    scanPage: true,
 
     envPage: false,
 

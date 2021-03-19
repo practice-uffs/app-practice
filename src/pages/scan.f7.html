@@ -3,9 +3,8 @@
     <div class="block card no-margin no-padding">
       <div class="row">
 
-        <div class="col-100 tablet-50">
-          <video id="scanner-video" style="width: 100%;"></video>
-        </div>
+        <div id="qr-reader" style="width:500px">kjk</div>
+        <div id="qr-reader-results"></div>
 
         <div class="col-100 tablet-50 margin-horizontal">
           <hr />
@@ -28,9 +27,8 @@
 </template>
 
 <script>
-  import QrScanner from 'qr-scanner'
-  //QrScanner.WORKER_PATH = '../js/qr-scanner-worker.min.js';
-
+  import 'html5-qrcode/minified/html5-qrcode.min.js';
+  
   export default {
     data: function () {
       return {
@@ -39,28 +37,20 @@
     },
     methods: {
       initScan: function () {
-        let self = this
-        let app = self.$app
+        let self = this;
+        let app = self.$app;
 
-        if(QrScanner.hasCamera()){
-          const scannerVideo = document.getElementById('scanner-video')
-          const scanner = new QrScanner(scannerVideo, function (result){
-            console.log('decoded qr code:', result)
-          });
-          
-          self.$setState({
-            scanner: scanner,
-          });
+        const html5QrcodeScanner = new Html5QrcodeScanner('qr-reader', { fps: 10, qrbox: 250 });
 
-          self.scanner.start()
-        }
-        else
-          app.dialog.alert('Nenhuma câmera encontrada!')
+        html5QrcodeScanner.render(function onScanSuccess(qrCodeMessage) {
+          // handle on success condition with the decoded message
+          console.log('success!');
+        });
       }
     },
     on: {
       tabInit: function(e, page) {
-        this.initScan()
+        this.initScan();
       },
     }
   }
