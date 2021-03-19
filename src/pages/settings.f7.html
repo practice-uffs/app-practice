@@ -60,16 +60,36 @@
                 <i class="f7-icons">exclamationmark_triangle</i>
               </div>
               <div class="item-inner">
-                <div class="item-title">Funcionalidades em versão beta</div>
+                <div class="item-title">Modo de desenvolvedor</div>
                 <div class="item-after">
                   <label class="toggle toggle-init color-blue">
-                    <input type="checkbox" name="betaFunctions" {{#if settings}}{{#if settings.betaFunctions}}checked{{/if}}{{/if}} @change="toogleCheckbox">
+                    <input type="checkbox" name="devMode" {{#if settings}}{{#if settings.devMode}}checked{{/if}}{{/if}} @change="toogleCheckbox">
                     <span class="toggle-icon"></span>
                   </label>
                 </div>
               </div>
             </div>
           </li>
+          {{#if settings}}
+            {{#if settings.devMode}}
+              <li>
+                <div class="item-content">
+                  <div class="item-media">
+                    <i class="f7-icons">ant</i>
+                  </div>
+                  <div class="item-inner">
+                    <div class="item-title">Usar API de testes</div>
+                    <div class="item-after">
+                      <label class="toggle toggle-init color-blue">
+                        <input type="checkbox" name="testApi" {{#if settings}}{{#if settings.testApi}}checked{{/if}}{{/if}} @change="toogleCheckbox">
+                        <span class="toggle-icon"></span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </li>
+            {{/if}}
+          {{/if}}
         </ul>
       </div>
   
@@ -104,12 +124,43 @@
         })
       },
 
+      changeSetting: function (setting, value) {
+        let self = this
+        let app = self.$app
+
+        let settings = self.settings
+        settings[setting] = value
+        app.storage.setSettings(settings)
+
+        self.$setState({
+          settings: settings,
+        })
+      },
+
       toogleCheckbox: function (e) {
         let self = this
         let app = self.$app
-        
-        self.settings[e.target.name] = !self.settings[e.target.name]
-        app.storage.setSettings(self.settings)
+
+        if (e.target.name === 'devMode') 
+          // Disable all dev options
+          if (self.settings['devMode']) {
+            app.dialog.confirm('Deseja realmente desativar o modo de desenvolvimento?', function () {
+              self.changeSetting('devMode', false)
+              self.changeSetting('testApi', false)
+            })
+          }
+          // Enable dev options
+          else
+            app.dialog.password('Digite a senha:', function (password) {
+              if (password != 'dev!Practice5918?') {
+                app.dialog.alert('Senha incorreta, modo de desenvolvedor não permitido!')
+              }
+              else
+                self.changeSetting('devMode', true)
+            })
+        // Toogle other options
+        else
+          self.changeSetting(e.target.name, e.target.checked)
       }
 
     },

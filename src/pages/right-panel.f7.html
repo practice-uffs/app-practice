@@ -1,90 +1,88 @@
 <template>
   <div class="panel panel-right panel-cover">
     <div class="content-block">
-
-      <div class="row no-gutter padding" style="background-color: #BFCCD9;">
-        <div class="col-35 margin-top margin-bottom">
-          <div class="card circle">
-            <img src="static/images/default-profile-image.png">
-          </div>
-        </div>
-        <div class="col-65 margin-top padding-top">
-          <div class="row">
-            <div class="col-100"><strong>{{name}}</strong></div>
-          </div>
-          <div class="row">
-            <div class="col-100">{{username}}</div>
-          </div>
+      <div class="no-gutter padding" style="background-color: var(--color-3)">
+        <div class="margin-top padding-top">
+          {{#if user}}
+          <p class="no-margin"><strong>{{user.name}}</strong></p>
+          <p class="no-margin">{{user.username}}</p>
+          {{else}}
+          <p class="no-margin">
+            <strong>_________________________________</strong>
+          </p>
+          <p class="no-margin">____________</p>
+          {{/if}}
         </div>
       </div>
 
       <div class="list no-margin">
         <ul>
           {{#if isEnabled.ideasPage}}
-            <li>
-              <a href="/ideas/" class="item-link item-content">
-                <div class="item-media padding-top"><i class="f7-icons">lightbulb</i></div>
-                <div class="item-inner">
-                  <div class="item-title">Ideias</div>
-                </div>
-              </a>
-            </li>
-          {{/if}}
-          {{#if isEnabled.coinPage}}
-            <li>
-              <a href="/coin/" class="item-link item-content">
-                <div class="item-media"><i class="f7-icons">money_dollar_circle</i></div>
-                <div class="item-inner">
-                  <div class="item-title">PR Coin</div>
-                </div>
-              </a>
-            </li>
-          {{/if}}
-          {{#if isEnabled.notificationsPage}}
-            <li>
-              <a href="/notifications/" class="item-link item-content">
-                <div class="item-media"><i class="f7-icons">bell</i></div>
-                <div class="item-inner">
-                  <div class="item-title">Notificações</div>
-                </div>
-              </a>
-            </li>
-          {{/if}}
-          {{#if isEnabled.aboutPage}}
-            <li>
-              <a href="/about/" class="item-link item-content">
-                <div class="item-media"><i class="f7-icons">info_circle</i></div>
-                <div class="item-inner">
-                  <div class="item-title">Sobre</div>
-                </div>
-              </a>
-            </li>
-          {{/if}}
-          {{#if isEnabled.taskCompletedPage}}
-            <li>
-              <a href="/task-completed/" class="item-link item-content">
-                <div class="item-media"><i class="f7-icons">info_circle</i></div>
-                <div class="item-inner">
-                  <div class="item-title">Modal issue 56</div>
-                </div>
-              </a>
-            </li>
-            <hr class="no-margin" />
-          {{/if}}
-          {{#if isEnabled.settingsPage}}
-            <li>
-              <a href="/settings/" class="item-link item-content">
-                <div class="item-media"><i class="f7-icons">gear_alt</i></div>
-                <div class="item-inner">
-                  <div class="item-title">Configurações</div>
-                </div>
-              </a>
-            </li>
+          <li>
+            <a href="/ideas/" class="item-link item-content">
+              <div class="item-media padding-top">
+                <i class="f7-icons">lightbulb</i>
+              </div>
+              <div class="item-inner">
+                <div class="item-title">Ideias</div>
+              </div>
+            </a>
+          </li>
+          {{/if}} {{#if isEnabled.coinPage}}
+          <li>
+            <a href="/coin/" class="item-link item-content">
+              <div class="item-media">
+                <i class="f7-icons">money_dollar_circle</i>
+              </div>
+              <div class="item-inner">
+                <div class="item-title">PR Coin</div>
+              </div>
+            </a>
+          </li>
+          {{/if}} {{#if isEnabled.notificationsPage}}
+          <li>
+            <a href="/notifications/" class="item-link item-content">
+              <div class="item-media"><i class="f7-icons">bell</i></div>
+              <div class="item-inner">
+                <div class="item-title">Notificações</div>
+              </div>
+            </a>
+          </li>
+          {{/if}} {{#if isEnabled.aboutPage}}
+          <li>
+            <a href="/about/" class="item-link item-content">
+              <div class="item-media"><i class="f7-icons">info_circle</i></div>
+              <div class="item-inner">
+                <div class="item-title">Sobre</div>
+              </div>
+            </a>
+          </li>
+          {{/if}} {{#if isEnabled.taskCompletedPage}}
+          <li>
+            <a href="/task-completed/" class="item-link item-content">
+              <div class="item-media"><i class="f7-icons">info_circle</i></div>
+              <div class="item-inner">
+                <div class="item-title">Modal issue 56</div>
+              </div>
+            </a>
+          </li>
+          <hr class="no-margin" />
+          {{/if}} {{#if isEnabled.settingsPage}}
+          <li>
+            <a href="/settings/" class="item-link item-content">
+              <div class="item-media"><i class="f7-icons">gear_alt</i></div>
+              <div class="item-inner">
+                <div class="item-title">Configurações</div>
+              </div>
+            </a>
+          </li>
           {{/if}}
           <hr class="no-margin" />
           <li>
             <a href="#" class="item-link item-content" @click="logout()">
-              <div class="item-media"><i class="f7-icons">square_arrow_left</i></div>
+              <div class="item-media">
+                <i class="f7-icons">square_arrow_left</i>
+              </div>
               <div class="item-inner">
                 <div class="item-title">Sair</div>
               </div>
@@ -96,46 +94,60 @@
   </div>
 </template>
 <script>
-  import IsEnabled from '../js/isenabled.js'
+  import IsEnabled from "../js/isenabled.js";
 
   export default {
-    data: function() {
+    data: function () {
       return {
-        name: null,
-        username: null,
-        email: null,
+        user: null,
         isEnabled: IsEnabled,
-      }
+      };
     },
 
     methods: {
       loadUser: function () {
-        let self = this
-        let app = self.$app
+        let self = this;
+        let app = self.$app;
 
-        const user = app.storage.getUserCredentials().user
-        self.$setState({
-          name: user.name,
-          username: user.username,
-          email: user.email,
-        })
+        app.storage
+          .getUserData()
+          .then((userData) => {
+            self.$setState({
+              user: userData,
+            });
+          })
+          .catch(() => {
+            app.dialog.alert("Ocorreu um erro em sua rede, tente novamente!");
+          });
       },
 
       logout: function () {
-        let self = this
-        let app = self.$app
+        let self = this;
+        let app = self.$app;
 
         app.dialog.confirm("Tem certeza que deseja sair?", function () {
-          app.storage.clearUserCredentials()
-          app.view.main.router.navigate('/')
+          app.storage
+            .requestLogout()
+            .then((res) => {
+              if (res) {
+                app.view.main.router.navigate("/");
+              } else {
+                app.dialog.alert(
+                  "Não foi possível te desconectar, tente novamente!"
+                );
+              }
+            })
+            .catch(() => {
+              app.dialog.alert("Ocorreu um erro em sua rede, tente novamente!");
+            });
         });
       },
     },
 
     on: {
       panelInit: function () {
-        this.loadUser()
-      }
-    }
-  }
+        this.loadUser();
+      },
+    },
+  };
 </script>
