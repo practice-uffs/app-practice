@@ -1,42 +1,36 @@
-/**
- * Controls if a certain feature is enabled (or not) in the app.
- *
- * @author Fernando Bevilacqua <dovyski@gmail.com>
- * @license MIT
- */
-var IsEnabled = {
-    addToHomeScreen: false,
-    shareAd: false,
+let IsEnabled = {
+  addToHomeScreen: false,
+  shareAd: false,
 
-    newsPage: true,
+  newsPage: true,
 
-    chatsPage: false,
-    chatPage: false,
+  chatsPage: false,
+  chatPage: false,
 
-    scanPage: true,
+  scanPage: false,
 
-    envPage: false,
+  envPage: false,
 
-    profilePage: false,
-    scores: false,
-    achievements: false,
+  profilePage: false,
+  scores: false,
+  achievements: false,
 
-    servicesPage: true,
+  servicesPage: true,
 
-    rightPanel: true,
+  rightPanel: true,
 
-    ideasPage: false,
+  ideasPage: false,
 
-    coinPage: false,
+  coinPage: false,
 
-    notificationsPage: false,
+  notificationsPage: false,
 
-    settingsPage: true,
+  settingsPage: true,
 
-    taskCompletedPage: false,
+  taskCompletedPage: false,
 
-    aboutPage: true,
-    recordAudioPage: true,
-}
+  aboutPage: true,
+  recordAudioPage: true,
+};
 
 export default IsEnabled;

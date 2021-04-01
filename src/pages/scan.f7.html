@@ -2,59 +2,69 @@
   <div data-name="scan">
     <div class="block card no-margin no-padding">
       <div class="row">
-
-        <div id="qr-reader" style="width:500px">kjk</div>
+        <div id="qr-reader" style="width: 500px">kjk</div>
         <div id="qr-reader-results"></div>
 
         <div class="col-100 tablet-50 margin-horizontal">
           <hr />
           <div class="row no-gutter">
-            <div class="col-45"><img style="width: 140px; height: 140px;" src="static/images/qrCode.png"></div>
-            <div class="col-55" style="margin-top: 8px; font-size: medium;">
+            <div class="col-45">
+              <img
+                style="width: 140px; height: 140px"
+                src="static/images/qrCode.png"
+              />
+            </div>
+            <div class="col-55" style="margin-top: 8px; font-size: medium">
               <div class="row item-title-row">
-                <div class="col-100 tablet-50"><strong>Fulano da Silva</strong></div>
+                <div class="col-100 tablet-50">
+                  <strong>Fulano da Silva</strong>
+                </div>
                 <div class="col-100 tablet-50">fulano.silva</div>
-                <div class="col-100 tablet-50 margin-top">Leia o QR para ser direcionado a página.</div>
+                <div class="col-100 tablet-50 margin-top">
+                  Leia o QR para ser direcionado a página.
+                </div>
               </div>
             </div>
           </div>
           <hr />
         </div>
-
       </div>
     </div>
   </div>
 </template>
 
 <script>
-  import 'html5-qrcode/minified/html5-qrcode.min.js';
+  import "html5-qrcode/minified/html5-qrcode.min.js";
 
   export default {
     data: function () {
       return {
-        scanner: null
-      }
+        scanner: null,
+      };
     },
     methods: {
       initScan: function () {
         let self = this;
         let app = self.$app;
 
-        const html5QrcodeScanner = new Html5QrcodeScanner('qr-reader', { fps: 10, qrbox: 250 });
+        const html5QrcodeScanner = new Html5QrcodeScanner("qr-reader", {
+          fps: 10,
+          qrbox: 250,
+        });
 
         html5QrcodeScanner.render(function onScanSuccess(qrCodeMessage) {
           // handle on success condition with the decoded message
-          console.log('success!');
+          console.log("success!");
         });
-      }
+      },
     },
     on: {
-      tabInit: function(e, page) {
+      tabInit: function (e, page) {
         this.initScan();
       },
       tabHide: function (e) {
-        this.removeScan()
-      }
-    }
-  }
+        this.removeScan();
+      },
+    },
+  };
 </script>
