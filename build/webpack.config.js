@@ -44,6 +44,7 @@ module.exports = {
     hot: true,
     open: true,
     compress: true,
+    https: true,
     contentBase: '/www/',
     disableHostCheck: true,
     historyApiFallback: true,
