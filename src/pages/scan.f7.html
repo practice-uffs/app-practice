@@ -28,11 +28,11 @@
 
 <script>
   import 'html5-qrcode/minified/html5-qrcode.min.js';
-  
+
   export default {
     data: function () {
       return {
-        scan: null
+        scanner: null
       }
     },
     methods: {
@@ -52,6 +52,9 @@
       tabInit: function(e, page) {
         this.initScan();
       },
+      tabHide: function (e) {
+        this.removeScan()
+      }
     }
   }
 </script>
