@@ -30,16 +30,21 @@ const storage = {
     let months = Math.floor(days / 30);
     let years = Math.floor(months / 12);
 
-    if (years > 0) return years === 1 ? years + " ano" : years + " anos";
-    else if (months > 0)
+    if (years > 0) {
+      return years === 1 ? years + " ano" : years + " anos";
+    } else if (months > 0) {
       return months === 1 ? months + " mês" : months + " meses";
-    else if (days > 0) return days === 1 ? days + " dias" : days + " dia";
-    else if (hours > 0) return hours === 1 ? hours + " hora" : hours + " horas";
-    else if (minutes > 0)
+    } else if (days > 0) {
+      return days === 1 ? days + " dia" : days + " dias";
+    } else if (hours > 0) {
+      return hours === 1 ? hours + " hora" : hours + " horas";
+    } else if (minutes > 0) {
       return minutes === 1 ? minutes + " minuto" : minutes + " minutos";
-    else if (seconds > 0)
+    } else if (seconds > 0) {
       return seconds === 1 ? seconds + " segundo" : seconds + " segundos";
-    else return "agora mesmo";
+    } else {
+      return "agora mesmo";
+    }
   },
 
   formatDate: (date) => {
