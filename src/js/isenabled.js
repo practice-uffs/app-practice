@@ -15,7 +15,7 @@ var IsEnabled = {
 
     scanPage: true,
 
-    envPage: false,
+    envPage: true,
 
     profilePage: false,
     scores: false,
