@@ -180,10 +180,6 @@
   ],
   "calendar_exemple":[
     {
-      "time": "7:10",
-      "destiny": "UFFS -> Centro"
-    },
-    {
       "month":"january",
       "events":[
       {
