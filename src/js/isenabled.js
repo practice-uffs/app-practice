@@ -8,14 +8,14 @@ var IsEnabled = {
     addToHomeScreen: false,
     shareAd: false,
 
-    newsPage: true,
+    newsPage: false,
 
     chatsPage: false,
     chatPage: false,
 
     scanPage: true,
 
-    envPage: false,
+    envPage: true,
 
     profilePage: false,
     scores: false,
