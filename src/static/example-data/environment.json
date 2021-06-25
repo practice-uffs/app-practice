@@ -180,7 +180,9 @@
   ],
   "calendar_exemple":[
     {
-      "month":"january",
+      "month":1,
+      "month_label":"Janeiro",
+      "year":2021,
       "events":[
       {
         "start_on":"01",
@@ -190,7 +192,9 @@
       ]
     },
     {
-      "month":"february",
+      "month":2,
+      "month_label":"Fevereiro",
+      "year":2021,
       "events":[
       {
           "start_on":"16",
@@ -205,7 +209,9 @@
       ]
     },
     {
-      "month":"march",
+      "month":3,
+      "month_label":"Março",
+      "year":2021,
       "events":[
       {
           "start_on":"8",
@@ -245,7 +251,9 @@
       ]
     },
     {
-      "month":"april",
+      "month":4,
+      "month_label":"Abril",
+      "year":2021,
       "events":[
       {
           "start_on":"02",
@@ -280,7 +288,9 @@
       ]
     },
     {
-      "month":"may",
+      "month":5,
+      "month_label":"Maio",
+      "year":2021,
       "events":[
       {
           "start_on":"1",
@@ -300,7 +310,9 @@
       ]
     },
     {
-      "month":"june",
+      "month":6,
+      "month_label":"Junho",
+      "year":2021,
       "events":[
       {
           "start_on":"31/05",
@@ -330,7 +342,9 @@
       ]
     },
     {
-      "month":"july",
+      "month":7,
+      "month_label":"Julho",
+      "year":2021,
       "events":[
       {
           "start_on":"1",
@@ -365,7 +379,9 @@
       ]
     },
     {
-      "month":"august",
+      "month":8,
+      "month_label":"Agosto",
+      "year":2021,
       "events":[
       {
           "start_on":"26/7",
@@ -440,7 +456,9 @@
       ]
     },
     {
-      "month":"september",
+      "month":9,
+      "month_label":"Setembro",
+      "year":2021,
       "events":[
       {
           "start_on":"30/08",
@@ -465,7 +483,9 @@
       ]
     },
     {
-      "month":"october",
+      "month":10,
+      "month_label":"Outubro",
+      "year":2021,
       "events":[
       {
           "start_on":"01",
@@ -510,7 +530,9 @@
       ]
     },
     {
-      "month":"november",
+      "month":11,
+      "month_label":"Novembro",
+      "year":2021,
       "events":[
       {
           "start_on":"01",
@@ -555,7 +577,9 @@
       ]
     },
     {
-      "month":"december",
+      "month":12,
+      "month_label":"Dezembro",
+      "year":2021,
       "events":[
       {
           "start_on":"08",
