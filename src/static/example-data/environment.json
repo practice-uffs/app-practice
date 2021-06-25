@@ -64,6 +64,32 @@
           "type": "date"
         }
       ]
+    },
+    {
+      "id": 4,
+      "type": "survey",
+      "title": "Votação para definir o trabalho final",
+      "method": "api/finalWork",
+      "label": "Escolha uma opção",
+      "name": "finalWork",
+      "options": [
+        {
+          "value": "dominó",
+          "label": "Jogo de dominó 3D"
+        },
+        {
+          "value": "xadrez",
+          "label": "Jogo de xadrez 3D"
+        },
+        {
+          "value": "modelagem",
+          "label": "Modelagem 3D de algum personagem"
+        },
+        {
+          "value": "animação",
+          "label": "Animação 3D de no mínimo 30 segundos"
+        }        
+      ]
     }
   ]
 }
