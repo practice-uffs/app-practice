@@ -68,6 +68,15 @@ O browser abrirá apontando para o endereço [http://localhost:8080/](http://loc
 
 ### 4. Build e deploy
 
+#### 4.1 Pré-requisitos
+
+Para ser possível gerar o APK do aplicativo é necessario instalar o Android SDK, o JDK 8 e também o Gradle. Caso haja mais de uma versão do JDK instalada no computador é necessário selecionar a versão 8 para ser utilizada.  Além disso, é necessário configurar as seguintes variaveis de ambiente: `JAVA_HOME`, `ANDROID_HOME` e `ANDROID_SDK_ROOT`.
+
+O Android SDK pode ser instalado tanto manualmente quanto por meio da instalação do Android Studio (sendo esta ultima possívelmente a mais simples). Com o SDK instalado é necessário também aceitar as licenças do Android, caso a instalação do SDK tenha sido feita por meio do Android Studio basta acessar `Configurações > SDK Manager > SDK Tools`, instalar `Google Play Licensing Library` e aceitar as licenças. 
+Por fim, é preciso instalar o Gradle e a instalação deste pode variar de acordo com o sistema operacional utilizado.
+
+#### 4.2 Build
+
 Para fazer build (dev) da aplicação, rode:
 
 ```
@@ -79,6 +88,7 @@ A aplicação pronta para uso estará no diretório `www` na raiz do respositór
 ```
 npm run build-prod
 ```
+#### 4.3 Deploy
 
 Para fazer deploy (dev) na Google Play, rode:
 
