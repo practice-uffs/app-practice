@@ -29,7 +29,10 @@
       "cordova-plugin-whitelist": {},
       "cordova-plugin-androidx": {},
       "cordova-plugin-androidx-adapter": {},
-      "cordova-plugin-android-permissions": {}
+      "cordova-plugin-android-permissions": {},
+      "cordova-plugin-local-notification": {
+        "ANDROID_SUPPORT_V4_VERSION": "26.+"
+      }
     },
     "platforms": [
       "ios",
@@ -37,9 +40,15 @@
     ]
   },
   "devDependencies": {
+<<<<<<< HEAD
     "cordova-android": "^8.1.0",
     "cordova-plugin-androidx": "^3.0.0",
     "cordova-plugin-androidx-adapter": "^1.1.3",
+=======
+    "cordova-plugin-badge": "^0.8.8",
+    "cordova-plugin-device": "^2.0.3",
+    "cordova-plugin-local-notification": "github:katzer/cordova-plugin-local-notifications",
+>>>>>>> 2942d16c32b630e22d8197621ee814c8051aeccf
     "cordova-plugin-whitelist": "^1.3.4"
   }
 }
