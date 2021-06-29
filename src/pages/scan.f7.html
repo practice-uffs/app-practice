@@ -46,18 +46,18 @@
   import 'html5-qrcode/minified/html5-qrcode.min.js';
   import 'dom7/dist/dom7.js';
 
-  //TODO: fazer direcionamentos de texte nos itens
-
   export default {
     data: function () {
       return {
         scanner: null,
         data_scanned: Array(),
-        items: ['teste 1', 'teste 2']
       }
     },
     methods: {
       getCamPermission: function (){
+        let self = this;
+        let app = self.$app;
+
         document.addEventListener('deviceready', function () {
             app.permissions = cordova.plugins.permissions;
             app.permissions.checkPermission("android.permission.CAMERA", function (status) {
@@ -66,9 +66,13 @@
               if (!status.hasPermission) {
                 app.permissions.requestPermission("android.permission.CAMERA", function (status) {
                     console.log('success requesting CAMERA permission');
+                    self.initScan();
                 }, function (err) {
                     console.log('failed to set permission');
                 });
+              }
+              else{
+                self.initScan();
               }
             }, function (err) {
               console.log(err);
@@ -194,12 +198,7 @@
     },
     on: {
       tabInit: function(e, page) {
-        var gotOpen = new Promise((resolve, reject) => {
-          resolve(this.getCamPermission());
-        })
-        gotOpen.then((res) => {
-          this.initScan();
-        })
+        this.getCamPermission();
       },
       tabBeforeRemove: function (e) {
         if(Dom7('#qr-shaded-region').length != 0){
