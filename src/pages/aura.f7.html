@@ -1,0 +1,121 @@
+<template>
+  <div data-name="aura" id="tab_aura" style="height: 100%;">
+    <!-- <div class="block card no-margin no-padding"> -->
+      <div id="logo_aura">
+        <img src="https://www.qbrobotics.com/wp-content/uploads/2018/03/sample-logo-470x235.png" alt="" width="50%">
+      </div>
+      <!-- Content -->
+      <div class="messages-content infinite-scroll-content infinite-scroll-bottom">
+        <div class="messages">
+          {{#if chat}}
+            {{#each chat.messages}}
+              <div class="message message-{{#if this.author}}received{{else}}sent{{/if}}">
+                <div class="message-content">
+                  <div class="message-bubble">
+                    {{#js_if "this.type === 'text'"}}
+                      <div class="message-text">{{this.content}}</div>
+                    {{/js_if}}
+                    {{#js_if "this.type === 'image'"}}
+                      <div class="message-image"><img src="{{this.content}}" style="width:200px; height: 260px;"></div>
+                    {{/js_if}}
+                    <div class="message-text-footer">{{this.timestamp}}</div>
+                  </div>
+                </div>
+              </div>
+            {{/each}}
+          {{/if}}
+        </div>
+      </div>
+    <!-- </div> -->
+      <!-- Toolbar -->
+      <div class="toolbar messagebar" data-max-height="500">
+        <div class="toolbar-inner">
+          <a class="link toggle-sheet" href="#">
+            <i class="icon f7-icons">camera</i>
+          </a>
+          <div class="messagebar-area">
+            <textarea placeholder="Digite uma mensagem"></textarea>
+          </div>
+          <a class="link" href="#"><span><i class="icon f7-icons">arrowtriangle_right</i></span></a>
+        </div>
+        <div class="messagebar-sheet"></div>
+      </div>
+  </div>
+</template>
+
+<style>
+  .messagebar{
+    position: absolute;
+    bottom: 58px;
+    border-radius: 25px;
+  }
+  .messages-content{
+    height: 90%;
+    overflow-y: scroll;
+    padding: 5px;
+    box-sizing: border-box;
+  }
+  .message-content{
+    margin-top: 5px;
+  }
+  .messages{
+    margin-top: 100px;
+  }
+  #logo_aura{
+    position: absolute;
+    z-index: 3;
+    text-align: center;
+    background-image: linear-gradient(to bottom, white, white, rgba(0,0,0,0));
+  }
+</style>
+
+<script>
+  import 'dom7/dist/dom7.js';
+  // Simulating phone images
+  let images = [
+    'https://cdn.framework7.io/placeholder/cats-300x300-1.jpg',
+    'https://cdn.framework7.io/placeholder/cats-200x300-2.jpg',
+    'https://cdn.framework7.io/placeholder/cats-400x300-3.jpg',
+    'https://cdn.framework7.io/placeholder/cats-300x150-4.jpg',
+    'https://cdn.framework7.io/placeholder/cats-150x300-5.jpg',
+    'https://cdn.framework7.io/placeholder/cats-300x300-6.jpg',
+    'https://cdn.framework7.io/placeholder/cats-300x300-7.jpg',
+    'https://cdn.framework7.io/placeholder/cats-200x300-8.jpg',
+    'https://cdn.framework7.io/placeholder/cats-400x300-9.jpg',
+    'https://cdn.framework7.io/placeholder/cats-300x150-10.jpg'
+  ]
+
+    export default {
+    data: function () {
+      return {
+        chat: null,
+      }
+    },
+    methods: {
+      loadData: function () {
+        var self = this;
+        var app = self.$app;
+
+        app.request.json('../static/example-data/aura.json', function (data) {
+          self.$setState({
+            chat: data,
+          });
+        });
+      },
+      resizeMessagesContent: function (){
+        let aura = Dom7('#tab_aura');
+        let messagebar = Dom7('.messagebar');
+        let messagesContent = Dom7('.messages-content');
+        let height = aura.height() - messagebar.height() - 15 +'px';
+        console.log(height);
+        messagesContent.css('height', height);
+      }
+    },
+    on: {
+      tabInit: function (e, page) {
+        this.loadData();
+        this.resizeMessagesContent();
+      }
+    },
+  };
+</script>

@@ -1,0 +1,54 @@
+{
+  "name": "Aura",
+  "picture": "",
+  "messages": [
+    {
+      "type": "text",
+      "content": "Olá, humano. O que você deseja?",
+      "timestamp": "21:20",
+      "author": "Aura"
+    },
+    {
+      "type": "text",
+      "content": "queria um cafezinho, se for possível",
+      "timestamp": "21:22"
+    },
+    {
+      "type": "image",
+      "content": "https://cdn.framework7.io/placeholder/cats-200x260-4.jpg",
+      "timestamp": "21:25",
+      "author": "Aura"
+    },
+    {
+      "type": "text",
+      "content": "Tá na nóia, maluco? Não sou esse tipo de assistente!",
+      "timestamp": "21:26",
+      "author": "Aura"
+    },
+    {
+      "type": "text",
+      "content": "There's fuck",
+      "timestamp": "08:45"
+    },
+    {
+      "type": "text",
+      "content": "There's fuck",
+      "timestamp": "08:45"
+    },
+    {
+      "type": "text",
+      "content": "There's fuck",
+      "timestamp": "08:45"
+    },
+    {
+      "type": "text",
+      "content": "There's fuck",
+      "timestamp": "08:45"
+    },
+    {
+      "type": "text",
+      "content": "There's fuck",
+      "timestamp": "08:45"
+    }
+  ]
+}

@@ -17,6 +17,8 @@ var IsEnabled = {
 
     envPage: true,
 
+    auraPage: true,
+
     profilePage: false,
     scores: false,
     achievements: false,
