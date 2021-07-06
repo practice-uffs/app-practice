@@ -80,13 +80,31 @@ A aplicação pronta para uso estará no diretório `www` na raiz do respositór
 npm run build-prod
 ```
 
-Para fazer deploy (dev) na Google Play, rode:
+### 5. Build e deploy Google Play
+
+Para fazer um build e deploy para a Google Play, você precisa de um ambiente de desenvolvimento Android disponível na máquina. Instale, por exemplo, o Android SDK e afins (Grade, JDK, etc). Para build nesse projeto, você precisa do `JDK 1.8` e de uma versão especifica do node (instale o `nvm`, por exemplo).
+
+Instale o Cordova:
+
+```
+npm install -g cordova
+```
+
+Instale as dependencias:
+
+```
+npm run install-deps-cordova
+```
+
+Faça um build da aplicação:
 
 ```
 npm run build-dev-cordova
 ```
 
-Para fazer deploy (final) na Google Play, rode:
+Faça os testes cabíveis, como instalar em algum dispositivo Android o `.apk` gerado no processo.
+
+Se tudo estiver certo, para fazer deploy (final) na Google Play, rode:
 
 ```
 npm run build-prod-cordova
