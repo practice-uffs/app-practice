@@ -1,79 +1,209 @@
 <template>
   <div data-name="scan">
     <div class="block card no-margin no-padding">
-      <div class="row">
+        <div id="qr-reader"></div>
 
-        <div class="col-100 tablet-50">
-          <video id="scanner-video" style="width: 100%;"></video>
+        <div class="drop"></div>
+        
+        <div id="qr-reader-results">
+          <div class="list media-list no-margin">
+            <ul>
+
+            </ul>
+          </div>           
         </div>
-
-        <div class="col-100 tablet-50 margin-horizontal">
-          <hr />
-          <div class="row no-gutter">
-            <div class="col-45"><img style="width: 140px; height: 140px;" src="static/images/qrCode.png"></div>
-            <div class="col-55" style="margin-top: 8px; font-size: medium;">
-              <div class="row item-title-row">
-                <div class="col-100 tablet-50"><strong>Fulano da Silva</strong></div>
-                <div class="col-100 tablet-50">fulano.silva</div>
-                <div class="col-100 tablet-50 margin-top">Leia o QR para ser direcionado a página.</div>
-              </div>
-            </div>
-          </div>
-          <hr />
-        </div>
-
-      </div>
     </div>
   </div>
 </template>
 
+<style>
+  #qr-reader{
+    width: 100%;
+  }
+  #qr-reader-results{
+    overflow-y: scroll;
+  }
+  .drop {
+    position: absolute;
+    right: calc(50% - 15px);
+    background-color: #2e749e;
+    height: 30px;
+    width: 30px;
+    border-radius: 50% 50%;
+    box-shadow: inset -25px 10px 0px -10px #0288d1;
+    z-index: 99;
+    margin: auto;
+    transition: transform 0.5s linear;
+    display: none;
+    transform: rotate(45deg);
+  }
+  .move {
+    border-radius: 0% 50% 50% 50%;
+  }
+</style>
+
 <script>
-  import QrScanner from 'qr-scanner'
-  import qrScannerWorkerSource from '!!raw-loader!../../node_modules/qr-scanner/qr-scanner-worker.min.js'
-  QrScanner.WORKER_PATH = URL.createObjectURL(new Blob([qrScannerWorkerSource]))
+  import 'html5-qrcode/minified/html5-qrcode.min.js';
+  import 'dom7/dist/dom7.js';
 
   export default {
     data: function () {
       return {
-        scanner: null
+        scanner: null,
+        data_scanned: Array(),
       }
     },
     methods: {
-      initScan: function () {
-        let self = this
-        let app = self.$app
+      getCamPermission: function (){
+        let self = this;
+        let app = self.$app;
 
-        if(QrScanner.hasCamera()){
-          const scannerVideo = document.getElementById('scanner-video')
-          const scanner = new QrScanner(scannerVideo, function (result) {
-            console.log('decoded qr code:', result)
-          })
-          
-          self.$setState({
-            scanner: scanner,
-          })
-
-          self.scanner.start()
-        }
-        else
-          app.dialog.alert('Nenhuma câmera encontrada!')
-      },
-      removeScan: function () {
-        var self = this
-
-        self.scanner.stop()
-        self.scanner.destroy()
-        self.$setState({
-          scanner: null,
+        document.addEventListener('deviceready', function () {
+            app.permissions = cordova.plugins.permissions;
+            app.permissions.checkPermission("android.permission.CAMERA", function (status) {
+              console.log('success checking permission');
+              console.log('Has CAMERA:', status.hasPermission);
+              if (!status.hasPermission) {
+                app.permissions.requestPermission("android.permission.CAMERA", function (status) {
+                    console.log('success requesting CAMERA permission');
+                    self.initScan();
+                }, function (err) {
+                    console.log('failed to set permission');
+                });
+              }
+              else{
+                self.initScan();
+              }
+            }, function (err) {
+              console.log(err);
+            });
         });
       },
+      initScan: function () {
+        let self = this;
+        let app = self.$app;
+
+        this.scanner = new Html5Qrcode("qr-reader");
+        const config = { fps: 3, qrbox: 200, aspectRatio : 0.8 };
+
+        var scanStart = new Promise((resolve, reject) => {  
+          this.scanner.start(
+            { facingMode: "environment" },
+            config,
+            qrCodeMessage => {
+              this.addContent(qrCodeMessage);
+            },
+            errorMessage => { resolve(true) }) //Está lendo
+          .catch(err => {
+            console.log(`Unable to start scanning, error: ${err}`);
+            reject(err);
+          })
+        });
+        scanStart.then(function(res) {
+          var screen = Dom7('#scan')
+          var scanner_size = Dom7('#qr-reader').height();
+          var screen_size = screen.height()-screen.css('padding-top').replace("px", "")-screen.css('padding-bottom').replace("px", "");
+          Dom7('#qr-reader-results').css("height", screen_size-scanner_size+"px");
+        })
+      },
+      removeScan: function () {
+        this.scanner.stop().then(ignore => {
+          console.log(`Stop Scan`);
+        }).catch(err => {
+          console.log(`Unable to stop scanning, error: ${err}`);
+        });
+      },
+      
+      animationAddContent: function () {
+        var drop = Dom7('.drop');
+        var deslocation = Dom7('#qr-reader').height();
+        var initialPos = (deslocation/2).toString()+'px';
+        this.setDropInitialPos(drop, initialPos);
+
+        drop
+        .animate(
+        {
+          'top': deslocation+20,
+        },
+        {
+          duration: 1000,
+          easing: 'swing',
+        }).animate(
+          {
+            'opacity': 0,
+          },
+          {
+            duration: 500
+          }
+        )
+
+        this.setDropEndPos(drop, initialPos);
+      },
+
+      setDropInitialPos: function(drop, initialPos) {
+        drop.css("display", "block");
+        drop.css("opacity", "1");
+        drop.css("top", initialPos);
+        setTimeout(function () { drop.addClass("move");}, 0);
+      },
+
+      setDropEndPos: function(drop, initialPos) {
+        setTimeout(function (){
+          drop.css("display", "none");
+          drop.css("opacity", "1");
+          drop.css("top", initialPos);
+          drop.removeClass("move");
+        }, 2000)
+      },
+
+      addContent: function (content) {
+        if(this.data_scanned.indexOf(content) != -1 || content.trim() == ""){
+        }
+        else{
+          this.data_scanned.unshift(content);
+          this.animationAddContent();
+
+          var dad = document.getElementById('qr-reader-results').childNodes[0].childNodes[0];
+          var text = '';
+
+          this.data_scanned.forEach(element => {
+            var link = ""; // ex: '/env/'
+            var title = "";
+            var description = "";
+            title = element;
+            text += `<li class="item"><a href="${link}" class="item-link item-content"> 
+              <div class="item-inner">
+                <div class="item-title-row">
+                  <div class="item-title">${title}</div>
+                </div>
+                <div class="item-text no-wrap">${description}</div>
+              </div>
+            </a></li>`;
+          });
+          dad.innerHTML = text;
+          var item = Dom7('.item');
+          
+          document.getElementsByClassName('item')[0].style.opacity = 0;
+          item.animate({
+            'opacity': 1,
+          },
+          {
+            duration: 1000,
+            easing: 'swing'
+          })
+          
+          navigator.vibrate([500]);
+        }
+      }
     },
     on: {
-      tabInit: function (e) {
-        this.initScan()
+      tabInit: function(e, page) {
+        this.getCamPermission();
       },
-      tabHide: function (e) {
-        this.removeScan()
+      tabBeforeRemove: function (e) {
+        if(Dom7('#qr-shaded-region').length != 0){
+          this.removeScan();
+        }
       }
     }
   }

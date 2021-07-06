@@ -15,9 +15,22 @@
 
     <div class="page-content">
       <h3>Notifications: N001-A</h3>
+      <button class="button button-fill" @click="exampleNotification">Disparar notificação</button>
     </div>
   </div>
 </template>
 <script>
-  export default {};
+  export default {
+    methods: {
+      exampleNotification: function () {
+        document.addEventListener('deviceready', function (){
+          cordova.plugins.notification.local.schedule({
+            title: 'Um titulo bonito',
+            text: 'Uma bela descrição para a notificação',
+            smallIcon: 'res://ic_launcher'            
+          });
+        });
+      }
+    }
+  };
 </script>
