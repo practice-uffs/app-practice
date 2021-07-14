@@ -10,6 +10,7 @@
     "dev": "cross-env NODE_ENV=development webpack-dev-server --config ./build/webpack.config.js --host=0.0.0.0",
     "build-dev": "cross-env NODE_ENV=development node ./build/build.js",
     "build-prod": "cross-env NODE_ENV=production node ./build/build.js",
+    "install-deps-cordova": "cross-env NODE_ENV=production && cd cordova && cordova platform add android",
     "build-dev-cordova": "cross-env TARGET=cordova cross-env NODE_ENV=development node ./build/build.js && cd cordova && cordova build --debug",
     "build-prod-cordova": "cross-env TARGET=cordova cross-env NODE_ENV=production node ./build/build.js && cd cordova && cordova build --release",
     "build-dev-cordova-ios": "cross-env TARGET=cordova cross-env NODE_ENV=development node ./build/build.js && cd cordova && cordova build ios --debug",
@@ -29,6 +30,7 @@
   ],
   "dependencies": {
     "@lottiefiles/lottie-interactivity": "^0.1.3",
+    "cordova-plugin-android-permissions": "^1.1.2",
     "dom7": "^2.1.3",
     "fast-xml-parser": "^3.17.4",
     "framework7": "^5.7.0",

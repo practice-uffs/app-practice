@@ -1,0 +1,193 @@
+<template>
+  <div data-name="aura" id="tab_aura" style="height: 100%;">
+    <div id="logo_aura">
+      <img src="https://www.qbrobotics.com/wp-content/uploads/2018/03/sample-logo-470x235.png" alt="" width="50%">
+    </div>
+    
+    <div class="page-content messages-content">
+      <div class="messages">
+      </div>  
+    </div>
+
+    <div class="toolbar messagebar">
+      <div class="toolbar-inner">
+        <div class="messagebar-area">
+          <textarea placeholder="Digite uma mensagem"></textarea>
+        </div>
+        <a class="link send-link" href="#"><span><i class="icon f7-icons theme-color-2">arrowtriangle_right_fill</i></span></a>
+      </div>
+    </div>
+  </div>
+</template>
+
+<style>  
+  .messages-content{
+    padding-bottom : 0px;
+    padding-top: 100px;
+  }
+  #logo_aura{
+    position: absolute;
+    z-index: 3;
+    text-align: center;
+    background-image: linear-gradient(to bottom, white, rgba(255,255,255,0.8),rgba(255,255,255,0));
+  }
+</style>
+
+<script>
+  import 'dom7/dist/dom7.js';
+
+  export default {
+    data: function () {
+      return {
+        chat: null,
+        messages : null,
+      }
+    },
+    methods: {
+      getTimestamp: function () {
+        var date = new Date();
+        var time = date.toTimeString().substring(0,5);
+        return time;
+      },
+      loadData: function () {
+        var self = this;
+        var app = self.$app;
+
+        app.request.json('static/example-data/aura.json', function (data) {
+          self.$setState({
+            chat: data,
+          });
+          self.messages.addMessages(self.chat.messages, "append", false);
+        });
+      },
+      resizeMessagesContent: function (){
+        let aura = Dom7('#tab_aura');
+        let messagebar = Dom7('.messagebar');
+        let messagesContent = Dom7('.messages-content');
+        let height = aura.height() - messagebar.height() +'px';
+        messagesContent.css('height', height);
+      },
+      messageInit: function () {
+        var self = this;
+        var app = self.$app;
+        var $$ = Dom7;
+
+        // Init Messages
+        self.messages = app.messages.create({
+          el: '.messages',
+
+          // First message rule
+          firstMessageRule: function (message, previousMessage, nextMessage) {
+            // Skip if title
+            if (message.isTitle) return false;
+            /* if:
+              - there is no previous message
+              - or previous message type (send/received) is different
+              - or previous message sender name is different
+            */
+            if (!previousMessage || previousMessage.type !== message.type || previousMessage.name !== message.name) return true;
+            return false;
+          },
+          // Last message rule
+          lastMessageRule: function (message, previousMessage, nextMessage) {
+            // Skip if title
+            if (message.isTitle) return false;
+            /* if:
+              - there is no next message
+              - or next message type (send/received) is different
+              - or next message sender name is different
+            */
+            if (!nextMessage || nextMessage.type !== message.type || nextMessage.name !== message.name) return true;
+            return false;
+          },
+          // Last message rule
+          tailMessageRule: function (message, previousMessage, nextMessage) {
+            // Skip if title
+            if (message.isTitle) return false;
+              /* if (basically same as lastMessageRule):
+              - there is no next message
+              - or next message type (send/received) is different
+              - or next message sender name is different
+            */
+            if (!nextMessage || nextMessage.type !== message.type || nextMessage.name !== message.name) return true;
+            return false;
+          }
+        });
+
+        // Init Messagebar
+        var messagebar = app.messagebar.create({
+          el: '.messagebar'
+        });
+
+        // Response flag
+        var responseInProgress = false;
+
+        // Send Message
+        $$('.send-link').on('click', function () {
+          var text = messagebar.getValue().replace(/\n/g, '<br>').trim();
+          // return if empty message
+          if (!text.length) return;
+
+          // Clear area
+          messagebar.clear();
+
+          // Return focus to area
+          messagebar.focus();
+
+          // Add message to messages
+          self.messages.addMessage({
+            text: text,
+            textFooter: self.getTimestamp(),
+          });
+
+          if (responseInProgress) return;
+          // Receive dummy message
+          receiveMessage();
+        });
+
+        var answers;
+
+        app.request.json('static/example-data/aura.json', function (data) {
+          answers = self.chat.answers;
+        });        
+
+        function receiveMessage() {
+          responseInProgress = true;
+          setTimeout(function () {
+            // Get random answer and random person
+            var answer = answers[Math.floor(Math.random() * answers.length)];
+            answer.textFooter = self.getTimestamp();
+
+            // Show typing indicator
+            self.messages.showTyping({
+              header: answer.name + ' is typing',
+              avatar: answer.avatar
+            });
+
+            setTimeout(function () {
+              // Add received dummy message
+              self.messages.addMessage(answer);
+              // Hide typing indicator
+              self.messages.hideTyping();
+              responseInProgress = false;
+            }, 3000);
+          }, 1000);
+        }
+      }
+    },
+    on: {
+      tabInit: function (e, page) {
+        this.loadData();
+        this.resizeMessagesContent();
+        this.messageInit();
+        var self = this;
+        window.onresize = function() {
+          self.resizeMessagesContent();
+          var doc = document.getElementsByClassName("messages-content")[0];
+          var maxScroll = Dom7(".messages").height();
+          doc.scrollTo({ top: maxScroll, behavior: 'smooth' });
+        }
+      }
+    },
+  };
+</script>
