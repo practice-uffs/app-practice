@@ -62,11 +62,10 @@ const homePageRoute = function () {
 
   if (IsEnabled.servicesPage)
     tabs.push({
-      path: "/services/",
+      path: "/",
       id: "services",
       component: ServicesPage,
     });
-
   if (IsEnabled.newsPage)
     tabs.push({
       path: "/news/",
@@ -76,7 +75,7 @@ const homePageRoute = function () {
 
   if (IsEnabled.envPage)
     tabs.push({
-      path: "/",
+      path: "/env/",
       id: "env",
       component: EnvPage,
     });
