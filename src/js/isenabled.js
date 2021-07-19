@@ -8,7 +8,7 @@ var IsEnabled = {
     addToHomeScreen: false,
     shareAd: false,
 
-    newsPage: false,
+    newsPage: true,
 
     chatsPage: false,
     chatPage: false,
