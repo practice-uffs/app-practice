@@ -158,6 +158,14 @@
               else
                 self.changeSetting('devMode', true)
             })
+        else if(e.target.name === 'offlineStorage'){
+          self.changeSetting('offlineStorage', e.target.checked);
+          if (!e.target.checked){
+            let self = this
+            let app = self.$app
+            app.storage.partialCleaning()
+          }
+        }
         // Toogle other options
         else
           self.changeSetting(e.target.name, e.target.checked)

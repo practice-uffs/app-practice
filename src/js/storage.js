@@ -69,6 +69,18 @@ const storage = {
     localStorage.clear();
   },
 
+  partialCleaning: () => {
+    const settings = JSON.parse(localStorage.getItem("settings"));
+    const userCredentials = JSON.parse(localStorage.getItem("userCredentials"));
+    const userData = JSON.parse(localStorage.getItem("userData"));
+
+    localStorage.clear();
+
+    storage.setUserCredentials(userCredentials);
+    storage.setSettings(settings);
+    storage.setUserData(userData);
+  },
+
   // Settings methods
 
   getSettings: () => {
@@ -122,6 +134,7 @@ const storage = {
       .post(storage.api() + "auth/logout")
       .then((res) => {
         if (res.data) {
+          storage.partialCleaning();
           storage.clearUserCredentials();
           storage.app.request.setup({
             headers: {
@@ -313,15 +326,16 @@ const storage = {
   },
 
   setServiceDetails: (service) => {
-    localStorage.removeItem("serviceDetails"+service.id);
-    localStorage["serviceDetails"+service.id] =  JSON.stringify({service: service});
+    let storagedService = localStorage.getItem("serviceDetails"+service.id);
+    storagedService = JSON.parse(storagedService);
+    localStorage["serviceDetails"+service.id] =  JSON.stringify({...storagedService, service: service});
   },
 
   getServiceDetailsFromLocalstorage: (service_id) => {
     let service = localStorage.getItem("serviceDetails"+service_id);
     service = JSON.parse(service);
-
-    return service.service;
+    if (service)
+      return service.service;
   },
 
   getServiceById: async (id) => {
@@ -343,7 +357,7 @@ const storage = {
 
           const settings = storage.getSettings();
           
-          if (settings.offlineStorage)
+          if (settings.offlineStorage && !service.error)
             storage.setServiceDetails(service);
           return service;
         });
@@ -354,14 +368,14 @@ const storage = {
     let service = localStorage.getItem("serviceDetails"+service_id);
     service = JSON.parse(service);
     service = {...service, comments: comments};
-    console.log(service)
     localStorage["serviceDetails"+service_id] =  JSON.stringify(service);
   },
 
   getServiceCommentsFromLocalstorage: (service_id) => {
     let serviceDetails = localStorage.getItem("serviceDetails"+service_id);
     serviceDetails = JSON.parse(serviceDetails);
-    return serviceDetails.comments;
+    if (serviceDetails)
+      return serviceDetails.comments;
   },
 
   getServiceComments: async (service_id) => {
@@ -377,7 +391,7 @@ const storage = {
         }
         const settings = storage.getSettings();
 
-        if (settings.offlineStorage)
+        if (settings.offlineStorage && !comments.error)
             storage.setServiceComments(service_id, comments);
         return comments;
       });
