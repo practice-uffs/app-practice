@@ -175,24 +175,32 @@
         app.storage
           .getRequestedServices()
           .then((services) => {
-            let activeServices = [];
-            let doneServices = [];
-            // Processing data
-            for (let i = 0; i < services.length; i++) {
-              if (services[i].status === 3) doneServices.push(services[i]);
-              else activeServices.push(services[i]);
-            }
-            // Updating state
-            self.$setState({
-              doneServices: doneServices,
-              activeServices: activeServices,
-            });
+            this.separateServices(services);
           })
           .catch(() => {
+            let services = app.storage.getRequestedServicesFromLocalstorage();
+            if (services)
+              this.separateServices(services);
             app.dialog.alert(
               "Ocorreu um erro ao carregar estes dados, tente novamente!"
             );
           });
+      },
+      separateServices: function ( services ) {
+        var self = this;
+        let activeServices = [];
+        let doneServices = [];
+        // Processing data
+        console.log(services[0])
+        for (let i = 0; i < services.length; i++) {
+          if (services[i].status === 3) doneServices.push(services[i]);
+          else activeServices.push(services[i]);
+        }
+        // Updating state
+        self.$setState({
+          doneServices: doneServices,
+          activeServices: activeServices,
+        });
       },
     },
     on: {

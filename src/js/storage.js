@@ -162,6 +162,7 @@ const storage = {
 
   clearUserCredentials: () => {
     localStorage.removeItem("userCredentials");
+    localStorage.removeItem("userData");
   },
 
   // User data methods
@@ -255,6 +256,15 @@ const storage = {
       });
   },
 
+  setRequestedServices: (services) => {
+    localStorage["requestedServices"] = JSON.stringify(services);
+  },
+
+  getRequestedServicesFromLocalstorage: () => {
+    let services = localStorage.getItem("requestedServices");
+    return JSON.parse(services);
+  },
+
   getRequestedServices: async () => {
     return await storage.getUserData().then(async (userData) => {
       return await storage.app.request.promise
@@ -275,6 +285,11 @@ const storage = {
             services[i].status = Number(services[i].status);
           }
           services.sort((a, b) => (a.timestamp > b.timestamp ? 1 : -1));
+
+          const settings = storage.getSettings();
+          
+          if (settings.offlineStorage)
+            storage.setRequestedServices(services);
           return services;
         });
     });
