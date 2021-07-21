@@ -202,6 +202,14 @@
             });
           })
           .catch(() => {
+            let service = app.storage.getServiceDetailsFromLocalstorage(self.$route.params.id);
+
+            if (service) {
+              self.$setState({
+                service: service,
+              });
+            }
+
             app.dialog.alert("Ocorreu um erro inesperado, tente novamente!");
           });
 
@@ -213,6 +221,13 @@
             });
           })
           .catch(() => {
+            let comments = app.storage.getServiceCommentsFromLocalstorage(self.$route.params.id);
+
+            if (comments) {
+              self.$setState({
+                comments: comments,
+              });
+            }
             app.dialog.alert("Ocorreu um erro inesperado, tente novamente!");
           });
       },
