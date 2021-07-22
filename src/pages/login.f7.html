@@ -17,7 +17,7 @@
         <div class="page-content login-screen-content">
           <div class="login-screen-title">
             <img
-              src="../static/images/logo/logo 915x286.png"
+              src="static/images/logo/logo 915x286.png"
               style="width: 100%; height: auto"
             />
           </div>
@@ -47,9 +47,14 @@
               <li class="item-content item-input item-input-outline">
                 <div class="item-inner">
                   <div class="item-title item-floating-label">Senha</div>
-                  <div class="item-input-wrap">
-                    <input type="password" name="password" required validate />
-                    <span class="input-clear-button"></span>
+                  <div class="password">
+                    <div class="item-input-wrap">
+                      <input type="password" name="password" id="input_password" required validate />
+                      <span class="input-clear-button"></span>
+                    </div>
+                    <div class="eye_box" @click="viewPassword()">
+                      <i class="f7-icons" id="eye_icon">eye_slash</i>
+                    </div>
                   </div>
                 </div>
               </li>
@@ -81,7 +86,27 @@
   </div>
 </template>
 
+<style>
+  .password{
+    display: flex;
+    width: 100%;
+    align-items: center;
+  }
+  .eye_box{
+    padding-left: 10px;
+    height: var(--f7-input-height);
+    display: flex;
+    align-items: center;
+  }
+  #eye_icon{
+    color: var(--color-2);
+    font-size: 24px;
+  }
+</style>
+
 <script>
+  import 'dom7/dist/dom7.js';
+
   export default {
     methods: {
       login: function () {
@@ -106,6 +131,18 @@
             app.dialog.alert("Ocorreu um ero em sua rede, tente novamente!");
           });
       },
+      viewPassword : function () {
+        let eye = Dom7("#eye_icon");
+        let input = Dom7("#input_password");
+        if(eye.text() == "eye_slash"){
+          eye.text("eye");
+          input.attr("type","text");
+        }
+        else if(eye.text() == "eye"){
+          eye.text("eye_slash");
+          input.attr("type","password");
+        }
+      }
     },
   };
 </script>
