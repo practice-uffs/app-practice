@@ -1,5 +1,5 @@
 <template>
-  <div data-name="services">
+  <div data-name="services" id="services-tab">
     <div class="block">
       <div class="row">
         <div class="col-50">
@@ -21,7 +21,7 @@
       </div>
     </div>
 
-    <div class="toolbar tabbar tabbar-scrollable toolbar-bottom">
+    <div class="toolbar tabbar tabbar-scrollable toolbar-bottom" id="tabbar">
       <div class="toolbar-inner"><a href="#tab-1" class="tab-link tab-link-active">Aguardando Aprovação</a>
         <a href="#tab-2" class="tab-link">Em Progresso</a>
         <a href="#tab-3" class="tab-link">Concluídos</a>
@@ -29,7 +29,7 @@
       </div>
     </div>
 
-    <div class="tabs">
+    <div class="tabs" id="tab-content">
       <div class="tab tab-active" id="tab-1">
         <!-- Active services -->
         <div class="card">
@@ -267,6 +267,17 @@
 
   </div>
 </template>
+
+<style>
+  #tab-content{
+    overflow-y: scroll;
+  }
+  #tabbar{
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.22);
+  }
+
+</style>
+
 <script>
   export default {
     data: function () {
@@ -290,21 +301,27 @@
             let progressServices = new Array();
             let doneServices = new Array();
             let refusedServices = new Array();
+            let user_id;
+            app.storage.getUserData().then(res => {
+              user_id = res.id;
 
-            for (let i = 0; i < services.length; i++) {
-              if (services[i].status === 1){
-                approvalServices.push(services[i]);
-              } 
-              else if (services[i].status === 2){
-                progressServices.push(services[i]);
-              } 
-              else if (services[i].status === 3){
-                doneServices.push(services[i]);
+              for (let i = 0; i < services.length; i++) {
+                if (services[i].status === 1 && services[i].user_id == user_id){
+                  approvalServices.push(services[i]);
+                } 
+                else if (services[i].status === 2 && services[i].user_id == user_id){
+                  progressServices.push(services[i]);
+                } 
+                else if (services[i].status === 3 && services[i].user_id == user_id){
+                  doneServices.push(services[i]);
+                }
+                else if (services[i].status === 4 && services[i].user_id == user_id){
+                  refusedServices.push(services[i]);
+                }
               }
-              else{
-                refusedServices.push(services[i]);
-              }
-            }
+            });
+            self.resizeListServices();
+            
             self.$setState({
               approvalServices : approvalServices,
               progressServices : progressServices,
@@ -312,12 +329,20 @@
               refusedServices : refusedServices,
             });
           })
-          .catch(() => {
-            app.dialog.alert(
-              "Ocorreu um erro ao carregar estes dados, tente novamente!"
-            );
-          });
+        .catch(() => {
+          app.dialog.alert(
+            "Ocorreu um erro ao carregar estes dados, tente novamente!"
+          );
+        });
       },
+      resizeListServices : function () {
+        var screen = Dom7('#services');
+        var screen_size = screen.height()-screen.css('padding-top').replace("px", "")-screen.css('padding-bottom').replace("px", "");
+        let content_size = Dom7('#services-tab').height()+32-Dom7('#tab-content').height();
+        let max_list_size = screen_size - content_size;
+        console.log(max_list_size);
+        Dom7('#tab-content').css("height", max_list_size+"px");
+      }
     },
     on: {
       tabInit: function (e, page) {
