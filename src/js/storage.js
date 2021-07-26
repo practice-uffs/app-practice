@@ -77,6 +77,7 @@ const storage = {
     if (!settings) {
       settings = {
         offlineStorage: true,
+        allowNotifications: true,
         // Dev options
         devMode: true,
         testApi: true,
@@ -101,7 +102,7 @@ const storage = {
         username: username,
         password: password,
       })
-      .then((res) => {
+      .then( async (res) => {
         let data = JSON.parse(res.data);
         if (data.access_token) {
           storage.setUserCredentials(data);
@@ -110,14 +111,20 @@ const storage = {
               Authorization: "Bearer " + data.access_token,
             },
           });
+          const settings = storage.getSettings();
+          if (settings.allowNotifications)
+            await storage.postFcmToken();
           return true;
         } else {
           return false;
         }
+      }).catch(() => {
+        return false;
       });
   },
 
   requestLogout: async () => {
+    await storage.deleteFcmToken();
     return await storage.app.request.promise
       .post(storage.api() + "auth/logout")
       .then((res) => {
@@ -342,6 +349,40 @@ const storage = {
       return await storage.app.request.promise
         .post(storage.api() + "service/" + service_id + "/comments", comment)
         .then((res) => true);
+    });
+  },
+
+  postFcmToken: async () => {
+    return await storage.getUserData().then(async (userData) => {
+      document.addEventListener('deviceready', () => {
+        cordova.plugins.firebase.messaging.getToken().then(async function(token) {
+          const user_id = userData.id;
+          console.log("Token: "+token)
+          const data = {
+            user_id: user_id,
+            fcm_token: token
+          }
+
+          return await storage.app.request.promise
+            .post(storage.api() + "user/channels", data)
+            .then((res) => console.log(res));
+        });
+      });
+    });
+  },
+
+  deleteFcmToken: async () => {
+    document.addEventListener('deviceready', async () => {
+
+      let userToken = JSON.parse(localStorage["userCredentials"]);
+      userToken = "Bearer " + userToken.access_token;
+      return await storage.app.request({
+        url: storage.api()+"user/channels",
+        method: "DELETE",
+        headers: {
+          Authorization: userToken
+        }
+      });
     });
   },
 };
