@@ -357,7 +357,6 @@ const storage = {
       document.addEventListener('deviceready', () => {
         cordova.plugins.firebase.messaging.getToken().then(async function(token) {
           const user_id = userData.id;
-          console.log("Token: "+token)
           const data = {
             user_id: user_id,
             fcm_token: token

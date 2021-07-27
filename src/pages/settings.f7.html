@@ -50,6 +50,30 @@
       </div>
 
       <div class="block-title">
+        <h3><i class="f7-icons">bell</i> Notificações</h3>
+      </div>
+      <div class="list">
+        <ul>
+          <li>
+            <div class="item-content">
+              <div class="item-media">
+                <i class="f7-icons">bell</i>
+              </div>
+              <div class="item-inner">
+                <div class="item-title">Receber notificações no dispositivo</div>
+                <div class="item-after">
+                  <label class="toggle toggle-init color-blue">
+                    <input type="checkbox" name="allowNotifications" {{#if settings}}{{#if settings.allowNotifications}}checked{{/if}}{{/if}} @change="toogleCheckbox">
+                    <span class="toggle-icon"></span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="block-title">
         <h3><i class="f7-icons">chevron_left_slash_chevron_right</i> Desenvolvimento</h3>
       </div>
       <div class="list">
@@ -159,8 +183,22 @@
                 self.changeSetting('devMode', true)
             })
         // Toogle other options
+        else if (e.target.name === 'allowNotifications')
+          try {
+            if (e.target.checked) {
+              app.storage.postFcmToken()
+              self.changeSetting(e.target.name, e.target.checked)
+            } else {
+              app.storage.deleteFcmToken()
+              self.changeSetting(e.target.name, e.target.checked)
+            }
+          } catch (err) {
+            app.dialog.alert(
+              "Não foi possível mudar as configurações de notificação, tente novamente mais tarde!"
+            );
+          }
         else
-          self.changeSetting(e.target.name, e.target.checked)
+        self.changeSetting(e.target.name, e.target.checked)
       }
 
     },
