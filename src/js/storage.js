@@ -170,9 +170,22 @@ const storage = {
     return await storage.app.request.promise
       .post(storage.api() + "auth/me")
       .then((res) => {
-        const userData = JSON.parse(res.data);
-        storage.setUserData(userData);
-        return userData;
+        let data = JSON.parse(res.data);
+        if(data.error){
+          storage.requestLogout().then(res => {
+            if (res) {
+              storage.app.dialog.alert(
+                "Sessão expirada ou inválida, faça login novamente!"
+              );
+              storage.app.views.main.router.navigate("/");
+            }
+          })
+        }
+        else{
+          const userData = JSON.parse(res.data);
+          storage.setUserData(userData);
+          return userData;
+        }
       });
   },
 
@@ -245,13 +258,26 @@ const storage = {
     return await storage.app.request.promise
       .get(storage.api() + "specifications")
       .then((res) => {
-        // Grouping services by category
-        let service_specifications = JSON.parse(res.data);
-        service_specifications = service_specifications.reduce((list, x) => {
-          (list[x["category_id"]] = list[x["category_id"]] || []).push(x);
-          return list;
-        }, {});
-        return service_specifications;
+        let data = JSON.parse(res.data);
+        if(data.error){
+          storage.requestLogout().then(res => {
+            if (res) {
+              storage.app.dialog.alert(
+                "Sessão expirada ou inválida, faça login novamente!"
+              );
+              storage.app.views.main.router.navigate("/");
+            }
+          })
+        }
+        else{
+          // Grouping services by category
+          let service_specifications = JSON.parse(res.data);
+          service_specifications = service_specifications.reduce((list, x) => {
+            (list[x["category_id"]] = list[x["category_id"]] || []).push(x);
+            return list;
+          }, {});
+          return service_specifications;
+        }
       });
   },
 
@@ -260,22 +286,35 @@ const storage = {
       return await storage.app.request.promise
         .get(storage.api() + "services", { user_id: userData.id })
         .then((res) => {
-          let services = JSON.parse(res.data).data;
-          for (let i = 0; i < services.length; i++) {
-            services[i].timestamp = storage.dateDifference(
-              services[i].created_at
-            );
-            services[i].created_at = storage.formatDateDifference(
-              services[i].timestamp
-            );
-            services[i].user_id = Number(services[i].user_id);
-            services[i].category_id = Number(services[i].category_id);
-            services[i].location_id = Number(services[i].location_id);
-            services[i].specification_id = Number(services[i].specification_id);
-            services[i].status = Number(services[i].status);
+          let data = JSON.parse(res.data);
+          if(data.error){
+            storage.requestLogout().then(res => {
+              if (res) {
+                storage.app.dialog.alert(
+                  "Sessão expirada ou inválida, faça login novamente!"
+                );
+                storage.app.views.main.router.navigate("/");
+              }
+            })
           }
-          services.sort((a, b) => (a.timestamp > b.timestamp ? 1 : -1));
-          return services;
+          else{
+            let services = JSON.parse(res.data).data;
+            for (let i = 0; i < services.length; i++) {
+              services[i].timestamp = storage.dateDifference(
+                services[i].created_at
+              );
+              services[i].created_at = storage.formatDateDifference(
+                services[i].timestamp
+              );
+              services[i].user_id = Number(services[i].user_id);
+              services[i].category_id = Number(services[i].category_id);
+              services[i].location_id = Number(services[i].location_id);
+              services[i].specification_id = Number(services[i].specification_id);
+              services[i].status = Number(services[i].status);
+            }
+            services.sort((a, b) => (a.timestamp > b.timestamp ? 1 : -1));
+            return services;
+          }
         });
     });
   },
@@ -284,7 +323,20 @@ const storage = {
     return await storage.app.request.promise
       .get(storage.api() + "locations")
       .then((res) => {
-        return JSON.parse(res.data);
+        let data = JSON.parse(res.data);
+        if(data.error){
+          storage.requestLogout().then(res => {
+            if (res) {
+              storage.app.dialog.alert(
+                "Sessão expirada ou inválida, faça login novamente!"
+              );
+              storage.app.views.main.router.navigate("/");
+            }
+          })
+        }
+        else{
+          return JSON.parse(res.data);
+        }
       });
   },
 
@@ -293,7 +345,22 @@ const storage = {
       service.user_id = userData.id;
       return await storage.app.request.promise
         .post(storage.api() + "services", service)
-        .then((res) => true);
+        .then((res) => {
+          let data = JSON.parse(res.data);
+          if(data.error){
+            storage.requestLogout().then(res => {
+              if (res) {
+                storage.app.dialog.alert(
+                  "Sessão expirada ou inválida, faça login novamente!"
+                );
+                storage.app.views.main.router.navigate("/");
+              }
+            })
+          }
+          else{
+            true;
+          }
+        });
     });
   },
 
@@ -302,19 +369,32 @@ const storage = {
       return await storage.app.request.promise
         .get(storage.api() + "service/" + id)
         .then((res) => {
-          let service = JSON.parse(res.data);
-          service.timestamp = storage.dateDifference(service.created_at);
-          service.created_at = storage.formatDateDifference(service.timestamp);
-          service.user_id = Number(service.user_id);
-          service.category_id = Number(service.category_id);
-          service.location_id = Number(service.location_id);
-          service.specification_id = Number(service.specification_id);
-          service.status = Number(service.status);
-          service.type = Number(service.type);
-          service.hidden = Number(service.hidden);
-          service.user = userData;
+          let data = JSON.parse(res.data);
+          if(data.error){
+            storage.requestLogout().then(res => {
+              if (res) {
+                storage.app.dialog.alert(
+                  "Sessão expirada ou inválida, faça login novamente!"
+                );
+                storage.app.views.main.router.navigate("/");
+              }
+            })
+          }
+          else{
+            let service = JSON.parse(res.data);
+            service.timestamp = storage.dateDifference(service.created_at);
+            service.created_at = storage.formatDateDifference(service.timestamp);
+            service.user_id = Number(service.user_id);
+            service.category_id = Number(service.category_id);
+            service.location_id = Number(service.location_id);
+            service.specification_id = Number(service.specification_id);
+            service.status = Number(service.status);
+            service.type = Number(service.type);
+            service.hidden = Number(service.hidden);
+            service.user = userData;
 
-          return service;
+            return service;
+          }
         });
     });
   },
@@ -323,14 +403,27 @@ const storage = {
     return await storage.app.request.promise
       .get(storage.api() + "service/" + service_id + "/comments")
       .then((res) => {
-        let comments = JSON.parse(res.data).data;
-        for (let i = 0; i < comments.length; i++) {
-          comments[i].timestamp = storage.dateDifference(comments[i].date);
-          comments[i].date = storage.formatDateDifference(
-            comments[i].timestamp
-          );
+        let data = JSON.parse(res.data);
+        if(data.error){
+          storage.requestLogout().then(res => {
+            if (res) {
+              storage.app.dialog.alert(
+                "Sessão expirada ou inválida, faça login novamente!"
+              );
+              storage.app.views.main.router.navigate("/");
+            }
+          })
         }
-        return comments;
+        else{
+          let comments = JSON.parse(res.data).data;
+          for (let i = 0; i < comments.length; i++) {
+            comments[i].timestamp = storage.dateDifference(comments[i].date);
+            comments[i].date = storage.formatDateDifference(
+              comments[i].timestamp
+            );
+          }
+          return comments;
+        }
       });
   },
 
@@ -341,7 +434,22 @@ const storage = {
 
       return await storage.app.request.promise
         .post(storage.api() + "service/" + service_id + "/comments", comment)
-        .then((res) => true);
+        .then((res) => {
+          let data = JSON.parse(res.data);
+          if(data.error){
+            storage.requestLogout().then(res => {
+              if (res) {
+                storage.app.dialog.alert(
+                  "Sessão expirada ou inválida, faça login novamente!"
+                );
+                storage.app.views.main.router.navigate("/");
+              }
+            })
+          }
+          else{
+            true;
+          }
+        });
     });
   },
 };
