@@ -161,7 +161,7 @@
         })
       },
 
-      toogleCheckbox: function (e) {
+      toogleCheckbox: async function (e) {
         let self = this
         let app = self.$app
 
@@ -186,8 +186,24 @@
         else if (e.target.name === 'allowNotifications')
           try {
             if (e.target.checked) {
-              app.storage.postFcmToken()
-              self.changeSetting(e.target.name, e.target.checked)
+              document.addEventListener('deviceready', () => {
+                app.storage.postFcmToken()
+                .then((res) => {
+                  if(res.id)
+                    self.changeSetting(e.target.name, e.target.checked)
+                  else
+                    app.storage.updateFcmToken()
+                    .then((res) => {
+                      let data = JSON.parse(res.data)
+                      if (!data.error)
+                        self.changeSetting(e.target.name, e.target.checked)
+                      else
+                        app.dialog.alert(
+                          "Não foi possível mudar as configurações de notificação, tente novamente mais tarde!"
+                        )
+                    });
+                })
+              });
             } else {
               app.storage.deleteFcmToken()
               self.changeSetting(e.target.name, e.target.checked)

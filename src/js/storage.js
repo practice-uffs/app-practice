@@ -113,12 +113,27 @@ const storage = {
           });
           const settings = storage.getSettings();
           if (settings.allowNotifications)
-            await storage.postFcmToken();
+            await storage.postFcmToken()
+            .then((res) => {
+              if (!res.id) {
+                storage.updateFcmToken()
+                .then((res) => {
+                  let data = JSON.parse(res.data)
+                  if (!data.error)
+                    self.changeSetting(e.target.name, e.target.checked)
+                  else
+                    storage.app.dialog.alert (
+                      "Não foi possível ativar as notificações para este dispositivo, tente novamente mais tarde!"
+                    );
+                });
+              }
+            })
           return true;
         } else {
           return false;
         }
-      }).catch(() => {
+      }).catch((err) => {
+        console.log("ERRO: "+JSON.stringify(err))
         return false;
       });
   },
@@ -364,15 +379,42 @@ const storage = {
 
           return await storage.app.request.promise
             .post(storage.api() + "user/channels", data)
-            .then((res) => console.log(res));
+            .then(async (res) => {
+              if(!res.id)
+                return await storage.updateFcmToken();
+              return true
+            })
+            .catch( async (err) => {
+              await storage.updateFcmToken();
+            });
         });
       });
     });
   },
 
+  updateFcmToken: async () => {
+    document.addEventListener('deviceready', async () => {
+      cordova.plugins.firebase.messaging.getToken().then(async function(token) {
+        const data = {
+          fcm_token: token
+        }
+        let userToken = JSON.parse(localStorage["userCredentials"]);
+        userToken = "Bearer " + userToken.access_token;
+        return await storage.app.request.promise({
+          url: storage.api()+"user/channels",
+          method: "PATCH",
+          contentType: "application/json",
+          headers: {
+            Authorization: userToken
+          },
+          data: data,
+        })
+      })    
+    });
+  },
+
   deleteFcmToken: async () => {
     document.addEventListener('deviceready', async () => {
-
       let userToken = JSON.parse(localStorage["userCredentials"]);
       userToken = "Bearer " + userToken.access_token;
       return await storage.app.request({
