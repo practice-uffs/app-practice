@@ -342,7 +342,6 @@
         var screen_size = screen.height()-screen.css('padding-top').replace("px", "")-screen.css('padding-bottom').replace("px", "");
         let content_size = Dom7('#services-tab').height()+32-Dom7('#tab-content').height();
         let max_list_size = screen_size - content_size;
-        console.log(max_list_size);
         Dom7('#tab-content').css("height", max_list_size+"px");
       }
     },
