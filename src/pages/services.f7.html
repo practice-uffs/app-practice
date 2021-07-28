@@ -308,14 +308,11 @@
               for (let i = 0; i < services.length; i++) {
                 if (services[i].status === 1 && services[i].user_id == user_id){
                   approvalServices.push(services[i]);
-                } 
-                else if (services[i].status === 2 && services[i].user_id == user_id){
+                } else if (services[i].status === 2 && services[i].user_id == user_id){
                   progressServices.push(services[i]);
-                } 
-                else if (services[i].status === 3 && services[i].user_id == user_id){
+                } else if (services[i].status === 3 && services[i].user_id == user_id){
                   doneServices.push(services[i]);
-                }
-                else if (services[i].status === 4 && services[i].user_id == user_id){
+                } else if (services[i].status === 4 && services[i].user_id == user_id){
                   refusedServices.push(services[i]);
                 }
               }
@@ -330,9 +327,7 @@
             });
           })
         .catch(() => {
-          app.dialog.alert(
-            "Ocorreu um erro ao carregar estes dados, tente novamente!"
-          );
+          app.dialog.alert("Ocorreu um erro ao carregar estes dados, tente novamente!");
         });
       },
       resizeListServices : function () {

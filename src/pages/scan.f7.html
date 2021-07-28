@@ -81,8 +81,7 @@
                 }, function (err) {
                     console.log('failed to set permission');
                 });
-              }
-              else{
+              } else{
                 self.initScan();
               }
             }, function (err) {
@@ -211,8 +210,7 @@
         bar.css("left", horizontalShadow/2+"px");
         if(self == null){
           this.barAnimation(bar, startPos, displacement);
-        }
-        else{
+        } else{
           self.barAnimation(bar, startPos, displacement);
         }
       },
@@ -298,14 +296,12 @@
             var extUrl = element;
             var title = element;
             var description = "URL Externa";
-          }
-          else if(routePattern.test(element)){
+          } else if(routePattern.test(element)){
             var route = element;
             var extUrl = "";
             var title = element;
             var description = "Aba do App";
-          }
-          else{
+          } else{
             var route = "#";
             var extUrl = "#";
             var title = element;
@@ -340,8 +336,7 @@
               e.preventDefault();
             }
           });
-        }
-        else if (device.platform.toUpperCase() === 'IOS') {
+        } else if (device.platform.toUpperCase() === 'IOS') {
           Dom7(document).on('click', "li.item", function (e) {
             if(Dom7(this).attr('extUrl') != ""){
               var url = Dom7(this).attr('extUrl');
@@ -349,8 +344,7 @@
               e.preventDefault();
             }
           });
-        }
-        else {
+        } else {
           console.log("Estamos no navegador");
           // Leave standard behaviour
         }
