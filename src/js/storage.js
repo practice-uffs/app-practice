@@ -180,12 +180,11 @@ const storage = {
               storage.app.views.main.router.navigate("/");
             }
           })
+          return;
         }
-        else{
-          const userData = JSON.parse(res.data);
-          storage.setUserData(userData);
-          return userData;
-        }
+        const userData = JSON.parse(res.data);
+        storage.setUserData(userData);
+        return userData;
       });
   },
 
@@ -261,23 +260,21 @@ const storage = {
         let data = JSON.parse(res.data);
         if(data.error){
           storage.requestLogout().then(res => {
-            if (res) {
-              storage.app.dialog.alert(
-                "Sessão expirada ou inválida, faça login novamente!"
-              );
-              storage.app.views.main.router.navigate("/");
+            if (!res) {
+              return;
             }
+            storage.app.dialog.alert("Sessão expirada ou inválida, faça login novamente!");
+            storage.app.views.main.router.navigate("/");
           })
+          return;
         }
-        else{
-          // Grouping services by category
-          let service_specifications = JSON.parse(res.data);
-          service_specifications = service_specifications.reduce((list, x) => {
-            (list[x["category_id"]] = list[x["category_id"]] || []).push(x);
-            return list;
-          }, {});
-          return service_specifications;
-        }
+        // Grouping services by category
+        let service_specifications = JSON.parse(res.data);
+        service_specifications = service_specifications.reduce((list, x) => {
+          (list[x["category_id"]] = list[x["category_id"]] || []).push(x);
+          return list;
+        }, {});
+        return service_specifications;
       });
   },
 
@@ -289,32 +286,26 @@ const storage = {
           let data = JSON.parse(res.data);
           if(data.error){
             storage.requestLogout().then(res => {
-              if (res) {
-                storage.app.dialog.alert(
-                  "Sessão expirada ou inválida, faça login novamente!"
-                );
-                storage.app.views.main.router.navigate("/");
+              if (!res) {
+                return;
               }
+              storage.app.dialog.alert("Sessão expirada ou inválida, faça login novamente!");
+              storage.app.views.main.router.navigate("/");
             })
+            return;
           }
-          else{
-            let services = JSON.parse(res.data).data;
-            for (let i = 0; i < services.length; i++) {
-              services[i].timestamp = storage.dateDifference(
-                services[i].created_at
-              );
-              services[i].created_at = storage.formatDateDifference(
-                services[i].timestamp
-              );
-              services[i].user_id = Number(services[i].user_id);
-              services[i].category_id = Number(services[i].category_id);
-              services[i].location_id = Number(services[i].location_id);
-              services[i].specification_id = Number(services[i].specification_id);
-              services[i].status = Number(services[i].status);
-            }
-            services.sort((a, b) => (a.timestamp > b.timestamp ? 1 : -1));
-            return services;
+          let services = JSON.parse(res.data).data;
+          for (let i = 0; i < services.length; i++) {
+            services[i].timestamp = storage.dateDifference(services[i].created_at);
+            services[i].created_at = storage.formatDateDifference(services[i].timestamp);
+            services[i].user_id = Number(services[i].user_id);
+            services[i].category_id = Number(services[i].category_id);
+            services[i].location_id = Number(services[i].location_id);
+            services[i].specification_id = Number(services[i].specification_id);
+            services[i].status = Number(services[i].status);
           }
+          services.sort((a, b) => (a.timestamp > b.timestamp ? 1 : -1));
+          return services;
         });
     });
   },
@@ -326,17 +317,15 @@ const storage = {
         let data = JSON.parse(res.data);
         if(data.error){
           storage.requestLogout().then(res => {
-            if (res) {
-              storage.app.dialog.alert(
-                "Sessão expirada ou inválida, faça login novamente!"
-              );
-              storage.app.views.main.router.navigate("/");
+            if (!res) {
+              return;
             }
+            storage.app.dialog.alert("Sessão expirada ou inválida, faça login novamente!");
+            storage.app.views.main.router.navigate("/");
           })
+          return;
         }
-        else{
-          return JSON.parse(res.data);
-        }
+        return JSON.parse(res.data);
       });
   },
 
@@ -349,17 +338,15 @@ const storage = {
           let data = JSON.parse(res.data);
           if(data.error){
             storage.requestLogout().then(res => {
-              if (res) {
-                storage.app.dialog.alert(
-                  "Sessão expirada ou inválida, faça login novamente!"
-                );
-                storage.app.views.main.router.navigate("/");
+              if (!res) {
+                return;
               }
+              storage.app.dialog.alert("Sessão expirada ou inválida, faça login novamente!");
+              storage.app.views.main.router.navigate("/");
             })
+            return;
           }
-          else{
-            true;
-          }
+          return true;
         });
     });
   },
@@ -372,29 +359,27 @@ const storage = {
           let data = JSON.parse(res.data);
           if(data.error){
             storage.requestLogout().then(res => {
-              if (res) {
-                storage.app.dialog.alert(
-                  "Sessão expirada ou inválida, faça login novamente!"
-                );
-                storage.app.views.main.router.navigate("/");
+              if (!res) {
+                return;
               }
+              storage.app.dialog.alert("Sessão expirada ou inválida, faça login novamente!");
+              storage.app.views.main.router.navigate("/");
             })
+            return;
           }
-          else{
-            let service = JSON.parse(res.data);
-            service.timestamp = storage.dateDifference(service.created_at);
-            service.created_at = storage.formatDateDifference(service.timestamp);
-            service.user_id = Number(service.user_id);
-            service.category_id = Number(service.category_id);
-            service.location_id = Number(service.location_id);
-            service.specification_id = Number(service.specification_id);
-            service.status = Number(service.status);
-            service.type = Number(service.type);
-            service.hidden = Number(service.hidden);
-            service.user = userData;
+          let service = JSON.parse(res.data);
+          service.timestamp = storage.dateDifference(service.created_at);
+          service.created_at = storage.formatDateDifference(service.timestamp);
+          service.user_id = Number(service.user_id);
+          service.category_id = Number(service.category_id);
+          service.location_id = Number(service.location_id);
+          service.specification_id = Number(service.specification_id);
+          service.status = Number(service.status);
+          service.type = Number(service.type);
+          service.hidden = Number(service.hidden);
+          service.user = userData;
 
-            return service;
-          }
+          return service;
         });
     });
   },
@@ -406,24 +391,20 @@ const storage = {
         let data = JSON.parse(res.data);
         if(data.error){
           storage.requestLogout().then(res => {
-            if (res) {
-              storage.app.dialog.alert(
-                "Sessão expirada ou inválida, faça login novamente!"
-              );
-              storage.app.views.main.router.navigate("/");
+            if (!res) {
+              return;
             }
+            storage.app.dialog.alert("Sessão expirada ou inválida, faça login novamente!");
+            storage.app.views.main.router.navigate("/");
           })
+          return;
         }
-        else{
-          let comments = JSON.parse(res.data).data;
-          for (let i = 0; i < comments.length; i++) {
-            comments[i].timestamp = storage.dateDifference(comments[i].date);
-            comments[i].date = storage.formatDateDifference(
-              comments[i].timestamp
-            );
-          }
-          return comments;
+        let comments = JSON.parse(res.data).data;
+        for (let i = 0; i < comments.length; i++) {
+          comments[i].timestamp = storage.dateDifference(comments[i].date);
+          comments[i].date = storage.formatDateDifference(comments[i].timestamp);
         }
+        return comments;
       });
   },
 
@@ -438,17 +419,15 @@ const storage = {
           let data = JSON.parse(res.data);
           if(data.error){
             storage.requestLogout().then(res => {
-              if (res) {
-                storage.app.dialog.alert(
-                  "Sessão expirada ou inválida, faça login novamente!"
-                );
-                storage.app.views.main.router.navigate("/");
+              if (!res) {
+                return;
               }
+              storage.app.dialog.alert("Sessão expirada ou inválida, faça login novamente!");
+              storage.app.views.main.router.navigate("/");
             })
+            return;
           }
-          else{
-            true;
-          }
+          return true;
         });
     });
   },
