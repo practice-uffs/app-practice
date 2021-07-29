@@ -112,28 +112,27 @@ const storage = {
             },
           });
           const settings = storage.getSettings();
-          if (settings.allowNotifications)
+          if (settings.allowNotifications) {
             await storage.postFcmToken()
             .then((res) => {
               if (!res.id) {
                 storage.updateFcmToken()
                 .then((res) => {
                   let data = JSON.parse(res.data)
-                  if (!data.error)
-                    self.changeSetting(e.target.name, e.target.checked)
-                  else
+                  if (data.error) {
                     storage.app.dialog.alert (
                       "Não foi possível ativar as notificações para este dispositivo, tente novamente mais tarde!"
                     );
+                  }
                 });
               }
-            })
+            });
+          }
           return true;
         } else {
           return false;
         }
-      }).catch((err) => {
-        console.log("ERRO: "+JSON.stringify(err))
+      }).catch(() => {
         return false;
       });
   },
@@ -380,9 +379,10 @@ const storage = {
 
           return await storage.app.request.promise
             .post(storage.api() + "user/channels", data)
-            .then(async (res) => {
-              if(!res.id)
+            .then( async (res) => {
+              if(!res.id) {
                 return await storage.updateFcmToken();
+              }
               return true
             })
             .catch( async (err) => {
@@ -395,7 +395,7 @@ const storage = {
 
   updateFcmToken: async () => {
     document.addEventListener('deviceready', async () => {
-      cordova.plugins.firebase.messaging.getToken().then(async function(token) {
+      cordova.plugins.firebase.messaging.getToken().then( async function(token) {
         storage.setFcmToken(token);
         const data = {
           fcm_token: token
@@ -419,6 +419,7 @@ const storage = {
     document.addEventListener('deviceready', async () => {
       let userToken = JSON.parse(localStorage["userCredentials"]);
       userToken = "Bearer " + userToken.access_token;
+      storage.removeFcmToken();
       return await storage.app.request({
         url: storage.api()+"user/channels",
         method: "DELETE",
@@ -432,6 +433,10 @@ const storage = {
   setFcmToken: (fcmToken) => {
     localStorage["fcmToken"] = JSON.stringify(fcmToken);
   },
+
+  removeFcmToken: () => {
+    localStorage.removeItem("fcmToken");
+  }
 
 };
 

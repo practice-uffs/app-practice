@@ -182,26 +182,27 @@
               else
                 self.changeSetting('devMode', true)
             })
-        // Toogle other options
-        else if (e.target.name === 'allowNotifications')
+        else if (e.target.name === 'allowNotifications') {
           try {
             if (e.target.checked) {
               document.addEventListener('deviceready', () => {
                 app.storage.postFcmToken()
                 .then((res) => {
-                  if(res.id)
+                  if(res.id) {
                     self.changeSetting(e.target.name, e.target.checked)
-                  else
+                  } else {
                     app.storage.updateFcmToken()
                     .then((res) => {
                       let data = JSON.parse(res.data)
-                      if (!data.error)
+                      if (!data.error) {
                         self.changeSetting(e.target.name, e.target.checked)
-                      else
+                      } else {
                         app.dialog.alert(
                           "Não foi possível mudar as configurações de notificação, tente novamente mais tarde!"
                         )
+                      }
                     });
+                  }
                 })
               });
             } else {
@@ -213,6 +214,8 @@
               "Não foi possível mudar as configurações de notificação, tente novamente mais tarde!"
             );
           }
+        }
+        // Toogle other options
         else
         self.changeSetting(e.target.name, e.target.checked)
       }
