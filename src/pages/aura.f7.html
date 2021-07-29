@@ -193,12 +193,12 @@
                   accs = res;
                   if(accs.length == 0){
                     answer.text = "Não foi encontrada nenhuma ACC";
-                  } else{
+                  } else {
                     answer.text = 'Isso é apenas um exemplo 🙂<br><b>'+accs.validated+'</b><br><br>';
                     for(let i in accs.list){
-                      answer.text += '<b>Título</b>: '+accs.list[i].title+'<br>'+
-                        '<b>Data</b>: '+accs.list[i].date+'<br>'+
-                        '<b>Horas Validadas</b>: '+accs.list[i].hours+'<br>'+
+                      answer.text += '<b>Título</b>: '+accs.list[i].title+'<br>' +
+                        '<b>Data</b>: '+accs.list[i].date+'<br>' +
+                        '<b>Horas Validadas</b>: '+accs.list[i].hours+'<br>' +
                         '<br>';
                     }
                   }
@@ -212,11 +212,11 @@
                   var user_name = self.capitalize(res.name.split(" ")[0].toLowerCase());
                   answer.text = "Olá <b>"+user_name+"</b>. Espero lhe encontrar bem 🙂! Meu nome é Aura e estou aqui para lhe ajudar.<br> Atualmente, me encontro em fase de desenvolvimento e logo disponibilizarei funções pra você 😉<br>Para demonstração, utilize as seguintes palavras:<br><ul><li>Acc</li><li>Alexa</li><li>Random</li></ul>"
                 })
-              } else if(received.toLowerCase().search('alexa') != -1){
+              } else if(received.toLowerCase().search('alexa') != -1) {
                 var answer = answers.alexa[Math.floor(Math.random() * answers.alexa.length)];
-              } else if(received.toLowerCase().search('random') != -1){
+              } else if(received.toLowerCase().search('random') != -1) {
                 var answer = answers.random[Math.floor(Math.random() * answers.random.length)];
-              } else{
+              } else {
                 // Get random answer
                 var answer = answers.answers[Math.floor(Math.random() * answers.answers.length)];
               }
