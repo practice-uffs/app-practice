@@ -113,26 +113,13 @@ const storage = {
           });
           const settings = storage.getSettings();
           if (settings.allowNotifications) {
-            await storage.postFcmToken()
-            .then((res) => {
-              if (!res.id) {
-                storage.updateFcmToken()
-                .then((res) => {
-                  let data = JSON.parse(res.data)
-                  if (data.error) {
-                    storage.app.dialog.alert (
-                      "Não foi possível ativar as notificações para este dispositivo, tente novamente mais tarde!"
-                    );
-                  }
-                });
-              }
-            });
+            await storage.postFcmToken();
           }
           return true;
         } else {
           return false;
         }
-      }).catch(() => {
+      }).catch((err) => {
         return false;
       });
   },
@@ -367,28 +354,25 @@ const storage = {
   },
 
   postFcmToken: async () => {
-    return await storage.getUserData().then(async (userData) => {
-      document.addEventListener('deviceready', () => {
-        cordova.plugins.firebase.messaging.getToken().then(async function(token) {
+    document.addEventListener('deviceready', () => {
+      cordova.plugins.firebase.messaging.getToken().then(async function(token) {
+        storage.setFcmToken(token); 
           storage.setFcmToken(token); 
-          const user_id = userData.id;
-          const data = {
-            user_id: user_id,
-            fcm_token: token
-          }
+        storage.setFcmToken(token); 
+        const data = {
+          fcm_token: token
+        }
 
-          return await storage.app.request.promise
-            .post(storage.api() + "user/channels", data)
-            .then( async (res) => {
-              if(!res.id) {
-                return await storage.updateFcmToken();
-              }
-              return true
-            })
-            .catch( async (err) => {
-              await storage.updateFcmToken();
-            });
-        });
+        return await storage.app.request.promise
+          .post(storage.api() + "user/channels", data)
+          .then( async (res) => {
+            let responseData = JSON.parse(res.data)
+            if(!responseData.id) {
+              return await storage.updateFcmToken();
+            }
+          }).catch( async (err) => {
+            return await storage.updateFcmToken()
+          })
       });
     });
   },
@@ -410,6 +394,17 @@ const storage = {
             Authorization: userToken
           },
           data: data,
+        }).then((res) => {
+          let responseData = JSON.parse(res.data)
+          if (responseData.error) {
+            storage.app.dialog.alert (
+              "Não foi possível ativar as notificações para este dispositivo, tente novamente mais tarde!"
+            );
+          }
+        }).catch(() => {
+          storage.app.dialog.alert (
+            "Não foi possível ativar as notificações para este dispositivo, tente novamente mais tarde!"
+          );
         })
       })    
     });
@@ -420,12 +415,16 @@ const storage = {
       let userToken = JSON.parse(localStorage["userCredentials"]);
       userToken = "Bearer " + userToken.access_token;
       storage.removeFcmToken();
-      return await storage.app.request({
+      return await storage.app.request.promise({
         url: storage.api()+"user/channels",
         method: "DELETE",
         headers: {
           Authorization: userToken
         }
+      }).catch((err) => {
+        storage.app.dialog.alert (
+          "Não foi possível desativar as notificações para este dispositivo, tente novamente mais tarde!"
+        );
       });
     });
   },
