@@ -178,6 +178,18 @@ const storage = {
     return await storage.app.request.promise
       .post(storage.api() + "auth/me")
       .then((res) => {
+        let data = JSON.parse(res.data);
+        if(data.error){
+          storage.requestLogout().then(res => {
+            if (res) {
+              storage.app.dialog.alert(
+                "Sessão expirada ou inválida, faça login novamente!"
+              );
+              storage.app.views.main.router.navigate("/");
+            }
+          })
+          return;
+        }
         const userData = JSON.parse(res.data);
         storage.setUserData(userData);
         return userData;
@@ -253,6 +265,17 @@ const storage = {
     return await storage.app.request.promise
       .get(storage.api() + "specifications")
       .then((res) => {
+        let data = JSON.parse(res.data);
+        if(data.error){
+          storage.requestLogout().then(res => {
+            if (!res) {
+              return;
+            }
+            storage.app.dialog.alert("Sessão expirada ou inválida, faça login novamente!");
+            storage.app.views.main.router.navigate("/");
+          })
+          return;
+        }
         // Grouping services by category
         let service_specifications = JSON.parse(res.data);
         service_specifications = service_specifications.reduce((list, x) => {
@@ -268,14 +291,21 @@ const storage = {
       return await storage.app.request.promise
         .get(storage.api() + "services", { user_id: userData.id })
         .then((res) => {
+          let data = JSON.parse(res.data);
+          if(data.error){
+            storage.requestLogout().then(res => {
+              if (!res) {
+                return;
+              }
+              storage.app.dialog.alert("Sessão expirada ou inválida, faça login novamente!");
+              storage.app.views.main.router.navigate("/");
+            })
+            return;
+          }
           let services = JSON.parse(res.data).data;
           for (let i = 0; i < services.length; i++) {
-            services[i].timestamp = storage.dateDifference(
-              services[i].created_at
-            );
-            services[i].created_at = storage.formatDateDifference(
-              services[i].timestamp
-            );
+            services[i].timestamp = storage.dateDifference(services[i].created_at);
+            services[i].created_at = storage.formatDateDifference(services[i].timestamp);
             services[i].user_id = Number(services[i].user_id);
             services[i].category_id = Number(services[i].category_id);
             services[i].location_id = Number(services[i].location_id);
@@ -292,6 +322,17 @@ const storage = {
     return await storage.app.request.promise
       .get(storage.api() + "locations")
       .then((res) => {
+        let data = JSON.parse(res.data);
+        if(data.error){
+          storage.requestLogout().then(res => {
+            if (!res) {
+              return;
+            }
+            storage.app.dialog.alert("Sessão expirada ou inválida, faça login novamente!");
+            storage.app.views.main.router.navigate("/");
+          })
+          return;
+        }
         return JSON.parse(res.data);
       });
   },
@@ -301,7 +342,20 @@ const storage = {
       service.user_id = userData.id;
       return await storage.app.request.promise
         .post(storage.api() + "services", service)
-        .then((res) => true);
+        .then((res) => {
+          let data = JSON.parse(res.data);
+          if(data.error){
+            storage.requestLogout().then(res => {
+              if (!res) {
+                return;
+              }
+              storage.app.dialog.alert("Sessão expirada ou inválida, faça login novamente!");
+              storage.app.views.main.router.navigate("/");
+            })
+            return;
+          }
+          return true;
+        });
     });
   },
 
@@ -310,6 +364,17 @@ const storage = {
       return await storage.app.request.promise
         .get(storage.api() + "service/" + id)
         .then((res) => {
+          let data = JSON.parse(res.data);
+          if(data.error){
+            storage.requestLogout().then(res => {
+              if (!res) {
+                return;
+              }
+              storage.app.dialog.alert("Sessão expirada ou inválida, faça login novamente!");
+              storage.app.views.main.router.navigate("/");
+            })
+            return;
+          }
           let service = JSON.parse(res.data);
           service.timestamp = storage.dateDifference(service.created_at);
           service.created_at = storage.formatDateDifference(service.timestamp);
@@ -331,12 +396,21 @@ const storage = {
     return await storage.app.request.promise
       .get(storage.api() + "service/" + service_id + "/comments")
       .then((res) => {
+        let data = JSON.parse(res.data);
+        if(data.error){
+          storage.requestLogout().then(res => {
+            if (!res) {
+              return;
+            }
+            storage.app.dialog.alert("Sessão expirada ou inválida, faça login novamente!");
+            storage.app.views.main.router.navigate("/");
+          })
+          return;
+        }
         let comments = JSON.parse(res.data).data;
         for (let i = 0; i < comments.length; i++) {
           comments[i].timestamp = storage.dateDifference(comments[i].date);
-          comments[i].date = storage.formatDateDifference(
-            comments[i].timestamp
-          );
+          comments[i].date = storage.formatDateDifference(comments[i].timestamp);
         }
         return comments;
       });
@@ -349,7 +423,20 @@ const storage = {
 
       return await storage.app.request.promise
         .post(storage.api() + "service/" + service_id + "/comments", comment)
-        .then((res) => true);
+        .then((res) => {
+          let data = JSON.parse(res.data);
+          if(data.error){
+            storage.requestLogout().then(res => {
+              if (!res) {
+                return;
+              }
+              storage.app.dialog.alert("Sessão expirada ou inválida, faça login novamente!");
+              storage.app.views.main.router.navigate("/");
+            })
+            return;
+          }
+          return true;
+        });
     });
   },
 

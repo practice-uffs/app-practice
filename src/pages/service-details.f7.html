@@ -38,6 +38,13 @@
       >
         <h3 class="text-color-white">Concluído</h3>
       </div>
+      {{/js_if}} {{#js_if "this.service.status === 4"}}
+      <div
+        class="block no-margin padding-half text-align-center"
+        style="background-color: var(--f7-color-red)"
+      >
+        <h3 class="text-color-white">Recusado</h3>
+      </div>
       {{/js_if}}
 
       <!-- Service title -->
@@ -232,9 +239,7 @@
                 app.view.main.router.refreshPage();
               })
               .catch(() => {
-                app.dialog.alert(
-                  "Ocorreu um erro inesperado, tente novamente!"
-                );
+                app.dialog.alert("Ocorreu um erro inesperado, tente novamente!");
               });
           }
         );
