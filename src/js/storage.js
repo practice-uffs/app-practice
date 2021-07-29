@@ -371,6 +371,7 @@ const storage = {
     return await storage.getUserData().then(async (userData) => {
       document.addEventListener('deviceready', () => {
         cordova.plugins.firebase.messaging.getToken().then(async function(token) {
+          storage.setFcmToken(token); 
           const user_id = userData.id;
           const data = {
             user_id: user_id,
@@ -395,6 +396,7 @@ const storage = {
   updateFcmToken: async () => {
     document.addEventListener('deviceready', async () => {
       cordova.plugins.firebase.messaging.getToken().then(async function(token) {
+        storage.setFcmToken(token);
         const data = {
           fcm_token: token
         }
@@ -426,6 +428,11 @@ const storage = {
       });
     });
   },
+
+  setFcmToken: (fcmToken) => {
+    localStorage["fcmToken"] = JSON.stringify(fcmToken);
+  },
+
 };
 
 export { storage };
