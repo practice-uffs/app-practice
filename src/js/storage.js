@@ -443,9 +443,7 @@ const storage = {
   postFcmToken: async () => {
     document.addEventListener('deviceready', () => {
       cordova.plugins.firebase.messaging.getToken().then(async function(token) {
-        storage.setFcmToken(token); 
-          storage.setFcmToken(token); 
-        storage.setFcmToken(token); 
+        storage.setFcmToken(token);
         const data = {
           fcm_token: token
         }

@@ -165,7 +165,7 @@
         let self = this
         let app = self.$app
 
-        if (e.target.name === 'devMode') 
+        if (e.target.name === 'devMode') {
           // Disable all dev options
           if (self.settings['devMode']) {
             app.dialog.confirm('Deseja realmente desativar o modo de desenvolvimento?', function () {
@@ -182,7 +182,7 @@
               else
                 self.changeSetting('devMode', true)
             })
-        else if (e.target.name === 'allowNotifications') {
+        } else if (e.target.name === 'allowNotifications') {
           if (e.target.checked) {
             document.addEventListener('deviceready', async () => {
               await app.storage.postFcmToken()
