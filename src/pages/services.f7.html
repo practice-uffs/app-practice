@@ -22,10 +22,13 @@
     </div>
 
     <div class="toolbar tabbar tabbar-scrollable toolbar-bottom" id="tabbar">
-      <div class="toolbar-inner"><a href="#tab-1" class="tab-link tab-link-active">Aguardando Aprovação</a>
+      <div class="toolbar-inner" id="toolbar_inner"><a href="#tab-1" class="tab-link tab-link-active">Aguardando Aprovação</a>
         <a href="#tab-2" class="tab-link">Em Progresso</a>
         <a href="#tab-3" class="tab-link">Concluídos</a>
         <a href="#tab-4" class="tab-link">Recusados</a>
+      </div>
+      <div id="arrow_tabbar">
+        <i class="f7-icons" >chevron_right</i>
       </div>
     </div>
 
@@ -275,10 +278,27 @@
   #tabbar{
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.22);
   }
+  #arrow_tabbar{
+    position: absolute;
+    display: flex;
+    height: 100%;
+    width: var(--f7-toolbar-height);
+    align-items: center;
+    right: 0px;
+    color: rgba(38, 70, 83, 0.8);
+    background-image: linear-gradient(to left, white, white, white, rgba(255,255,255,0));
+    z-index: 99;
+  }
+  #arrow_tabbar i{
+    font-size: 20px;
+    margin: auto 5px auto auto;
+  }
 
 </style>
 
 <script>
+  import 'dom7/dist/dom7.js';
+
   export default {
     data: function () {
       return {
@@ -337,11 +357,44 @@
         let max_list_size = screen_size - content_size;
         console.log(max_list_size);
         Dom7('#tab-content').css("height", max_list_size+"px");
+      },
+      animateArrow : function () {
+        let arrow = Dom7("#arrow_tabbar");
+        Dom7("#toolbar_inner").on('touchstart', () => {
+          arrow.animate(
+            {
+              'opacity' : 0,
+            },
+            {
+              duration: 200,
+              easing: "linear"
+            }
+          );
+
+          setTimeout(() => {
+            arrow.css("display", "none");
+          }, 200)
+        });
+
+        Dom7("#toolbar_inner").on('touchend', () => {
+          arrow.css("display", "flex");
+          arrow.animate(
+            {
+              'opacity': 1,
+            },
+            {
+              duration: 200,
+              easing: "linear"
+            }
+          )
+        });
       }
     },
     on: {
       tabInit: function (e, page) {
         this.loadServices();
+
+        this.animateArrow();
       },
     },
   };
