@@ -360,19 +360,20 @@
       animateArrow : function () {
         let arrow = Dom7("#arrow_tabbar");
         Dom7("#toolbar_inner").on('touchstart', () => {
+
           arrow.animate(
             {
               'opacity' : 0,
             },
             {
-              duration: 200,
+              duration: 50,
               easing: "linear"
             }
           );
 
           setTimeout(() => {
             arrow.css("display", "none");
-          }, 200)
+          }, 50)
         });
 
         Dom7("#toolbar_inner").on('touchend', () => {
@@ -382,7 +383,7 @@
               'opacity': 1,
             },
             {
-              duration: 200,
+              duration: 50,
               easing: "linear"
             }
           )
