@@ -69,7 +69,7 @@ const storage = {
     localStorage.clear();
   },
 
-  partialCleaning: () => {
+  removeAllButUserData: () => {
     const settings = JSON.parse(localStorage.getItem("settings"));
     const userCredentials = JSON.parse(localStorage.getItem("userCredentials"));
     const userData = JSON.parse(localStorage.getItem("userData"));
@@ -134,7 +134,7 @@ const storage = {
       .post(storage.api() + "auth/logout")
       .then((res) => {
         if (res.data) {
-          storage.partialCleaning();
+          storage.removeAllButUserData();
           storage.clearUserCredentials();
           storage.app.request.setup({
             headers: {
@@ -301,8 +301,9 @@ const storage = {
 
           const settings = storage.getSettings();
           
-          if (settings.offlineStorage)
+          if (settings.offlineStorage) {
             storage.setRequestedServices(services);
+          }
           return services;
         });
     });
@@ -334,8 +335,9 @@ const storage = {
   getServiceDetailsFromLocalstorage: (service_id) => {
     let service = localStorage.getItem("serviceDetails"+service_id);
     service = JSON.parse(service);
-    if (service)
+    if (service) {
       return service.service;
+    }
   },
 
   getServiceById: async (id) => {
@@ -357,8 +359,9 @@ const storage = {
 
           const settings = storage.getSettings();
           
-          if (settings.offlineStorage && !service.error)
+          if (settings.offlineStorage && !service.error) {
             storage.setServiceDetails(service);
+          }
           return service;
         });
     });
@@ -391,8 +394,9 @@ const storage = {
         }
         const settings = storage.getSettings();
 
-        if (settings.offlineStorage && !comments.error)
-            storage.setServiceComments(service_id, comments);
+        if (settings.offlineStorage && !comments.error) {
+          storage.setServiceComments(service_id, comments);
+        }
         return comments;
       });
   },

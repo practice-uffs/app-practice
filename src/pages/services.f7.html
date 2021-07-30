@@ -179,8 +179,9 @@
           })
           .catch(() => {
             let services = app.storage.getRequestedServicesFromLocalstorage();
-            if (services)
+            if (services) {
               this.separateServices(services);
+            }
             app.dialog.alert(
               "Ocorreu um erro ao carregar estes dados, tente novamente!"
             );
