@@ -57,7 +57,6 @@
           self.$setState({
             chat: data,
           });
-          self.messages.addMessages(self.chat.messages, "append", false);
         });
       },
       getACCHours: function () {
@@ -174,61 +173,75 @@
           if (responseInProgress) return;
           // Receive dummy message
           receiveMessage(text);
-        });
-
-        var answers;
-
-        app.request.json('static/example-data/aura.json', function (data) {
-          answers = self.chat.answers;
-        });        
+        });       
 
         function receiveMessage(received) {
-          responseInProgress = true;
-          setTimeout(function () {
-            if(received.toLowerCase().search('acc') != -1){
-              var accs;
-              var answer = new Object();
-              answer.name = "Aura";
-              answer.avatar = "https://img.icons8.com/plasticine/2x/bot.png";
-              answer.type = "received";
+          var answers;
+          app.request.json('static/example-data/aura.json', function (data) {
+            answers = self.chat;
 
-              self.getACCHours().then(function (res) {
-                accs = res;
-                if(accs.length == 0){
-                  answer.text = "Não foi encontrada nenhuma ACC";
-                }
-                else{
-                  answer.text = '<b>'+accs.validated+'</b><br><br>';
-                  for(let i in accs.list){
-                    answer.text += '<b>Título</b>: '+accs.list[i].title+'<br>';
-                    answer.text += '<b>Data</b>: '+accs.list[i].date+'<br>';
-                    answer.text += '<b>Horas Validadas</b>: '+accs.list[i].hours+'<br>';
-                    answer.text += '<br>';
-                  }
-                }
-              });
-            }
-            else{
-              // Get random answer
-              var answer = answers[Math.floor(Math.random() * answers.length)];
-            }
-            answer.textFooter = self.getTimestamp();
-
-            // Show typing indicator
-            self.messages.showTyping({
-              header: answer.name + ' is typing',
-              avatar: answer.avatar
-            });
-
+            responseInProgress = true;
             setTimeout(function () {
-              // Add received dummy message
-              self.messages.addMessage(answer);
-              // Hide typing indicator
-              self.messages.hideTyping();
-              responseInProgress = false;
-            }, 3000);
-          }, 1000);
+              if(received.toLowerCase().search('acc') != -1){
+                var accs;
+                var answer = new Object();
+                answer.name = "Aura";
+                answer.avatar = "https://img.icons8.com/plasticine/2x/bot.png";
+                answer.type = "received";
+
+                self.getACCHours().then(function (res) {
+                  accs = res;
+                  if(accs.length == 0){
+                    answer.text = "Não foi encontrada nenhuma ACC";
+                  } else {
+                    answer.text = 'Isso é apenas um exemplo 🙂<br><b>'+accs.validated+'</b><br><br>';
+                    for(let i in accs.list){
+                      answer.text += '<b>Título</b>: '+accs.list[i].title+'<br>' +
+                        '<b>Data</b>: '+accs.list[i].date+'<br>' +
+                        '<b>Horas Validadas</b>: '+accs.list[i].hours+'<br>' +
+                        '<br>';
+                    }
+                  }
+                });
+              } else if(received.toLowerCase().search('init') != -1){
+                var answer = new Object();
+                answer.name = "Aura";
+                answer.avatar = "https://img.icons8.com/plasticine/2x/bot.png";
+                answer.type = "received";
+                var user = app.storage.getUserData().then(res => {
+                  var user_name = self.capitalize(res.name.split(" ")[0].toLowerCase());
+                  answer.text = "Olá <b>"+user_name+"</b>. Espero lhe encontrar bem 🙂! Meu nome é Aura e estou aqui para lhe ajudar.<br> Atualmente, me encontro em fase de desenvolvimento e logo disponibilizarei funções pra você 😉<br>Para demonstração, utilize as seguintes palavras:<br><ul><li>Acc</li><li>Alexa</li><li>Random</li></ul>"
+                })
+              } else if(received.toLowerCase().search('alexa') != -1) {
+                var answer = answers.alexa[Math.floor(Math.random() * answers.alexa.length)];
+              } else if(received.toLowerCase().search('random') != -1) {
+                var answer = answers.random[Math.floor(Math.random() * answers.random.length)];
+              } else {
+                // Get random answer
+                var answer = answers.answers[Math.floor(Math.random() * answers.answers.length)];
+              }
+              answer.textFooter = self.getTimestamp();
+
+              // Show typing indicator
+              self.messages.showTyping({
+                header: answer.name + ' is typing',
+                avatar: answer.avatar
+              });
+
+              setTimeout(function () {
+                // Add received dummy message
+                self.messages.addMessage(answer);
+                // Hide typing indicator
+                self.messages.hideTyping();
+                responseInProgress = false;
+              }, 3000);
+            }, 1000);
+          });           
         }
+        receiveMessage("init");
+      },
+      capitalize : function (text) {
+        return text.charAt(0).toUpperCase() + text.slice(1);
       }
     },
     on: {
