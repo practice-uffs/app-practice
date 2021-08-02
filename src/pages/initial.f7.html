@@ -1,26 +1,37 @@
 <template>
   <div class="page" data-name="initial">
     <div class="display-flex flex-direction-column justify-content-space-between" style="height: 100%;">
+
+      <!-- Wellcome message -->
+      <h2 class="margin-horizontal text-align-center" style="font-family: system-ui; font-weight: 300;"> Prepare-se para
+        a inovação!</h2>
+
       <!-- Logo -->
-      <div  class="margin">
+      <div class="margin">
         <img src="../static/images/logo/logo 915x286.png" style="width: 100%; height: auto;" />
       </div>
 
-      <!-- Wellcome message -->
-      <h2 class="margin-horizontal text-align-center text-color-primary">Prepare-se para a inovação!</h2>
-
       <!-- Some information -->
       <div class="margin-horizontal">
-        <p class="text-align-center" style="max-width: 60%; margin: auto;">Descubra um ambiente interativo e dinâmico para elevar sua vida acadêmica a um novo patamar</p>
+        <p class="text-align-center"
+          style="max-width: 80%; margin: auto; font-size: 17px; font-family: system-ui; font-weight: 300;">
+          Descubra um ambiente <br> interativo e dinâmico para<br>
+          elevar sua vida acadêmica <br> a um novo patamar</p>
       </div>
 
-      <!-- Login button -->
-      <div class="margin">
-        <img src="../static/images/mountains.png" style="width: 100%; height: auto;" />
-        <a href="/login/" class="button button-raised button-fill">Acessar com seu idUFFS</a>
+      <!-- Login Button -->
+      <div class="margin center">
+        <a href="/login/" style="width: 50%; 
+          border: 2.5px var(--color-3) solid; color: var(--color-3); font-weight: 700;
+          display: flex; background-color: white;" class="button button-round button-fill">Explorar</a>
       </div>
+
+      <!-- Illustration -->
+      <div class="margin fadeIn">
+        <img src="../static/images/ideia.svg" class="vibrate" style="width: 60%; height: auto;" />
+      </div>
+
     </div>
-  </div>
 </template>
 <script>
   export default {};

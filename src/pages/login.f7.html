@@ -6,7 +6,7 @@
         <div class="navbar">
           <div class="navbar-inner">
             <div class="left">
-              <a href="#" class="link back">
+              <a href="#" class="link back" style="color: var(--color-2);">
                 <i class="icon icon-back"></i>
                 <span class="if-not-md">Voltar</span>
               </a>
@@ -14,68 +14,81 @@
           </div>
         </div>
         <!-- Content -->
-        <div class="page-content login-screen-content">
-          <div class="login-screen-title">
-            <img
-              src="../static/images/logo/logo 915x286.png"
-              style="width: 100%; height: auto"
-            />
-          </div>
-          <form
+        <form class="list" id="login-form" style="margin-bottom: 0;" onSubmit="return false;" @submit="login()">
+          <div class="page-content login-screen-content" style="margin-top: 0%; padding-top: 0;">
+            <div class="login-screen-title">
+              <img 
+              src="../static/images/logo/logo 915x286.png" 
+              style="width: 100%; height: auto" 
+              />
+            </div>
+            <form 
             class="list"
             id="login-form"
             onSubmit="return false;"
             @submit="login()"
-          >
-            <ul>
-              <li class="item-content item-input item-input-outline">
-                <div class="item-inner">
-                  <div class="item-title item-floating-label">idUFFS</div>
-                  <div class="item-input-wrap">
-                    <input
-                      type="text"
-                      name="iduffs"
+            style="margin-bottom: 0;"
+            >
+              <ul>
+                <li class="item-content item-input item-input-outline">
+                  <div class="item-inner">
+                    <div class="item-title item-floating-label">idUFFS</div>
+                    <div class="item-input-wrap">
+                      <input 
+                      type="text" 
+                      name="iduffs" 
                       pattern="[a-zA-Z.]+"
-                      data-error-message="Digite apenas letras ou pontos."
-                      required
-                      validate
-                    />
-                    <span class="input-clear-button"></span>
+                      data-error-message="Digite apenas letras ou pontos." 
+                      required 
+                      validate 
+                      />
+                      <span class="input-clear-button"></span>
+                    </div>
                   </div>
-                </div>
-              </li>
-              <li class="item-content item-input item-input-outline">
-                <div class="item-inner">
-                  <div class="item-title item-floating-label">Senha</div>
-                  <div class="item-input-wrap">
-                    <input type="password" name="password" required validate />
-                    <span class="input-clear-button"></span>
+                </li>
+                <li class="item-content item-input item-input-outline">
+                  <div class="item-inner">
+                    <div class="item-title item-floating-label">Senha</div>
+                    <div class="item-input-wrap">
+                      <input type="password" name="password" required validate />
+                      <span class="input-clear-button"></span>
+                    </div>
                   </div>
-                </div>
-              </li>
-              <li class="item-content item-input">
-                <div class="item-inner">
-                  <input
-                    type="submit"
-                    class="button button-raised button-fill"
-                    value="Acessar"
-                  />
-                </div>
-              </li>
-              <li class="item-content">
-                <div class="item-inner">
-                  <a
-                    href="#"
-                    class="link text-align-center login-screen-close"
-                    style="width: 100%"
-                  >
-                    Clique aqui para redefinir sua senha</a
-                  >
-                </div>
-              </li>
-            </ul>
-          </form>
-        </div>
+                </li>
+                <li class="item-content item-input">
+                  <div class="item-inner">
+                    <input
+                     type="submit"
+                     class="button button-raised button-fill"
+                     value="Acessar" 
+                     style="background-color: var(--color-2);"
+                     />
+                  </div>
+                </li>
+                <li class="item-content">
+                  <div class="item-inner">
+                    <a
+                     href="#"
+                     class="link text-align-center login-screen-close"
+                     style="font-size: 13px; color: var(--color-2); width: 100%">
+                     Esqueceu sua senha? <br>
+                     Toque aqui para redefini-la.</a>
+                  </div>
+                </li>
+              </ul>
+            </form>
+          </div>
+
+          <!-- Waves -->
+          <div style="position: absolute;">
+            <img src="../static/images/onda0.svg" class="wave"
+              style="bottom: -10%; animation: up-down 3.5s linear infinite alternate;" />
+            <img src="../static/images/onda1.svg" class="wave"
+              style="bottom: -12%; animation: up-down 3s linear infinite alternate;" />
+            <img src="../static/images/onda2.svg" class="wave"
+              style="bottom: -14%; animation: up-down 2.5s linear infinite alternate;" />
+          </div>
+
       </div>
     </div>
   </div>

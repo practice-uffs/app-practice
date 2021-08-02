@@ -1,9 +1,11 @@
 /* iOS Cordova Tweak */
+
 .device-cordova.device-ios {
   height: 100vh;
 }
 
 /* Custom color theme properties */
+
 :root {
   --color-1: #264653;
   --color-2: #2F7B9A;
@@ -14,13 +16,12 @@
   --f7-theme-color-rgb: var(--color-2);
   --f7-theme-color-shade: var(--color-1);
   --f7-theme-color-tint: #fff;
-  --f7-page-bg-color: #eee;
+  --f7-page-bg-color: white;
 }
 
 /* Invert navigation bars to fill style */
-:root,
-:root.theme-dark,
-:root .theme-dark {
+
+:root, :root.theme-dark, :root .theme-dark {
   --f7-bars-bg-color: white;
   --f7-bars-bg-color-rgb: white;
   --f7-bars-border-color: transparent;
@@ -31,78 +32,69 @@
   --f7-tabbar-link-inactive-color: var(--color-1);
   --f7-sheet-border-color: transparent;
   --f7-tabbar-link-active-border-color: #444;
-  --f7-navbar-subtitle-text-color: rgba(34,34,34,0.85);
+  --f7-navbar-subtitle-text-color: rgba(34, 34, 34, 0.85);
 }
-.appbar,
-.navbar,
-.toolbar,
-.subnavbar,
-.calendar-header,
-.calendar-footer {
+
+.appbar, .navbar, .toolbar, .subnavbar, .calendar-header, .calendar-footer {
   --f7-touch-ripple-color: var(--f7-touch-ripple-white);
   --f7-link-highlight-color: var(--f7-link-highlight-white);
   --f7-button-text-color: #fff;
-  --f7-button-pressed-bg-color: rgba(255,255,255,0.1);
+  --f7-button-pressed-bg-color: rgba(255, 255, 255, 0.1);
 }
-.navbar-large-transparent,
-.navbar-large.navbar-transparent {
-  --f7-navbar-large-title-text-color: #000;
 
+.navbar-large-transparent, .navbar-large.navbar-transparent {
+  --f7-navbar-large-title-text-color: #000;
   --r: 0;
   --g: 111;
   --b: 60;
   --progress: var(--f7-navbar-large-collapse-progress);
-  --f7-bars-link-color: rgb(
-    calc(var(--r) + (255 - var(--r)) * var(--progress)),
-    calc(var(--g) + (255 - var(--g)) * var(--progress)),
-    calc(var(--b) + (255 - var(--b)) * var(--progress))
-  );
+  --f7-bars-link-color: rgb( calc(var(--r) + (255 - var(--r)) * var(--progress)), calc(var(--g) + (255 - var(--g)) * var(--progress)), calc(var(--b) + (255 - var(--b)) * var(--progress)));
 }
-.theme-dark .navbar-large-transparent,
-.theme-dark .navbar-large.navbar-transparent {
+
+.theme-dark .navbar-large-transparent, .theme-dark .navbar-large.navbar-transparent {
   --f7-navbar-large-title-text-color: #fff;
 }
 
 /* Your app custom styles here */
 
 div.block-title i.f7-icons {
-    font-size: 1.4em;
-    margin-right: 0.2em;
+  font-size: 1.4em;
+  margin-right: 0.2em;
 }
 
 div.stat div.card-content strong {
-    font-size: 3em;
+  font-size: 3em;
 }
 
 div.stat div.card-footer {
-    font-size: 0.9em;
+  font-size: 0.9em;
 }
 
 .stat-footnote {
-    line-height: 0.8em;
-    opacity: 0.7;
+  line-height: 0.8em;
+  opacity: 0.7;
 }
 
 .stat-footnote i {
-    font-size: 1.3em;
-    opacity: 0.6;
+  font-size: 1.3em;
+  opacity: 0.6;
 }
 
 .navbar-icon {
-    width: 40px;
-    width: 40px;
-    margin-left: 0.5em;
+  width: 40px;
+  width: 40px;
+  margin-left: 0.5em;
 }
 
 .card-header-pic .card-header {
-    height: 40vw;
-    background-size: cover;
-    background-position: center;
-    color: #fff;
+  height: 40vw;
+  background-size: cover;
+  background-position: center;
+  color: #fff;
 }
 
 .card-header-pic .card-content-padding .date {
-    color: #8e8e93;
+  color: #8e8e93;
 }
 
 a.link {
@@ -155,4 +147,63 @@ a.link {
 .button.button-record i {
   position: relative;
   top: 40%;
+}
+
+.center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.wave {
+  position: fixed;
+  width: 100%;
+  height: auto;
+}
+
+.fadeIn {
+  animation: fade-in 1.5s 1s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
+}
+
+.vibrate {
+  animation: vibrate 7s linear infinite both;
+}
+
+@keyframes vibrate {
+  0% {
+    transform: translate(0);
+  }
+  20% {
+    transform: translate(-2px, 2px);
+  }
+  40% {
+    transform: translate(-2px, -2px);
+  }
+  60% {
+    transform: translate(2px, 2px);
+  }
+  80% {
+    transform: translate(2px, -2px);
+  }
+  100% {
+    transform: translate(0);
+  }
+}
+
+@keyframes up-down {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
