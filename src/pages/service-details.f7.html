@@ -204,22 +204,41 @@
         app.storage
           .getServiceById(self.$route.params.id)
           .then((service) => {
+            if (service.error) {
+              throw service.error;
+            }
             self.$setState({
               service: service,
             });
           })
           .catch(() => {
+            let service = app.storage.getServiceDetailsFromLocalstorage(self.$route.params.id);
+            if (service) {
+              self.$setState({
+                service: service,
+              });
+            }
             app.dialog.alert("Ocorreu um erro inesperado, tente novamente!");
           });
-
         app.storage
           .getServiceComments(self.$route.params.id)
           .then((comments) => {
+            if (comments.error) {
+              throw comments.error
+            }
             self.$setState({
               comments: comments,
             });
           })
           .catch(() => {
+            let comments = app.storage.getServiceCommentsFromLocalstorage(self.$route.params.id);
+
+            if (comments) {
+              self.$setState({
+                comments: comments,
+              });
+            }
+              
             app.dialog.alert("Ocorreu um erro inesperado, tente novamente!");
           });
       },

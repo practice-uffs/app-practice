@@ -296,38 +296,50 @@
         app.storage
           .getRequestedServices()
           .then((services) => {
-            // Processing data
-            let approvalServices = new Array();
-            let progressServices = new Array();
-            let doneServices = new Array();
-            let refusedServices = new Array();
-            let user_id;
-            app.storage.getUserData().then(res => {
-              user_id = res.id;
-
-              for (let i = 0; i < services.length; i++) {
-                if (services[i].status === 1 && services[i].user_id == user_id){
-                  approvalServices.push(services[i]);
-                } else if (services[i].status === 2 && services[i].user_id == user_id){
-                  progressServices.push(services[i]);
-                } else if (services[i].status === 3 && services[i].user_id == user_id){
-                  doneServices.push(services[i]);
-                } else if (services[i].status === 4 && services[i].user_id == user_id){
-                  refusedServices.push(services[i]);
-                }
-              }
-            });
-            self.resizeListServices();
-            
-            self.$setState({
-              approvalServices : approvalServices,
-              progressServices : progressServices,
-              doneServices : doneServices,
-              refusedServices : refusedServices,
-            });
+            this.separateServices(services);
           })
-        .catch(() => {
-          app.dialog.alert("Ocorreu um erro ao carregar estes dados, tente novamente!");
+          .catch(() => {
+            let services = app.storage.getRequestedServicesFromLocalstorage();
+            if (services) {
+              this.separateServices(services);
+            }
+            app.dialog.alert(
+              "Ocorreu um erro ao carregar estes dados, tente novamente!"
+            );
+          });
+      },
+      separateServices: function ( services ) {
+        var self = this;
+        var app = self.$app;
+        
+        // Processing data
+        let approvalServices = new Array();
+        let progressServices = new Array();
+        let doneServices = new Array();
+        let refusedServices = new Array();
+        let user_id;
+        app.storage.getUserData().then(res => {
+          user_id = res.id;
+
+          for (let i = 0; i < services.length; i++) {
+            if (services[i].status === 1 && services[i].user_id == user_id){
+              approvalServices.push(services[i]);
+            } else if (services[i].status === 2 && services[i].user_id == user_id){
+              progressServices.push(services[i]);
+            } else if (services[i].status === 3 && services[i].user_id == user_id){
+              doneServices.push(services[i]);
+            } else if (services[i].status === 4 && services[i].user_id == user_id){
+              refusedServices.push(services[i]);
+            }
+          }
+        });
+        self.resizeListServices();
+        
+        self.$setState({
+          approvalServices : approvalServices,
+          progressServices : progressServices,
+          doneServices : doneServices,
+          refusedServices : refusedServices,
         });
       },
       resizeListServices : function () {

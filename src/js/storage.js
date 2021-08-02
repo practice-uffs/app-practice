@@ -69,6 +69,18 @@ const storage = {
     localStorage.clear();
   },
 
+  removeAllButUserData: () => {
+    const settings = JSON.parse(localStorage.getItem("settings"));
+    const userCredentials = JSON.parse(localStorage.getItem("userCredentials"));
+    const userData = JSON.parse(localStorage.getItem("userData"));
+
+    localStorage.clear();
+
+    storage.setUserCredentials(userCredentials);
+    storage.setSettings(settings);
+    storage.setUserData(userData);
+  },
+
   // Settings methods
 
   getSettings: () => {
@@ -122,6 +134,7 @@ const storage = {
       .post(storage.api() + "auth/logout")
       .then((res) => {
         if (res.data) {
+          storage.removeAllButUserData();
           storage.clearUserCredentials();
           storage.app.request.setup({
             headers: {
@@ -162,6 +175,7 @@ const storage = {
 
   clearUserCredentials: () => {
     localStorage.removeItem("userCredentials");
+    localStorage.removeItem("userData");
   },
 
   // User data methods
@@ -278,6 +292,15 @@ const storage = {
       });
   },
 
+  setRequestedServices: (services) => {
+    localStorage["requestedServices"] = JSON.stringify(services);
+  },
+
+  getRequestedServicesFromLocalstorage: () => {
+    let services = localStorage.getItem("requestedServices");
+    return JSON.parse(services);
+  },
+
   getRequestedServices: async () => {
     return await storage.getUserData().then(async (userData) => {
       return await storage.app.request.promise
@@ -305,6 +328,12 @@ const storage = {
             services[i].status = Number(services[i].status);
           }
           services.sort((a, b) => (a.timestamp > b.timestamp ? 1 : -1));
+
+          const settings = storage.getSettings();
+          
+          if (settings.offlineStorage) {
+            storage.setRequestedServices(services);
+          }
           return services;
         });
     });
@@ -351,6 +380,20 @@ const storage = {
     });
   },
 
+  setServiceDetails: (service) => {
+    let storagedService = localStorage.getItem("serviceDetails"+service.id);
+    storagedService = JSON.parse(storagedService);
+    localStorage["serviceDetails"+service.id] =  JSON.stringify({...storagedService, service: service});
+  },
+
+  getServiceDetailsFromLocalstorage: (service_id) => {
+    let service = localStorage.getItem("serviceDetails"+service_id);
+    service = JSON.parse(service);
+    if (service) {
+      return service.service;
+    }
+  },
+
   getServiceById: async (id) => {
     return await storage.getUserData().then(async (userData) => {
       return await storage.app.request.promise
@@ -379,9 +422,28 @@ const storage = {
           service.hidden = Number(service.hidden);
           service.user = userData;
 
+          const settings = storage.getSettings();
+          
+          if (settings.offlineStorage && !service.error) {
+            storage.setServiceDetails(service);
+          }
           return service;
         });
     });
+  },
+
+  setServiceComments: (service_id, comments) => {
+    let service = localStorage.getItem("serviceDetails"+service_id);
+    service = JSON.parse(service);
+    service = {...service, comments: comments};
+    localStorage["serviceDetails"+service_id] =  JSON.stringify(service);
+  },
+
+  getServiceCommentsFromLocalstorage: (service_id) => {
+    let serviceDetails = localStorage.getItem("serviceDetails"+service_id);
+    serviceDetails = JSON.parse(serviceDetails);
+    if (serviceDetails)
+      return serviceDetails.comments;
   },
 
   getServiceComments: async (service_id) => {
@@ -403,6 +465,11 @@ const storage = {
         for (let i = 0; i < comments.length; i++) {
           comments[i].timestamp = storage.dateDifference(comments[i].date);
           comments[i].date = storage.formatDateDifference(comments[i].timestamp);
+        }
+        const settings = storage.getSettings();
+
+        if (settings.offlineStorage && !comments.error) {
+          storage.setServiceComments(service_id, comments);
         }
         return comments;
       });
