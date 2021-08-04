@@ -22,10 +22,13 @@
     </div>
 
     <div class="toolbar tabbar tabbar-scrollable toolbar-bottom" id="tabbar">
-      <div class="toolbar-inner"><a href="#tab-1" class="tab-link tab-link-active">Aguardando Aprovação</a>
+      <div class="toolbar-inner" id="toolbar_inner"><a href="#tab-1" class="tab-link tab-link-active">Aguardando Aprovação</a>
         <a href="#tab-2" class="tab-link">Em Progresso</a>
         <a href="#tab-3" class="tab-link">Concluídos</a>
         <a href="#tab-4" class="tab-link">Recusados</a>
+      </div>
+      <div id="arrow_tabbar">
+        <i class="f7-icons" >chevron_right</i>
       </div>
     </div>
 
@@ -275,10 +278,27 @@
   #tabbar{
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.22);
   }
+  #arrow_tabbar{
+    position: absolute;
+    display: flex;
+    height: 100%;
+    width: var(--f7-toolbar-height);
+    align-items: center;
+    right: 0px;
+    color: rgba(38, 70, 83, 0.8);
+    background-image: linear-gradient(to left, white, white, white, rgba(255,255,255,0));
+    z-index: 99;
+  }
+  #arrow_tabbar i{
+    font-size: 20px;
+    margin: auto 5px auto auto;
+  }
 
 </style>
 
 <script>
+  import 'dom7/dist/dom7.js';
+
   export default {
     data: function () {
       return {
@@ -296,38 +316,50 @@
         app.storage
           .getRequestedServices()
           .then((services) => {
-            // Processing data
-            let approvalServices = new Array();
-            let progressServices = new Array();
-            let doneServices = new Array();
-            let refusedServices = new Array();
-            let user_id;
-            app.storage.getUserData().then(res => {
-              user_id = res.id;
-
-              for (let i = 0; i < services.length; i++) {
-                if (services[i].status === 1 && services[i].user_id == user_id){
-                  approvalServices.push(services[i]);
-                } else if (services[i].status === 2 && services[i].user_id == user_id){
-                  progressServices.push(services[i]);
-                } else if (services[i].status === 3 && services[i].user_id == user_id){
-                  doneServices.push(services[i]);
-                } else if (services[i].status === 4 && services[i].user_id == user_id){
-                  refusedServices.push(services[i]);
-                }
-              }
-            });
-            self.resizeListServices();
-            
-            self.$setState({
-              approvalServices : approvalServices,
-              progressServices : progressServices,
-              doneServices : doneServices,
-              refusedServices : refusedServices,
-            });
+            this.separateServices(services);
           })
-        .catch(() => {
-          app.dialog.alert("Ocorreu um erro ao carregar estes dados, tente novamente!");
+          .catch(() => {
+            let services = app.storage.getRequestedServicesFromLocalstorage();
+            if (services) {
+              this.separateServices(services);
+            }
+            app.dialog.alert(
+              "Ocorreu um erro ao carregar estes dados, tente novamente!"
+            );
+          });
+      },
+      separateServices: function ( services ) {
+        var self = this;
+        var app = self.$app;
+        
+        // Processing data
+        let approvalServices = new Array();
+        let progressServices = new Array();
+        let doneServices = new Array();
+        let refusedServices = new Array();
+        let user_id;
+        app.storage.getUserData().then(res => {
+          user_id = res.id;
+
+          for (let i = 0; i < services.length; i++) {
+            if (services[i].status === 1 && services[i].user_id == user_id){
+              approvalServices.push(services[i]);
+            } else if (services[i].status === 2 && services[i].user_id == user_id){
+              progressServices.push(services[i]);
+            } else if (services[i].status === 3 && services[i].user_id == user_id){
+              doneServices.push(services[i]);
+            } else if (services[i].status === 4 && services[i].user_id == user_id){
+              refusedServices.push(services[i]);
+            }
+          }
+        });
+        self.resizeListServices();
+        
+        self.$setState({
+          approvalServices : approvalServices,
+          progressServices : progressServices,
+          doneServices : doneServices,
+          refusedServices : refusedServices,
         });
       },
       resizeListServices : function () {
@@ -336,11 +368,45 @@
         let content_size = Dom7('#services-tab').height()+32-Dom7('#tab-content').height();
         let max_list_size = screen_size - content_size;
         Dom7('#tab-content').css("height", max_list_size+"px");
+      },
+      animateArrow : function () {
+        let arrow = Dom7("#arrow_tabbar");
+        Dom7("#toolbar_inner").on('touchstart', () => {
+
+          arrow.animate(
+            {
+              'opacity' : 0,
+            },
+            {
+              duration: 50,
+              easing: "linear"
+            }
+          );
+
+          setTimeout(() => {
+            arrow.css("display", "none");
+          }, 50)
+        });
+
+        Dom7("#toolbar_inner").on('touchend', () => {
+          arrow.css("display", "flex");
+          arrow.animate(
+            {
+              'opacity': 1,
+            },
+            {
+              duration: 50,
+              easing: "linear"
+            }
+          )
+        });
       }
     },
     on: {
       tabInit: function (e, page) {
         this.loadServices();
+
+        this.animateArrow();
       },
     },
   };

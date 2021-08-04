@@ -190,14 +190,20 @@
             });
           } else {
             app.storage.deleteFcmToken()
-            self.changeSetting(e.target.name, e.target.checked)
+            self.changeSetting( e.target.name, e.target.checked)
+          }
+        } else if (e.target.name === 'offlineStorage') {
+          self.changeSetting('offlineStorage', e.target.checked);
+          if (!e.target.checked){
+            let self = this
+            let app = self.$app
+            app.storage.removeAllButUserData()
           }
         }
         // Toogle other options
         else
         self.changeSetting(e.target.name, e.target.checked)
       }
-
     },
     on: {
 
