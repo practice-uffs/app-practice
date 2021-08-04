@@ -50,6 +50,30 @@
       </div>
 
       <div class="block-title">
+        <h3><i class="f7-icons">bell</i> Notificações</h3>
+      </div>
+      <div class="list">
+        <ul>
+          <li>
+            <div class="item-content">
+              <div class="item-media">
+                <i class="f7-icons">bell</i>
+              </div>
+              <div class="item-inner">
+                <div class="item-title">Receber notificações no dispositivo</div>
+                <div class="item-after">
+                  <label class="toggle toggle-init color-blue">
+                    <input type="checkbox" name="allowNotifications" {{#if settings}}{{#if settings.allowNotifications}}checked{{/if}}{{/if}} @change="toogleCheckbox">
+                    <span class="toggle-icon"></span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="block-title">
         <h3><i class="f7-icons">chevron_left_slash_chevron_right</i> Desenvolvimento</h3>
       </div>
       <div class="list">
@@ -137,7 +161,7 @@
         })
       },
 
-      toogleCheckbox: function (e) {
+      toogleCheckbox: async function (e) {
         let self = this
         let app = self.$app
 
@@ -158,6 +182,16 @@
               else
                 self.changeSetting('devMode', true)
             })
+        } else if (e.target.name === 'allowNotifications') {
+          if (e.target.checked) {
+            document.addEventListener('deviceready', async () => {
+              await app.storage.postFcmToken()
+              self.changeSetting(e.target.name, e.target.checked)  
+            });
+          } else {
+            app.storage.deleteFcmToken()
+            self.changeSetting( e.target.name, e.target.checked)
+          }
         } else if (e.target.name === 'offlineStorage') {
           self.changeSetting('offlineStorage', e.target.checked);
           if (!e.target.checked){
@@ -168,7 +202,7 @@
         }
         // Toogle other options
         else
-          self.changeSetting(e.target.name, e.target.checked)
+        self.changeSetting(e.target.name, e.target.checked)
       }
     },
     on: {

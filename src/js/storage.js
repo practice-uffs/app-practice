@@ -89,6 +89,7 @@ const storage = {
     if (!settings) {
       settings = {
         offlineStorage: true,
+        allowNotifications: true,
         // Dev options
         devMode: true,
         testApi: true,
@@ -113,7 +114,7 @@ const storage = {
         username: username,
         password: password,
       })
-      .then((res) => {
+      .then( async (res) => {
         let data = JSON.parse(res.data);
         if (data.access_token) {
           storage.setUserCredentials(data);
@@ -122,14 +123,21 @@ const storage = {
               Authorization: "Bearer " + data.access_token,
             },
           });
+          const settings = storage.getSettings();
+          if (settings.allowNotifications) {
+            await storage.postFcmToken();
+          }
           return true;
         } else {
           return false;
         }
+      }).catch((err) => {
+        return false;
       });
   },
 
   requestLogout: async () => {
+    await storage.deleteFcmToken();
     return await storage.app.request.promise
       .post(storage.api() + "auth/logout")
       .then((res) => {
@@ -498,6 +506,89 @@ const storage = {
         });
     });
   },
+
+  postFcmToken: async () => {
+    document.addEventListener('deviceready', () => {
+      cordova.plugins.firebase.messaging.getToken().then(async function(token) {
+        storage.setFcmToken(token);
+        const data = {
+          fcm_token: token
+        }
+
+        return await storage.app.request.promise
+          .post(storage.api() + "user/channels", data)
+          .then( async (res) => {
+            let responseData = JSON.parse(res.data)
+            if(!responseData.id) {
+              return await storage.updateFcmToken();
+            }
+          }).catch( async (err) => {
+            return await storage.updateFcmToken()
+          })
+      });
+    });
+  },
+
+  updateFcmToken: async () => {
+    document.addEventListener('deviceready', async () => {
+      cordova.plugins.firebase.messaging.getToken().then( async function(token) {
+        storage.setFcmToken(token);
+        const data = {
+          fcm_token: token
+        }
+        let userToken = JSON.parse(localStorage["userCredentials"]);
+        userToken = "Bearer " + userToken.access_token;
+        return await storage.app.request.promise({
+          url: storage.api()+"user/channels",
+          method: "PATCH",
+          contentType: "application/json",
+          headers: {
+            Authorization: userToken
+          },
+          data: data,
+        }).then((res) => {
+          let responseData = JSON.parse(res.data)
+          if (responseData.error) {
+            storage.app.dialog.alert (
+              "Não foi possível ativar as notificações para este dispositivo, tente novamente mais tarde!"
+            );
+          }
+        }).catch(() => {
+          storage.app.dialog.alert (
+            "Não foi possível ativar as notificações para este dispositivo, tente novamente mais tarde!"
+          );
+        })
+      })    
+    });
+  },
+
+  deleteFcmToken: async () => {
+    document.addEventListener('deviceready', async () => {
+      let userToken = JSON.parse(localStorage["userCredentials"]);
+      userToken = "Bearer " + userToken.access_token;
+      storage.removeFcmToken();
+      return await storage.app.request.promise({
+        url: storage.api()+"user/channels",
+        method: "DELETE",
+        headers: {
+          Authorization: userToken
+        }
+      }).catch((err) => {
+        storage.app.dialog.alert (
+          "Não foi possível desativar as notificações para este dispositivo, tente novamente mais tarde!"
+        );
+      });
+    });
+  },
+
+  setFcmToken: (fcmToken) => {
+    localStorage["fcmToken"] = JSON.stringify(fcmToken);
+  },
+
+  removeFcmToken: () => {
+    localStorage.removeItem("fcmToken");
+  }
+
 };
 
 export { storage };
