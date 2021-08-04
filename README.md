@@ -75,6 +75,12 @@ Para ser possível gerar o APK do aplicativo é necessario instalar o Android SD
 O Android SDK pode ser instalado tanto manualmente quanto por meio da instalação do Android Studio (sendo esta ultima possívelmente a mais simples). Com o SDK instalado é necessário também aceitar as licenças do Android, caso a instalação do SDK tenha sido feita por meio do Android Studio basta acessar `Configurações > SDK Manager > SDK Tools`, instalar `Google Play Licensing Library` e aceitar as licenças. 
 Por fim, é preciso instalar o Gradle e a instalação deste pode variar de acordo com o sistema operacional utilizado.
 
+Além disso, para gerar o apk com o plugin do fcm adicionado é necessário:
+
+1. Garantir que a linha `<widget id="cc.uffs.practice" version="0.4.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">` do arquivo `config.xml` possua o id **igual** ao nome do pacote criado no firebase.
+2. Caso o pacote criado possua um nome diferente do que esta previamente configurado no arquivo `config.xml` é necessario remover e readicionar a plataforma android por meio do cordova.
+3. Adicionar o arquivo `google-services.json` gerado pelo firebase à pasta `/cordova/platforms/android/app/src/google-services.json`
+
 #### 4.2 Build
 
 Para fazer build (dev) da aplicação, rode:
