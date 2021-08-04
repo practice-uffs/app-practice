@@ -141,7 +141,7 @@
         let self = this
         let app = self.$app
 
-        if (e.target.name === 'devMode') 
+        if (e.target.name === 'devMode') {
           // Disable all dev options
           if (self.settings['devMode']) {
             app.dialog.confirm('Deseja realmente desativar o modo de desenvolvimento?', function () {
@@ -158,11 +158,18 @@
               else
                 self.changeSetting('devMode', true)
             })
+        } else if (e.target.name === 'offlineStorage') {
+          self.changeSetting('offlineStorage', e.target.checked);
+          if (!e.target.checked){
+            let self = this
+            let app = self.$app
+            app.storage.removeAllButUserData()
+          }
+        }
         // Toogle other options
         else
           self.changeSetting(e.target.name, e.target.checked)
       }
-
     },
     on: {
 
