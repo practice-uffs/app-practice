@@ -31,7 +31,7 @@
         <param name="android-package" value="org.apache.cordova.CameraLauncher" />
       </feature>
       <preference name="StatusBarOverlaysWebView" value="false" />
-      <preference name="android-minSdkVersion" value="21" />
+      <preference name="android-minSdkVersion" value="22" />
       <preference name="SplashMaintainAspectRatio" value="true" />
       <splash density="land-hdpi" src="res/screen/android/drawable-hdpi/screen.png" />
       <splash density="land-mdpi" src="res/screen/android/drawable-mdpi/screen.png" />

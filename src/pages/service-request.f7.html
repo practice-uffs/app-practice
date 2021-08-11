@@ -31,7 +31,7 @@
                   <div class="col-40">
                     <img src="https://qa.mural.practice.uffs.cc/img/undraw.co/{{this.img}}" style="width: 100%; height: auto;" />
                     <p><small>Prazo: {{this.deadline}} dias úteis</small></p>
-                    <a href="#" class="button button-raised button-fill sheet-open" data-sheet=".service-request-modal" @click="setServiceRequest('{{this.title}}', {{this.id}}, {{this.category_id}})">Solicitar</a>
+                    <a href="#" class="button button-raised button-fill sheet-open" data-sheet=".service-request-modal" @click="setServiceRequest('{{this.title}}', {{this.id}}, {{this.category_id}}, {{this.delivery_date}})">Solicitar</a>
                   </div>
                   <div class="col-60 text-align-justify">
                     <p>{{this.description}}</p>
@@ -85,6 +85,16 @@
                     </div>
                   </div>
                 </li>
+                <!-- Delivery_Date -->
+                <li class="item-content item-input item-input-outline">
+                  <div class="item-inner">
+                    <small >Prazo mínimo de 10 dias</small>
+                    <div class="item-title item-floating-label">Data de Entrega</div>
+                    <div class="item-input-wrap">
+                      <input type="date" name="delivery_date" min="{{minDate}}" required validate></input>
+                    </div>
+                  </div>
+                </li>
                 <!-- Location -->
                 <li class="item-content item-input item-input-outline">
                   <div class="item-inner">
@@ -130,12 +140,19 @@
         serviceSpecifications: null,
         requestedService: null,
         locations: null,
+        minDate: null,
+        deliveryDate: null,
       }
     },
     methods: {
       lodaData: function () {
         var self = this
         var app = self.$app
+
+        //Load min date
+        this.$setState({
+          minDate: new Date(new Date().setDate(new Date().getDate() + 10)).toISOString("yyyy-mm-dd").substring(0, 10)
+        })
         // Load service specifications
         app.storage.getServiceSpecifications().then((serviceSpecifications) => {
           if (serviceSpecifications) {
@@ -155,7 +172,7 @@
           app.dialog.alert("Ocorreu um erro em sua rede, tente novamente!");
         })
       },
-      setServiceRequest: function (title, specification_id, category_id) {
+      setServiceRequest: function (title, specification_id, category_id, delivery_date) {
         var self = this
 
         self.$setState({
@@ -163,6 +180,7 @@
             title: title,
             specification_id: specification_id,
             category_id: category_id,
+            delivery_date : delivery_date,
           }
         })
       },
@@ -170,10 +188,17 @@
         var self = this
         var app = self.$app
 
+        let serviceData = app.form.convertToData('#service-request-form');
+
+        if (!self.checkDeliveryDate(serviceData.delivery_date)) {
+          app.dialog.close()
+          app.dialog.alert('Data de entrega inválida')
+          return;
+        }
+
         app.dialog.confirm("Tem certeza que deseja fazer esta solicitação?", function () {
           app.dialog.preloader("Realizando solicitação...")
-          let serviceData = app.form.convertToData('#service-request-form')
-
+ 
           serviceData.location_id = Number(serviceData.location_id)
           serviceData.category_id = Number(serviceData.category_id)
           serviceData.specification_id = Number(serviceData.specification_id)
@@ -187,11 +212,17 @@
             app.dialog.alert('Ocorreu um erro inesperado, tente novamente!')
           })
         })
-      }
+      },
+      checkDeliveryDate: function(delivery_date) {
+        if (new Date(delivery_date) < new Date(this.minDate) || delivery_date == null) {
+          return false;
+        }
+        return true;
+      },
     },
     on: {
       pageInit: function (e, page) {
-        this.lodaData()
+        this.lodaData();
       },
     }
   }
