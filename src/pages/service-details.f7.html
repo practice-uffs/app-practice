@@ -49,7 +49,13 @@
 
       <!-- Service title -->
       <div class="block no-margin margin-top-half margin-bottom">
-        <h3 class="text-color-gray">{{service.title}}</h3>
+        <h2 class="text-color-gray">{{service.title}}</h2>
+        <p class="text-color-gray no-margin">
+          <a class="link external" target="_blank" href="{{service.github_issue_link}}"><b>Acessar no Github</b></a>
+        </p>
+        <p class="text-color-gray no-margin"><b>Categoria:</b> {{specification}}</p>
+        <p class="text-color-gray no-margin"><b>Localização:</b> {{location}}</p>
+        <p class="text-color-gray no-margin"><b>Sugestão de entrega:</b> {{delivery_date}}</p>
       </div>
 
       <!-- Service content -->
@@ -194,6 +200,9 @@
       return {
         service: null,
         comments: null,
+        location: null,
+        specification: null,
+        delivery_date: null,
       };
     },
     methods: {
@@ -207,8 +216,44 @@
             if (service.error) {
               throw service.error;
             }
+            // Pegando informação de localização do Serviço
+            app.storage
+              .getLocations()
+              .then((locations) => {
+                if (locations.error) {
+                  throw locations.error
+                }
+                let location = locations.find(location => location.id == service.location_id);
+                self.$setState({
+                  location: location.name,
+                });
+              })
+              .catch(() => {
+                app.dialog.alert("Ocorreu um erro inesperado, tente novamente!");
+              });
+            
+            // Pegando informação de Categoria do Serviço
+            app.storage
+              .getServiceSpecifications()
+              .then((specifications) => {
+                if (specifications.error) {
+                  throw specifications.error
+                }
+                let specification = specifications[service.category_id].find(specification => specification.id == service.specification_id);
+                self.$setState({
+                  specification: specification.title,
+                });
+              })
+              .catch(() => {
+                app.dialog.alert("Ocorreu um erro inesperado, tente novamente!");
+              });
+
+            // Ajustando formato da data
+            let delivery_date = new Date(service.delivery_date).toLocaleDateString("pt-br");
+            
             self.$setState({
               service: service,
+              delivery_date: delivery_date,
             });
           })
           .catch(() => {

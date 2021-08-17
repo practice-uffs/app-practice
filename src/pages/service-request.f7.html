@@ -1,5 +1,5 @@
 <template>
-  <div class="page" data-name="service-request">
+  <div class="page" data-name="service-request" id="tab_service_request">
     
     <div class="navbar">
       <div class="navbar-bg"></div>
@@ -63,8 +63,8 @@
         </div>
       {{/if}}
 
-      <div class="sheet-modal service-request-modal" style="height:auto;">
-        <div class="sheet-modal-inner">
+      <div class="sheet-modal service-request-modal" style="height:auto;" id="sheet">
+        <div class="sheet-modal-inner" style="overflow-y: scroll;">
           {{#if requestedService}}
             <form class="list no-margin" id="service-request-form" onSubmit="return false;" @submit="requestService()">
               <ul>
@@ -134,12 +134,15 @@
   </div>
 </template>
 <script>
+  import 'dom7/dist/dom7.js';
+
   export default {
     data: function () {
       return {
         serviceSpecifications: null,
         requestedService: null,
         locations: null,
+        sheetInitialSize: 350,
         minDate: null,
         deliveryDate: null,
       }
@@ -172,17 +175,18 @@
           app.dialog.alert("Ocorreu um erro em sua rede, tente novamente!");
         })
       },
-      setServiceRequest: function (title, specification_id, category_id, delivery_date) {
+      setServiceRequest: async function (title, specification_id, category_id, delivery_date) {
         var self = this
 
-        self.$setState({
+        await self.$setState({
           requestedService: {
             title: title,
             specification_id: specification_id,
             category_id: category_id,
             delivery_date : delivery_date,
           }
-        })
+        });
+        self.setSheetInitialSize();
       },
       requestService: function () {
         var self = this
@@ -213,7 +217,20 @@
           })
         })
       },
-      checkDeliveryDate: function(delivery_date) {
+      resizeSheetContent: function (){
+        var tab = Dom7('#tab_service_request');
+        var sheet = Dom7('#sheet');
+        
+        if(tab.height() < this.sheetInitialSize){
+          sheet.css("height",tab.height()+"px");
+          return;
+        }
+        sheet.css("height","auto");
+      },
+      setSheetInitialSize: function (){
+        this.sheetInitialSize = Dom7("#sheet").height();
+      },
+      checkDeliveryDate: function (delivery_date) {
         if (new Date(delivery_date) < new Date(this.minDate) || delivery_date == null) {
           return false;
         }
@@ -222,8 +239,14 @@
     },
     on: {
       pageInit: function (e, page) {
+        let self = this;
+
         this.lodaData();
-      },
-    }
+
+        window.onresize = function() {
+          self.resizeSheetContent();
+        }
+      }
+    },
   }
 </script>
