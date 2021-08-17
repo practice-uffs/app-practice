@@ -333,6 +333,7 @@ const storage = {
             services[i].category_id = Number(services[i].category_id);
             services[i].location_id = Number(services[i].location_id);
             services[i].specification_id = Number(services[i].specification_id);
+            services[i].github_issue_link =  services.github_issue_link;
             services[i].status = Number(services[i].status);
           }
           services.sort((a, b) => (a.timestamp > b.timestamp ? 1 : -1));
@@ -425,6 +426,7 @@ const storage = {
           service.category_id = Number(service.category_id);
           service.location_id = Number(service.location_id);
           service.specification_id = Number(service.specification_id);
+          service.github_issue_link = service.github_issue_link;
           service.status = Number(service.status);
           service.type = Number(service.type);
           service.hidden = Number(service.hidden);
