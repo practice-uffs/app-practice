@@ -50,13 +50,11 @@
       <!-- Service title -->
       <div class="block no-margin margin-top-half margin-bottom">
         <h2 class="text-color-gray">{{service.title}}</h2>
-        {{#js_if "this.service.user.type == 'admin'"}}
-          {{#if service.github_issue_link}}
-            <p class="text-color-gray no-margin">
-              <a class="link external" href="{{service.github_issue_link}}"><b>Acessar no Github</b></a>
-            </p>
-          {{/if}}
-        {{/js_if}}
+        {{#if service.github_issue_link}}
+          <p class="text-color-gray no-margin">
+            <a class="link external" href="{{service.github_issue_link}}"><b>Acessar no Github</b></a>
+          </p>
+        {{/if}}
         <p class="text-color-gray no-margin"><b>Categoria:</b> {{specification}}</p>
         <p class="text-color-gray no-margin"><b>Localização:</b> {{location}}</p>
         <p class="text-color-gray no-margin"><b>Sugestão de entrega:</b> {{delivery_date}}</p>
