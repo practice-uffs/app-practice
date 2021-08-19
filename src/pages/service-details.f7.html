@@ -50,9 +50,11 @@
       <!-- Service title -->
       <div class="block no-margin margin-top-half margin-bottom">
         <h2 class="text-color-gray">{{service.title}}</h2>
-        <p class="text-color-gray no-margin">
-          <a class="link external" target="_blank" href="{{service.github_issue_link}}"><b>Acessar no Github</b></a>
-        </p>
+        {{#if service.github_issue_link}}
+          <p class="text-color-gray no-margin">
+            <a class="link external" href="{{service.github_issue_link}}"><b>Acessar no Github</b></a>
+          </p>
+        {{/if}}
         <p class="text-color-gray no-margin"><b>Categoria:</b> {{specification}}</p>
         <p class="text-color-gray no-margin"><b>Localização:</b> {{location}}</p>
         <p class="text-color-gray no-margin"><b>Sugestão de entrega:</b> {{delivery_date}}</p>
@@ -216,6 +218,7 @@
             if (service.error) {
               throw service.error;
             }
+            console.log(service);
             // Pegando informação de localização do Serviço
             app.storage
               .getLocations()
@@ -308,10 +311,40 @@
           }
         );
       },
+      onDeviceReady: function () {
+        if (!window.device) {
+          window.device = { platform: 'Browser' };
+        }
+
+        this.handleExternalURLs();
+      },
+      handleExternalURLs: function () {
+        if (device.platform.toUpperCase() === 'ANDROID') {
+          Dom7(document).on('click', "a", function (e) {
+            if (Dom7(this).attr('href') != "") {
+              var url = Dom7(this).attr('href');
+              navigator.app.loadUrl(url, { openExternal: true });
+              e.preventDefault();
+            }
+          });
+        } else if (device.platform.toUpperCase() === 'IOS') {
+          Dom7(document).on('click', "a", function (e) {
+            if (Dom7(this).attr('href') != "") {
+              var url = Dom7(this).attr('href');
+              window.open(url, '_system');
+              e.preventDefault();
+            }
+          });
+        } else {
+          console.log("Estamos no navegador");
+          // Leave standard behaviour
+        }
+      }
     },
     on: {
       pageInit: function (e, page) {
         this.loadServices();
+        document.addEventListener('deviceready', this.onDeviceReady, false);
       },
     },
   };
