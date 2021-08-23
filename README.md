@@ -120,6 +120,8 @@ npm run build-dev-cordova
 
 Faça os testes cabíveis, como instalar em algum dispositivo Android o `.apk` gerado no processo.
 
+Após gerar o `.apk` é necessário verificar se a permissão para utilizar a câmera foi adicionada ao arquivo: `cordova/platforms/android/app/src/main/AndroidManifest.xml`. Para isso basta verificar se o mesmo possui uma linha com o conteúdo: `<uses-permission android:name="android.permission.CAMERA" />`. Caso não possua, é necessário adicionar esta linha para que o aplicativo consiga acessar a câmera do dispositivo, após isso basta executar o comando novamente para gerar um novo `.apk` do aplicativo.
+
 Se tudo estiver certo, para fazer deploy (final) na Google Play, rode:
 
 ```
