@@ -1,79 +1,365 @@
 <template>
   <div data-name="scan">
     <div class="block card no-margin no-padding">
-      <div class="row">
+        <div id="qr-reader"></div>
 
-        <div class="col-100 tablet-50">
-          <video id="scanner-video" style="width: 100%;"></video>
+        <div id="scanner_bar"></div>
+
+        <div class="drop">
+          <i class="f7-icons color-white">qrcode</i>
         </div>
+        
+        <div id="qr-reader-results">
+          <div class="list media-list no-margin">
+            <ul>
 
-        <div class="col-100 tablet-50 margin-horizontal">
-          <hr />
-          <div class="row no-gutter">
-            <div class="col-45"><img style="width: 140px; height: 140px;" src="static/images/qrCode.png"></div>
-            <div class="col-55" style="margin-top: 8px; font-size: medium;">
-              <div class="row item-title-row">
-                <div class="col-100 tablet-50"><strong>Fulano da Silva</strong></div>
-                <div class="col-100 tablet-50">fulano.silva</div>
-                <div class="col-100 tablet-50 margin-top">Leia o QR para ser direcionado a página.</div>
-              </div>
-            </div>
-          </div>
-          <hr />
+            </ul>
+          </div>           
         </div>
-
-      </div>
     </div>
   </div>
 </template>
 
+<style>
+  #qr-reader{
+    width: 100%;
+  }
+  #qr-reader-results{
+    overflow-y: scroll;
+  }
+  .drop {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    right: calc(50% - 40px);
+    background-color: #0288d1;
+    height: 80px;
+    width: 80px;
+    border-radius: 100%;
+    z-index: 99;
+    transition: transform 0.5s linear;
+    display: none;
+  }
+  #scanner_bar {
+    position: absolute;
+    background-image: linear-gradient(to right, rgba(255, 255, 255, 0), white, white, white,rgba(255, 255, 255, 0));
+    height: 4px;
+    border-radius: 50%;
+  }
+  .color-white {
+    color: #fff;
+  }
+</style>
+
 <script>
-  import QrScanner from 'qr-scanner'
-  import qrScannerWorkerSource from '!!raw-loader!../../node_modules/qr-scanner/qr-scanner-worker.min.js'
-  QrScanner.WORKER_PATH = URL.createObjectURL(new Blob([qrScannerWorkerSource]))
+  import 'html5-qrcode/minified/html5-qrcode.min.js';
+  import 'dom7/dist/dom7.js';
 
   export default {
     data: function () {
       return {
-        scanner: null
+        scanner: null,
+        data_scanned: Array(),
+        bar_animation: true,
       }
     },
     methods: {
-      initScan: function () {
-        let self = this
-        let app = self.$app
+      getCamPermission: function (){
+        let self = this;
+        let app = self.$app;
 
-        if(QrScanner.hasCamera()){
-          const scannerVideo = document.getElementById('scanner-video')
-          const scanner = new QrScanner(scannerVideo, function (result) {
-            console.log('decoded qr code:', result)
-          })
-          
-          self.$setState({
-            scanner: scanner,
-          })
-
-          self.scanner.start()
-        }
-        else
-          app.dialog.alert('Nenhuma câmera encontrada!')
-      },
-      removeScan: function () {
-        var self = this
-
-        self.scanner.stop()
-        self.scanner.destroy()
-        self.$setState({
-          scanner: null,
+        document.addEventListener('deviceready', function () {
+            app.permissions = cordova.plugins.permissions;
+            app.permissions.checkPermission("android.permission.CAMERA", function (status) {
+              console.log('success checking permission');
+              console.log('Has CAMERA:', status.hasPermission);
+              if (!status.hasPermission) {
+                app.permissions.requestPermission("android.permission.CAMERA", function (status) {
+                    console.log('success requesting CAMERA permission');
+                    self.initScan();
+                }, function (err) {
+                    console.log('failed to set permission');
+                });
+              } else{
+                self.initScan();
+              }
+            }, function (err) {
+              console.log(err);
+            });
         });
       },
+      initScan: function () {
+        let self = this;
+        let app = self.$app;
+        let callFunctions = false;
+
+        this.scanner = new Html5Qrcode("qr-reader");
+        const config = { fps: 3, qrbox: 200, aspectRatio : 0.8 };
+
+        this.scanner.start(
+          { facingMode: "environment" },
+          config,
+          qrCodeMessage => {
+            this.addContent(qrCodeMessage);
+          },
+          errorMessage => {
+            if(!callFunctions){
+              callFunctions = true;
+              self.scanBar();
+              self.resizeQrResults();
+            }
+          }) //Está lendo
+        .catch(err => {
+          console.log(`Unable to start scanning, error: ${err}`);
+        });
+      },
+      removeScan: function () {
+        this.scanner.stop().then(ignore => {
+          console.log(`Stop Scan`);
+        }).catch(err => {
+          console.log(`Unable to stop scanning, error: ${err}`);
+        });
+      },
+      resizeQrResults : function () {
+        var screen = Dom7('#scan')
+        var scanner_size = Dom7('#qr-reader').height();
+        var screen_size = screen.height()-screen.css('padding-top').replace("px", "")-screen.css('padding-bottom').replace("px", "");
+        Dom7('#qr-reader-results').css("height", screen_size-scanner_size+"px");
+      },
+      animationAddContent: function () {
+        this.barStopAnimation();
+        let drop = Dom7('.drop');
+        let qrbox = Dom7("#qr-shaded-region");
+        let dropSize = drop.width();
+        let displacement = Dom7('#qr-reader').height();
+        let widthScreen = Dom7('#qr-reader').width();
+        let initialPosTop = (displacement/2) - (dropSize/2);
+        let initialPosRight = (widthScreen/2) - (dropSize/2);
+
+        let horizontalShadow = qrbox.css("border-left").split(" ")[0];
+        horizontalShadow = horizontalShadow.substring(0, horizontalShadow.length - 2)*2;
+        let qrBoxWidth = qrbox.width() - horizontalShadow;
+
+        console.log(initialPosRight);
+        this.setDropInitialPos(drop, initialPosTop, initialPosRight);
+
+        drop
+        .animate(
+        {
+          'top': displacement+5,
+          'width' : 40,
+          'height' : 40,
+          'opacity': 1,
+          'left' : initialPosRight+20,
+          'right' : initialPosRight+20
+        },
+        {
+          duration: 1000,
+          easing: 'swing',
+        });
+
+        setTimeout( function () {
+          drop.animate(
+            {
+              'opacity': 0,
+              'left' : 0,
+            },
+            {
+              duration: 200,
+              easing: "linear"
+            }
+          );
+        },1000);
+
+        this.setDropEndPos(drop, initialPosTop, initialPosRight);
+      },
+      setDropInitialPos: function(drop, initialPosTop, initialPosRight) {
+        
+        drop.css("display", "flex");
+        drop.css("opacity", "0");
+        drop.css("top", initialPosTop+'px');
+        drop.css("left", initialPosRight+'px');
+        drop.css("width", "80px");
+        drop.css("height", "80px");        
+      },
+      setDropEndPos: function(drop, initialPosTop, initialPosRight) {
+        setTimeout(function (){
+          drop.css("display", "none");
+          drop.css("opacity", "1");
+          drop.css("top", initialPosTop+'px');
+          drop.css("left", initialPosRight+'px');
+          drop.css("width", "80px");
+          drop.css("height", "80px");  
+        }, 2000)
+      },
+      scanBar : function (self=null) {
+        var qrbox = Dom7("#qr-shaded-region");
+        var bar = Dom7("#scanner_bar")
+        var verticalShadow = qrbox.css("border-top").split(" ")[0];
+        verticalShadow = verticalShadow.substring(0, verticalShadow.length - 2)*2;
+        var horizontalShadow = qrbox.css("border-left").split(" ")[0];
+        horizontalShadow = horizontalShadow.substring(0, horizontalShadow.length - 2)*2;
+
+        var barwidth = qrbox.width() - horizontalShadow;
+        var displacement = qrbox.height() - verticalShadow;
+        var startPos = Number(qrbox.css("top").substring(0, qrbox.css("top").length-2)) + (verticalShadow/2);
+
+        bar.css("width", barwidth+"px");
+        bar.css("top", startPos+"px");
+        bar.css("left", horizontalShadow/2+"px");
+        if(self == null){
+          this.barAnimation(bar, startPos, displacement);
+        } else{
+          self.barAnimation(bar, startPos, displacement);
+        }
+      },
+      barAnimation : function (bar, startPos, displacement){
+        let self = this;
+
+        let action = new Promise((resolve, reject) => {
+          try {
+            bar.animate(
+              {
+                'top': startPos+displacement-1,
+              },
+              {
+                duration: 3000,
+                easing: 'swing',
+              }).animate(
+              {
+                'top': startPos,
+              },
+              {
+                duration: 3000,
+                easing: 'swing',
+                begin: function (elements) {
+                },
+                complete: function (elements) {
+                  resolve(true);
+                },
+              }
+            );
+          } catch (error) {
+            console.log(`Error: ${error}`);
+            reject(error);
+          }
+        });
+        action.then(res => {
+          this.barAnimation(bar, startPos, displacement);
+        })
+      },
+      barStopAnimation : function(){
+        let bar = Dom7("#scanner_bar");
+
+        bar.css("display", "none");
+      },
+      addContent: function (content) {
+        let self = this;
+        
+        if(this.data_scanned.indexOf(content) != -1 || content.trim() == ""){}
+        else{
+          this.data_scanned.unshift(content);
+          this.animationAddContent();
+
+          var dad = document.getElementById('qr-reader-results').childNodes[0].childNodes[0];
+          let text = this.contentTreatment(content);
+          dad.innerHTML = text;
+          var item = Dom7('.item');
+          
+          document.getElementsByClassName('item')[0].style.opacity = 0;
+          setTimeout(function (){
+            item.animate({
+              'opacity': 1,
+            },
+            {
+              duration: 1000,
+              easing: 'swing'
+            });
+          }, 1000);
+          
+          navigator.vibrate([500]);
+        }
+
+        setTimeout(function () {
+          Dom7("#scanner_bar").css("display", "block");
+        }, 2500);
+      },
+      contentTreatment : function (content) {
+        let text = '';
+        this.data_scanned.forEach(element => {
+          let urlPattern = new RegExp('(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})');
+          let routePattern = new RegExp('\/[a-zA-Z0-9]+(\-[a-zA-Z0-9]+)?(\_[a-zA-Z0-9]+)?(\/)');
+
+          if(urlPattern.test(element)){
+            var route = "#";
+            var extUrl = element;
+            var title = element;
+            var description = "URL Externa";
+          } else if(routePattern.test(element)){
+            var route = element;
+            var extUrl = "";
+            var title = element;
+            var description = "Aba do App";
+          } else{
+            var route = "#";
+            var extUrl = "#";
+            var title = element;
+            var description = "Texto";
+          }
+          
+          text += `<li class="item" extUrl="${extUrl}"><a href="${route}" class="item-link item-content"> 
+            <div class="item-inner">
+              <div class="item-title-row">
+                <div class="item-title">${title}</div>
+              </div>
+              <div class="item-text no-wrap">${description}</div>
+            </div>
+          </a></li>`;
+        });
+        console.log(text);
+        return text;
+      },
+      onDeviceReady: function () {
+        if (!window.device) {
+            window.device = { platform: 'Browser' };
+        }
+
+        this.handleExternalURLs();
+      },
+      handleExternalURLs : function () {
+        if (device.platform.toUpperCase() === 'ANDROID') {
+          Dom7(document).on('click', "li.item" ,function (e) {
+            if(Dom7(this).attr('extUrl') != ""){
+              var url = Dom7(this).attr('extUrl');
+              navigator.app.loadUrl(url, { openExternal: true });
+              e.preventDefault();
+            }
+          });
+        } else if (device.platform.toUpperCase() === 'IOS') {
+          Dom7(document).on('click', "li.item", function (e) {
+            if(Dom7(this).attr('extUrl') != ""){
+              var url = Dom7(this).attr('extUrl');
+              window.open(url, '_system');
+              e.preventDefault();
+            }
+          });
+        } else {
+          console.log("Estamos no navegador");
+          // Leave standard behaviour
+        }
+      }
     },
     on: {
-      tabInit: function (e) {
-        this.initScan()
+      tabInit: async function(e, page) {
+        this.getCamPermission()
+        // this.initScan() //Para funcionar na web, descomente essa linhas
+        document.addEventListener('deviceready', this.onDeviceReady, false);
       },
-      tabHide: function (e) {
-        this.removeScan()
+      tabBeforeRemove: function (e) {
+        if(Dom7('#qr-shaded-region').length != 0){
+          this.removeScan();
+        }
       }
     }
   }

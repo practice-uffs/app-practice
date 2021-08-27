@@ -13,9 +13,11 @@ var IsEnabled = {
     chatsPage: false,
     chatPage: false,
 
-    scanPage: false,
+    scanPage: true,
 
-    envPage: false,
+    envPage: true,
+
+    auraPage: true,
 
     profilePage: false,
     scores: false,

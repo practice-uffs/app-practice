@@ -1,0 +1,260 @@
+<template>
+  <div data-name="aura" id="tab_aura" style="height: 100%;">
+    
+    <div class="page-content messages-content">
+      <div class="messages">
+      </div>  
+    </div>
+
+    <div class="toolbar messagebar">
+      <div class="toolbar-inner">
+        <div class="messagebar-area">
+          <textarea placeholder="Digite uma mensagem"></textarea>
+        </div>
+        <a class="link send-link" href="#"><span><i class="icon f7-icons theme-color-2">arrowtriangle_right_fill</i></span></a>
+      </div>
+    </div>
+  </div>
+</template>
+
+<style>  
+  .messages-content{
+    padding-bottom : 0px;
+    padding-top: 0px;
+  }
+  #logo_aura{
+    position: absolute;
+    z-index: 3;
+    text-align: center;
+    background-image: linear-gradient(to bottom, white, rgba(255,255,255,0.8),rgba(255,255,255,0));
+  }
+</style>
+
+<script>
+  import 'dom7/dist/dom7.js';
+
+  export default {
+    data: function () {
+      return {
+        chat: null,
+        messages : null,
+      }
+    },
+    methods: {
+      getTimestamp: function () {
+        var date = new Date();
+        var time = date.toTimeString().substring(0,5);
+        return time;
+      },
+      loadData: function () {
+        var self = this;
+        var app = self.$app;
+
+        app.request.json('static/example-data/aura.json', function (data) {
+          self.$setState({
+            chat: data,
+          });
+        });
+      },
+      getACCHours: function () {
+        var self = this;
+        var app = self.$app;
+        var accs = new Object();
+        accs.validated;
+        accs.list = new Array();
+        return new Promise(function(resolve, reject) {
+          app.request.promise.json('static/example-data/aura-aluno-matricula.json').then(function (res) {
+            try {
+              var infos = res.data.infos[3].values;
+              accs.validated = infos[5];
+
+              var lastIndex = infos.indexOf("Outras atividades complementares");
+              while(lastIndex != -1){
+                var temp = new Object();
+                temp.date = infos[lastIndex+2];
+                temp.hours = infos[lastIndex+3];
+                temp.title = infos[lastIndex+5];
+    
+                accs.list.push(temp);
+    
+                lastIndex = infos.indexOf("Outras atividades complementares", lastIndex+1);
+              }
+              resolve(accs);
+            } 
+            catch (error) {
+              reject(error)
+            }
+          });
+        });
+      },
+      resizeMessagesContent: function (){
+        let aura = Dom7('#tab_aura');
+        let messagebar = Dom7('.messagebar');
+        let messagesContent = Dom7('.messages-content');
+        let height = aura.height() - messagebar.height() +'px';
+        messagesContent.css('height', height);
+      },
+      messageInit: function () {
+        var self = this;
+        var app = self.$app;
+        var $$ = Dom7;
+
+        // Init Messages
+        self.messages = app.messages.create({
+          el: '.messages',
+
+          // First message rule
+          firstMessageRule: function (message, previousMessage, nextMessage) {
+            // Skip if title
+            if (message.isTitle) return false;
+            /* if:
+              - there is no previous message
+              - or previous message type (send/received) is different
+              - or previous message sender name is different
+            */
+            if (!previousMessage || previousMessage.type !== message.type || previousMessage.name !== message.name) return true;
+            return false;
+          },
+          // Last message rule
+          lastMessageRule: function (message, previousMessage, nextMessage) {
+            // Skip if title
+            if (message.isTitle) return false;
+            /* if:
+              - there is no next message
+              - or next message type (send/received) is different
+              - or next message sender name is different
+            */
+            if (!nextMessage || nextMessage.type !== message.type || nextMessage.name !== message.name) return true;
+            return false;
+          },
+          // Last message rule
+          tailMessageRule: function (message, previousMessage, nextMessage) {
+            // Skip if title
+            if (message.isTitle) return false;
+              /* if (basically same as lastMessageRule):
+              - there is no next message
+              - or next message type (send/received) is different
+              - or next message sender name is different
+            */
+            if (!nextMessage || nextMessage.type !== message.type || nextMessage.name !== message.name) return true;
+            return false;
+          }
+        });
+
+        // Init Messagebar
+        var messagebar = app.messagebar.create({
+          el: '.messagebar'
+        });
+
+        // Response flag
+        var responseInProgress = false;
+
+        // Send Message
+        $$('.send-link').on('click', function () {
+          var text = messagebar.getValue().replace(/\n/g, '<br>').trim();
+          // return if empty message
+          if (!text.length) return;
+
+          // Clear area
+          messagebar.clear();
+
+          // Return focus to area
+          messagebar.focus();
+
+          // Add message to messages
+          self.messages.addMessage({
+            text: text,
+            textFooter: self.getTimestamp(),
+          });
+
+          if (responseInProgress) return;
+          // Receive dummy message
+          receiveMessage(text);
+        });       
+
+        function receiveMessage(received) {
+          var answers;
+          app.request.json('static/example-data/aura.json', function (data) {
+            answers = self.chat;
+
+            responseInProgress = true;
+            setTimeout(function () {
+              if(received.toLowerCase().search('acc') != -1){
+                var accs;
+                var answer = new Object();
+                answer.name = "Aura";
+                answer.avatar = "https://img.icons8.com/plasticine/2x/bot.png";
+                answer.type = "received";
+
+                self.getACCHours().then(function (res) {
+                  accs = res;
+                  if(accs.length == 0){
+                    answer.text = "Não foi encontrada nenhuma ACC";
+                  } else {
+                    answer.text = 'Isso é apenas um exemplo 🙂<br><b>'+accs.validated+'</b><br><br>';
+                    for(let i in accs.list){
+                      answer.text += '<b>Título</b>: '+accs.list[i].title+'<br>' +
+                        '<b>Data</b>: '+accs.list[i].date+'<br>' +
+                        '<b>Horas Validadas</b>: '+accs.list[i].hours+'<br>' +
+                        '<br>';
+                    }
+                  }
+                });
+              } else if(received.toLowerCase().search('init') != -1){
+                var answer = new Object();
+                answer.name = "Aura";
+                answer.avatar = "https://img.icons8.com/plasticine/2x/bot.png";
+                answer.type = "received";
+                var user = app.storage.getUserData().then(res => {
+                  var user_name = self.capitalize(res.name.split(" ")[0].toLowerCase());
+                  answer.text = "Olá <b>"+user_name+"</b>. Espero lhe encontrar bem 🙂! Meu nome é Aura e estou aqui para lhe ajudar.<br> Atualmente, me encontro em fase de desenvolvimento e logo disponibilizarei funções pra você 😉<br>Para demonstração, utilize as seguintes palavras:<br><ul><li>Acc</li><li>Alexa</li><li>Random</li></ul>"
+                })
+              } else if(received.toLowerCase().search('alexa') != -1) {
+                var answer = answers.alexa[Math.floor(Math.random() * answers.alexa.length)];
+              } else if(received.toLowerCase().search('random') != -1) {
+                var answer = answers.random[Math.floor(Math.random() * answers.random.length)];
+              } else {
+                // Get random answer
+                var answer = answers.answers[Math.floor(Math.random() * answers.answers.length)];
+              }
+              answer.textFooter = self.getTimestamp();
+
+              // Show typing indicator
+              self.messages.showTyping({
+                header: answer.name + ' is typing',
+                avatar: answer.avatar
+              });
+
+              setTimeout(function () {
+                // Add received dummy message
+                self.messages.addMessage(answer);
+                // Hide typing indicator
+                self.messages.hideTyping();
+                responseInProgress = false;
+              }, 3000);
+            }, 1000);
+          });           
+        }
+        receiveMessage("init");
+      },
+      capitalize : function (text) {
+        return text.charAt(0).toUpperCase() + text.slice(1);
+      }
+    },
+    on: {
+      tabInit: function (e, page) {
+        this.loadData();
+        this.resizeMessagesContent();
+        this.messageInit();
+        var self = this;
+
+        window.onresize = function() {
+          self.resizeMessagesContent();
+          var doc = document.getElementsByClassName("messages-content")[0];
+          var maxScroll = Dom7(".messages").height();
+          doc.scrollTo({ top: maxScroll, behavior: 'smooth' });
+        }
+      }
+    },
+  };
+</script>

@@ -45,7 +45,7 @@
             }
           ]
         }
-      ]
+        ]
     },
     {
       "id": 3,
@@ -63,6 +63,549 @@
           "name": "date",
           "type": "date"
         }
+        ]
+    },
+    {
+      "id": 4,
+      "type": "survey",
+      "title": "Votação para definir o trabalho final",
+      "method": "api/finalWork",
+      "label": "Escolha uma opção",
+      "name": "finalWork",
+      "options": [
+        {
+          "value": "dominó",
+          "label": "Jogo de dominó 3D"
+        },
+        {
+          "value": "xadrez",
+          "label": "Jogo de xadrez 3D"
+        },
+        {
+          "value": "modelagem",
+          "label": "Modelagem 3D de algum personagem"
+        },
+        {
+          "value": "animação",
+          "label": "Animação 3D de no mínimo 30 segundos"
+        }        
+      ]
+    }
+  ],
+  "bus_itineraries": [
+    {
+      "time": "7:10",
+      "destiny": "UFFS -> Centro"
+    },
+    {
+      "time": "7:30",
+      "destiny": "UFFS -> Centro"
+    },
+    {
+      "time": "7:40",
+      "destiny": "UFFS -> Centro"
+    },
+    {
+      "time": "8:10",
+      "destiny": "UFFS -> Centro"
+    },
+    {
+      "time": "9:10",
+      "destiny": "UFFS -> Centro"
+    },
+    {
+      "time": "11:15",
+      "destiny": "UFFS -> Centro"
+    },
+    {
+      "time": "11:45",
+      "destiny": "UFFS -> Centro"
+    },
+    {
+      "time": "12:00",
+      "destiny": "UFFS -> Centro"
+    },
+    {
+      "time": "13:00",
+      "destiny": "UFFS -> Centro"
+    },
+    {
+      "time": "13:15",
+      "destiny": "UFFS -> Centro"
+    },
+    {
+      "time": "14:00",
+      "destiny": "UFFS -> Centro"
+    },
+    {
+      "time": "14:30",
+      "destiny": "UFFS -> Centro"
+    },
+    {
+      "time": "16:00",
+      "destiny": "UFFS -> Centro"
+    },
+    {
+      "time": "16:45",
+      "destiny": "UFFS -> Centro"
+    },
+    {
+      "time": "16:00",
+      "destiny": "UFFS -> Centro"
+    },
+    {
+      "time": "17:00",
+      "destiny": "UFFS -> Centro"
+    },
+    {
+      "time": "18:00",
+      "destiny": "UFFS -> Centro"
+    },
+    {
+      "time": "19:00",
+      "destiny": "UFFS -> Centro"
+    },
+    {
+      "time": "20:00",
+      "destiny": "UFFS -> Centro"
+    },
+    {
+      "time": "21:00",
+      "destiny": "UFFS -> Centro"
+    },
+    {
+      "time": "22:00",
+      "destiny": "UFFS -> Centro"
+    }
+  ],
+  "calendar_exemple":[
+    {
+      "month":1,
+      "month_label":"Janeiro",
+      "year":2021,
+      "events":[
+      {
+        "start_on":"01",
+        "ends_on":"",
+        "description":"Confraternizacao Universal – Feriado Nacional."
+      }
+      ]
+    },
+    {
+      "month":2,
+      "month_label":"Fevereiro",
+      "year":2021,
+      "events":[
+      {
+          "start_on":"16",
+          "ends_on":"",
+          "description":"Carnaval – Recesso administrativo."
+      },
+      {
+          "start_on":"17",
+          "ends_on":"",
+          "description":"Quarta-feira de Cinzas (ponto facultativo ate as 14 h)."
+      }
+      ]
+    },
+    {
+      "month":3,
+      "month_label":"Março",
+      "year":2021,
+      "events":[
+      {
+          "start_on":"8",
+          "ends_on":"",
+          "description":"Dia Internacional da Mulher."
+      },
+      {
+          "start_on":"8/3",
+          "ends_on":"19/3",
+          "description":"Rematricula 2021.1 do PROFMAT"
+      },
+      {
+          "start_on":"10",
+          "ends_on":"15/03",
+          "description":"Matricula aluno novo regular do PROFMAT"
+      },
+      {
+          "start_on":"19",
+          "ends_on":"",
+          "description":"Feriado Municipal – Dia do Municipio de Erechim."
+      },
+      {
+          "start_on":"22/03",
+          "ends_on":"01/04",
+          "description":"Matricula e Rematricula 2021.1 Pos-Graduacao: Campus Cerro Largo, Chapeco, Erechim, Realeza e Laranjeiras do Sul, exceto PPGADR e PROFMAT."
+      },
+      {
+          "start_on":"26",
+          "ends_on":"",
+          "description":"Inicio do semestre 2021.1 do PROFMAT"
+      },
+      {
+          "start_on":"26",
+          "ends_on":"9/4",
+          "description":"Ajuste de matricula 2021.1 do PROFMAT"
+      }
+      ]
+    },
+    {
+      "month":4,
+      "month_label":"Abril",
+      "year":2021,
+      "events":[
+      {
+          "start_on":"02",
+          "ends_on":"",
+          "description":"Paixao de Cristo – Feriado Nacional."
+      },
+      {
+          "start_on":"05",
+          "ends_on":"",
+          "description":"Inicio do semestre letivo 2021/1 do curso de Graduacao no Campus Passo Fundo."
+      },
+      {
+          "start_on":"05",
+          "ends_on":"",
+          "description":"Inicio do semestre 2021.1 Pos-Graduacao: Campus Cerro Largo, Chapeco, Erechim e Realeza e Laranjeiras do Sul, exceto PPGADR."
+      },
+      {
+          "start_on":"05",
+          "ends_on":"16",
+          "description":"Ajuste de matricula 2021.1 Pos-Graduacao: Campus Cerro Largo, Chapeco, Erechim e Realeza e Laranjeiras do Sul, exceto PPGADR e PROFMAT"
+      },
+      {
+          "start_on":"21",
+          "ends_on":"",
+          "description":"Tiradentes – Feriado Nacional."
+      },
+      {
+          "start_on":"22/03",
+          "ends_on":"01/04",
+          "description":"Matricula e Rematricula 2021.1 Pos-Graduacao: Campus Cerro Largo, Chapeco, Erechim e Realeza e Laranjeiras do Sul, exceto PPGADR."
+      }
+      ]
+    },
+    {
+      "month":5,
+      "month_label":"Maio",
+      "year":2021,
+      "events":[
+      {
+          "start_on":"1",
+          "ends_on":"",
+          "description":"Dia do Trabalho – Feriado Nacional."
+      },
+      {
+          "start_on":"14",
+          "ends_on":"",
+          "description":"Envio da planilha com as turmas 2021.1: PPGADR."
+      },
+      {
+          "start_on":"31/05",
+          "ends_on":"11/06",
+          "description":"Matricula e rematricula 2021.1: PPGADR."
+      }
+      ]
+    },
+    {
+      "month":6,
+      "month_label":"Junho",
+      "year":2021,
+      "events":[
+      {
+          "start_on":"31/05",
+          "ends_on":"11/06",
+          "description":"Matricula e rematricula 2021.1: PPGADR."
+      },
+      {
+          "start_on":"03",
+          "ends_on":"",
+          "description":"Corpus Christi – Feriado Nacional."
+      },
+      {
+          "start_on":"07",
+          "ends_on":"",
+          "description":"Inicio do semestre letivo 2021/1 dos cursos de Graduacao nos Campi Cerro Largo, Chapeco, Erechim, Laranjeiras do Sul e Realeza."
+      },
+      {
+          "start_on":"14",
+          "ends_on":"",
+          "description":"Inicio do semestre 2021.1: PPGADR."
+      },
+      {
+          "start_on":"14",
+          "ends_on":"25",
+          "description":"Ajuste de matricula 2021.1: PPGADR."
+      }
+      ]
+    },
+    {
+      "month":7,
+      "month_label":"Julho",
+      "year":2021,
+      "events":[
+      {
+          "start_on":"1",
+          "ends_on":"",
+          "description":"Envio da planilha com as turmas 2021.2, exceto PPGADR."
+      },
+      {
+          "start_on":"17",
+          "ends_on":"",
+          "description":"Fim do semestre 2021.1 Pos-Graduacao: Campus Cerro Largo, Chapeco, Erechim e Realeza e Laranjeiras do Sul, exceto PPGADR."
+      },
+      {
+          "start_on":"18/07",
+          "ends_on":"7/08",
+          "description":"Recesso academico de inverno dos cursos de Pos-Graduacao."
+      },
+      {
+          "start_on":"19/07",
+          "ends_on":"31/07",
+          "description":"Recesso academico de inverno dos cursos de Graduacao para os Campi Cerro Largo, Chapeco, Erechim, Laranjeiras do Sul e Realeza."
+      },
+      {
+          "start_on":"26",
+          "ends_on":"",
+          "description":"Feriado Municipal para o Campus Laranjeiras do Sul – Dia da Padroeira Santana."
+      },
+      {
+          "start_on":"26/7",
+          "ends_on":"6/8",
+          "description":"Rematricula 2021.2 do PROFMAT."
+      }
+      ]
+    },
+    {
+      "month":8,
+      "month_label":"Agosto",
+      "year":2021,
+      "events":[
+      {
+          "start_on":"26/7",
+          "ends_on":"6/8",
+          "description":"Rematricula 2021.2 do PROFMAT."
+      },
+      {
+          "start_on":"06",
+          "ends_on":"",
+          "description":"Feriado municipal para o Campus Laranjeiras do Sul – Dia do Senhor Bom Jesus."
+      },
+      {
+          "start_on":"07",
+          "ends_on":"",
+          "description":"Dia do Municipio de Passo Fundo – nao e feriado."
+      },
+      {
+          "start_on":"07",
+          "ends_on":"",
+          "description":"Termino do semestre letivo 2021/1 do curso de Graduacao no Campus Passo Fundo."
+      },
+      {
+          "start_on":"9",
+          "ends_on":"21/8",
+          "description":"Recesso academico de inverno do curso de Graduacao no Campus Passo Fundo."
+      },
+      {
+          "start_on":"11",
+          "ends_on":"",
+          "description":"Dia do estudante."
+      },
+      {
+          "start_on":"13",
+          "ends_on":"",
+          "description":"Inicio do semestre 2021.2 do PROFMAT"
+      },
+      {
+          "start_on":"13",
+          "ends_on":"27",
+          "description":"Ajuste de matricula 2021.2 do PROFMAT"
+      },
+      {
+          "start_on":"16",
+          "ends_on":"27",
+          "description":"Matricula e rematricula 2021.2 Pos-Graduacao: Campus Cerro Largo, Chapeco, Erechim, Realeza e Laranjeiras do Sul, exceto PPGADR e PROFMAT"
+      },
+      {
+          "start_on":"18/07",
+          "ends_on":"7/08",
+          "description":"Recesso academico de inverno dos cursos de Pos-Graduacao."
+      },
+      {
+          "start_on":"23",
+          "ends_on":"",
+          "description":"Inicio do semestre letivo 2021/1 do curso de Graduacao no Campus Passo Fundo."
+      },
+      {
+          "start_on":"25",
+          "ends_on":"",
+          "description":"Feriado municipal para o Campus Chapeco – Dia do Municipio de Chapeco."
+      },
+      {
+          "start_on":"30",
+          "ends_on":"",
+          "description":"Inicio do semestre 2021.2 Pos-Graduacao: Campus Cerro Largo, Chapeco, Erechim e Realeza e Laranjeiras do Sul, exceto PPGADR e PROFMAT"
+      },
+      {
+          "start_on":"30/08",
+          "ends_on":"10/09",
+          "description":"Ajuste de matricula 2021.2 Pos-Graduacao: Campus Cerro Largo, Chapeco, Erechim e Realeza e Laranjeiras do Sul, exceto PPGADR e PROFMAT"
+      }
+      ]
+    },
+    {
+      "month":9,
+      "month_label":"Setembro",
+      "year":2021,
+      "events":[
+      {
+          "start_on":"30/08",
+          "ends_on":"10/09",
+          "description":"Ajuste de matricula 2021.2 Pos-Graduacao: Campus Cerro Largo, Chapeco, Erechim e Realeza e Laranjeiras do Sul, exceto PPGADR e PROFMAT."
+      },
+      {
+          "start_on":"07",
+          "ends_on":"",
+          "description":"Independencia do Brasil – Feriado Nacional."
+      },
+      {
+          "start_on":"15",
+          "ends_on":"",
+          "description":"Aniversario da UFFS."
+      },
+      {
+          "start_on":"20",
+          "ends_on":"",
+          "description":"Revolucao Farroupilha – Feriado Estadual para os Campi Erechim, Cerro Largo e Passo Fundo."
+      }
+      ]
+    },
+    {
+      "month":10,
+      "month_label":"Outubro",
+      "year":2021,
+      "events":[
+      {
+          "start_on":"01",
+          "ends_on":"",
+          "description":"Envio da planilha com as turmas 2021.2: PPGADR."
+      },
+      {
+          "start_on":"12",
+          "ends_on":"",
+          "description":"Nossa Senhora Aparecida – Feriado Nacional."
+      },
+      {
+          "start_on":"A definir",
+          "ends_on":"",
+          "description":"A definir – Feriado municipal – Campus Cerro Largo – Dia do Municipio de Cerro Largo."
+      },
+      {
+          "start_on":"15",
+          "ends_on":"",
+          "description":"Dia do professor."
+      },
+      {
+          "start_on":"16",
+          "ends_on":"",
+          "description":"Fim do semestre 2021.1: PPGADR."
+      },
+      {
+          "start_on":"18",
+          "ends_on":"29",
+          "description":"Matricula e Rematricula 2021.2: PPGADR."
+      },
+      {
+          "start_on":"23",
+          "ends_on":"",
+          "description":"Termino do semestre letivo 2021/1 dos cursos de Graduacao nos Campi Cerro Largo, Chapeco, Erechim, Laranjeiras do Sul e Realeza."
+      },
+      {
+          "start_on":"28",
+          "ends_on":"",
+          "description":"Dia do Servidor Publico - a ser comemorado no dia 1º de novembro (ponto facultativo)."
+      }
+      ]
+    },
+    {
+      "month":11,
+      "month_label":"Novembro",
+      "year":2021,
+      "events":[
+      {
+          "start_on":"01",
+          "ends_on":"",
+          "description":"Inicio do semestre 2021.2: PPGADR."
+      },
+      {
+          "start_on":"01",
+          "ends_on":"12",
+          "description":"Ajuste de matricula 2021.2: PPGADR."
+      },
+      {
+          "start_on":"02",
+          "ends_on":"",
+          "description":"Finados – Feriado Nacional."
+      },
+      {
+          "start_on":"A definir",
+          "ends_on":"",
+          "description":"A definir – Feriado Municipal para o Campus Realeza – dia do Municipio de Realeza."
+      },
+      {
+          "start_on":"08",
+          "ends_on":"",
+          "description":"Inicio do semestre letivo 2021/2 dos cursos de Graduacao nos Campi Cerro Largo, Chapeco, Erechim, Laranjeiras do Sul e Realeza."
+      },
+      {
+          "start_on":"15",
+          "ends_on":"",
+          "description":"Proclamacao da Republica – Feriado Nacional."
+      },
+      {
+          "start_on":"20",
+          "ends_on":"",
+          "description":"Dia da consciencia negra."
+      },
+      {
+          "start_on":"30",
+          "ends_on":"",
+          "description":"Feriado Municipal para o Campus Laranjeiras do Sul – dia do Municipio de Laranjeiras do Sul."
+      }
+      ]
+    },
+    {
+      "month":12,
+      "month_label":"Dezembro",
+      "year":2021,
+      "events":[
+      {
+          "start_on":"08",
+          "ends_on":"",
+          "description":"Feriado Municipal para o Campus Passo Fundo – Dia de N. Sra. da Conceicao, Padroeira do Municipio."
+      },
+      {
+          "start_on":"18",
+          "ends_on":"",
+          "description":"Fim do semestre 2021.2 Pos-Graduacao: Campus Cerro Largo, Chapeco, Erechim e Realeza e Laranjeiras do Sul, exceto PPGADR."
+      },
+      {
+          "start_on":"24/12/2021",
+          "ends_on":"31/01/2022",
+          "description":"Recesso academico de verao para os Campi Cerro Largo, Chapeco, Erechim, Laranjeiras do Sul e Realeza."
+      },
+      {
+          "start_on":"24",
+          "ends_on":"",
+          "description":"Termino do semestre letivo 2021/2 no curso de Graduacao no Campus Passo Fundo."
+      },
+      {
+          "start_on":"25",
+          "ends_on":"",
+          "description":"Natal – Feriado Nacional."
+      }
       ]
     }
   ]

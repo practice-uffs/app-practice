@@ -3,6 +3,7 @@ import HomePage from "../pages/home.f7.html";
 import RightPanelPage from "../pages/right-panel.f7.html";
 
 import EnvPage from "../pages/env.f7.html";
+import AuraPage from "../pages/aura.f7.html";
 import ScanPage from "../pages/scan.f7.html";
 import ChatsPage from "../pages/chats.f7.html";
 import ChatPage from "../pages/chat.f7.html";
@@ -65,7 +66,6 @@ const homePageRoute = function () {
       id: "services",
       component: ServicesPage,
     });
-
   if (IsEnabled.newsPage)
     tabs.push({
       path: "/news/",
@@ -85,6 +85,13 @@ const homePageRoute = function () {
       path: "/scan/",
       id: "scan",
       component: ScanPage,
+    });
+
+  if (IsEnabled.auraPage)
+    tabs.push({
+      path: "/aura/",
+      id: "aura",
+      component: AuraPage,
     });
 
   if (IsEnabled.chatsPage)
