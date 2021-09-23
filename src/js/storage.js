@@ -87,13 +87,24 @@ const storage = {
     let settings = localStorage["settings"];
 
     if (!settings) {
-      settings = {
-        offlineStorage: true,
-        allowNotifications: true,
-        // Dev options
-        devMode: true,
-        testApi: true,
-      };
+      const env = process.env.NODE_ENV || 'development';
+      if (env == 'production') {
+        settings = {
+          offlineStorage: true,
+          allowNotifications: true,
+          // Dev options
+          devMode: false,
+          testApi: false,
+        };
+      } else {
+        settings = {
+          offlineStorage: true,
+          allowNotifications: true,
+          // Dev options
+          devMode: true,
+          testApi: true,
+        };
+      }
       localStorage["settings"] = JSON.stringify(settings);
     } else {
       settings = JSON.parse(settings);
