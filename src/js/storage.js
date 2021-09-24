@@ -586,10 +586,6 @@ const storage = {
         headers: {
           Authorization: userToken
         }
-      }).catch((err) => {
-        storage.app.dialog.alert (
-          "Não foi possível desativar as notificações para este dispositivo, tente novamente mais tarde!"
-        );
       });
     });
   },
