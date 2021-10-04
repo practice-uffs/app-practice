@@ -367,28 +367,6 @@ const storage = {
       });
   },
 
-  postServiceRequest: async (service) => {
-    return await storage.getUserData().then(async (userData) => {
-      service.user_id = userData.id;
-      return await storage.app.request.promise
-        .post(storage.api() + "services", service)
-        .then((res) => {
-          let data = JSON.parse(res.data);
-          if(data.error){
-            storage.requestLogout().then(res => {
-              if (!res) {
-                return;
-              }
-              storage.app.dialog.alert("Sessão expirada ou inválida, faça login novamente!");
-              storage.app.views.main.router.navigate("/");
-            })
-            return;
-          }
-          return true;
-        });
-    });
-  },
-
   setServiceDetails: (service) => {
     let storagedService = localStorage.getItem("serviceDetails"+service.id);
     storagedService = JSON.parse(storagedService);

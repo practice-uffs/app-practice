@@ -11,242 +11,25 @@
             <span class="if-not-md">Voltar</span>
           </a>
         </div>
-        <div class="title">Serviços disponíveis</div>
+        <div class="title">Solicitar serviço</div>
       </div>
     </div>
 
     <div class="page-content">
-
-      <div class="block-title">
-        <h3 class="no-margin padding-bottom-half">Solicite um dos serviços abaixo</h3>
+      <div class="margin padding display-flex justify-content-center">
+        <img
+          src="static/images/work.png"
+          style="width: 80%; height: auto"
+        />
       </div>
 
-      {{#if serviceSpecifications}}
-          {{#each serviceSpecifications}}
-            <!-- Services of this category -->
-            {{#each this}}
-              <div class="card">
-                <div class="card-header">{{this.title}}</div>
-                <div class="row card-content card-content-padding">
-                  <div class="col-40">
-                    <img src="https://qa.mural.practice.uffs.cc/img/undraw.co/{{this.img}}" style="width: 100%; height: auto;" />
-                    <p><small>Prazo: {{this.deadline}} dias úteis</small></p>
-                    <a href="#" class="button button-raised button-fill sheet-open" data-sheet=".service-request-modal" @click="setServiceRequest('{{this.title}}', {{this.id}}, {{this.category_id}}, {{this.delivery_date}})">Solicitar</a>
-                  </div>
-                  <div class="col-60 text-align-justify">
-                    <p>{{this.description}}</p>
-                  </div>
-                </div>
-              </div>
-            {{/each}}
-          {{/each}}
-        </div>
-      {{else}}
-        <div class="skeleton-text skeleton-effect-blink">
-          {{#each '01'}}
-            <div class="card">
-              <div class="card-header">_________________________</div>
-              <div class="row card-content card-content-padding">
-                <div class="col-40">
-                  <div class="thumb-image skeleton-block" style="height: 125px;"></div>
-                  <p>______________</p>
-                </div>
-                <div class="col-60 text-align-justify">
-                  <p>____________________________</p>
-                  <p>____________________________</p>
-                  <p>____________________________</p>
-                  <p>____________________________</p>
-                </div>
-              </div>
-            </div>
-          {{/each}}
-        </div>
-      {{/if}}
-
-      <div class="sheet-modal service-request-modal" style="height:auto;" id="sheet">
-        <div class="sheet-modal-inner" style="overflow-y: scroll;">
-          {{#if requestedService}}
-            <form class="list no-margin" id="service-request-form" onSubmit="return false;" @submit="requestService()">
-              <ul>
-                <!-- Category and specification -->
-                <li class="item-content">
-                  <div class="item-inner">
-                    <div class="item-title text-align-center">Solicitando {{requestedService.title}}</div>
-                    <input type="hidden" name="category_id" value="{{requestedService.category_id}}">
-                    <input type="hidden" name="specification_id" value="{{requestedService.specification_id}}">
-                  </div>
-                </li>
-                <!-- Title -->
-                <li class="item-content item-input item-input-outline">
-                  <div class="item-inner">
-                    <div class="item-title item-floating-label">Título da solicitação</div>
-                    <div class="item-input-wrap">
-                      <input type="text" name="title" required validate>
-                    </div>
-                  </div>
-                </li>
-                <!-- Delivery_Date -->
-                <li class="item-content item-input item-input-outline">
-                  <div class="item-inner">
-                    <small >Prazo mínimo de 10 dias</small>
-                    <div class="item-title item-floating-label">Data de Entrega</div>
-                    <div class="item-input-wrap">
-                      <input type="date" name="delivery_date" min="{{minDate}}" required validate></input>
-                    </div>
-                  </div>
-                </li>
-                <!-- Location -->
-                <li class="item-content item-input item-input-outline">
-                  <div class="item-inner">
-                    <div class="item-title item-floating-label">Seu campus</div>
-                    <div class="item-input-wrap input-dropdown-wrap">
-                      <select name="location_id" required validate>
-                        <option value=""></option>
-                        {{#each locations}}
-                          <option value="{{this.id}}">{{this.name}}</option>
-                        {{/each}}
-                      </select>
-                    </div>
-                  </div>
-                </li>
-                <!-- Description -->
-                <li class="item-content item-input item-input-outline">
-                  <div class="item-inner">
-                    <div class="item-title item-floating-label">Descrição detalhada da solicitação</div>
-                    <div class="item-input-wrap">
-                      <textarea name="description" required validate></textarea>
-                    </div>
-                  </div>
-                </li>
-                <!-- Buttons -->
-                <li class="item-content item-input">
-                  <div class="item-inner">
-                    <input type="submit" class="button button-raised button-fill" value="Solicitar">
-                  </div>
-                </li>
-              </ul>
-            </form>
-          {{/if}}
-        </div>
+      <h2 class="padding text-align-center">Para solicitar algum serviço, utilize o Practice Mural</h2>
+      <div class="display-flex justify-content-center">
+        <a class="external button button-raised button-fill" href="https://practice.uffs.edu.br/mural">Acessar agora</a>
       </div>
-
     </div>
   </div>
 </template>
 <script>
-  import 'dom7/dist/dom7.js';
-
-  export default {
-    data: function () {
-      return {
-        serviceSpecifications: null,
-        requestedService: null,
-        locations: null,
-        sheetInitialSize: 350,
-        minDate: null,
-        deliveryDate: null,
-      }
-    },
-    methods: {
-      lodaData: function () {
-        var self = this
-        var app = self.$app
-
-        //Load min date
-        this.$setState({
-          minDate: new Date(new Date().setDate(new Date().getDate() + 10)).toISOString("yyyy-mm-dd").substring(0, 10)
-        })
-        // Load service specifications
-        app.storage.getServiceSpecifications().then((serviceSpecifications) => {
-          if (serviceSpecifications) {
-            self.$setState({
-              serviceSpecifications: serviceSpecifications
-            })
-          }
-        }).catch(() => {
-          app.dialog.alert("Ocorreu um erro em sua rede, tente novamente!");
-        })
-        // Load locations
-        app.storage.getLocations().then((locations) => {
-          self.$setState({
-            locations: locations
-          })
-        }).catch(()=>{
-          app.dialog.alert("Ocorreu um erro em sua rede, tente novamente!");
-        })
-      },
-      setServiceRequest: async function (title, specification_id, category_id, delivery_date) {
-        var self = this
-
-        await self.$setState({
-          requestedService: {
-            title: title,
-            specification_id: specification_id,
-            category_id: category_id,
-            delivery_date : delivery_date,
-          }
-        });
-        self.setSheetInitialSize();
-      },
-      requestService: function () {
-        var self = this
-        var app = self.$app
-
-        let serviceData = app.form.convertToData('#service-request-form');
-
-        if (!self.checkDeliveryDate(serviceData.delivery_date)) {
-          app.dialog.close()
-          app.dialog.alert('Data de entrega inválida')
-          return;
-        }
-
-        app.dialog.confirm("Tem certeza que deseja fazer esta solicitação?", function () {
-          app.dialog.preloader("Realizando solicitação...")
- 
-          serviceData.location_id = Number(serviceData.location_id)
-          serviceData.category_id = Number(serviceData.category_id)
-          serviceData.specification_id = Number(serviceData.specification_id)
-
-          app.storage.postServiceRequest(serviceData).then((res) => {
-            app.dialog.close()
-            app.sheet.close()
-            app.view.main.router.navigate('/')
-          }).catch(() => {
-            app.dialog.close()
-            app.dialog.alert('Ocorreu um erro inesperado, tente novamente!')
-          })
-        })
-      },
-      resizeSheetContent: function (){
-        var tab = Dom7('#tab_service_request');
-        var sheet = Dom7('#sheet');
-        
-        if(tab.height() < this.sheetInitialSize){
-          sheet.css("height",tab.height()+"px");
-          return;
-        }
-        sheet.css("height","auto");
-      },
-      setSheetInitialSize: function (){
-        this.sheetInitialSize = Dom7("#sheet").height();
-      },
-      checkDeliveryDate: function (delivery_date) {
-        if (new Date(delivery_date) < new Date(this.minDate) || delivery_date == null) {
-          return false;
-        }
-        return true;
-      },
-    },
-    on: {
-      pageInit: function (e, page) {
-        let self = this;
-
-        this.lodaData();
-
-        window.onresize = function() {
-          self.resizeSheetContent();
-        }
-      }
-    },
-  }
+  export default {}
 </script>
