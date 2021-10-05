@@ -169,8 +169,10 @@
           // Disable all dev options
           if (self.settings['devMode']) {
             app.dialog.confirm('Deseja realmente desativar o modo de desenvolvimento?', function () {
+              app.storage.clearAll()
               self.changeSetting('devMode', false)
               self.changeSetting('testApi', false)
+              app.view.main.router.navigate('/')
             })
           }
           // Enable dev options
