@@ -1,6 +1,6 @@
 const storage = {
-  prodApiURL: "https://mural.practice.uffs.cc/api/",
-  testApiURL: "https://qa.mural.practice.uffs.cc/api/",
+  prodApiURL: "https://practice.uffs.edu.br/mural/api/",
+  testApiURL: "https://v2.mural.practice.uffs.cc/api/",
 
   api: () => {
     const settings = storage.getSettings();
@@ -310,42 +310,39 @@ const storage = {
   },
 
   getRequestedServices: async () => {
-    return await storage.getUserData().then(async (userData) => {
-      return await storage.app.request.promise
-        .get(storage.api() + "services", { user_id: userData.id })
-        .then((res) => {
-          let data = JSON.parse(res.data);
-          if(data.error){
-            storage.requestLogout().then(res => {
-              if (!res) {
-                return;
-              }
-              storage.app.dialog.alert("Sessão expirada ou inválida, faça login novamente!");
-              storage.app.views.main.router.navigate("/");
-            })
-            return;
-          }
-          let services = JSON.parse(res.data).data;
-          for (let i = 0; i < services.length; i++) {
-            services[i].timestamp = storage.dateDifference(services[i].created_at);
-            services[i].created_at = storage.formatDateDifference(services[i].timestamp);
-            services[i].user_id = Number(services[i].user_id);
-            services[i].category_id = Number(services[i].category_id);
-            services[i].location_id = Number(services[i].location_id);
-            services[i].specification_id = Number(services[i].specification_id);
-            services[i].github_issue_link =  services.github_issue_link;
-            services[i].status = Number(services[i].status);
-          }
-          services.sort((a, b) => (a.timestamp > b.timestamp ? 1 : -1));
-
-          const settings = storage.getSettings();
-          
-          if (settings.offlineStorage) {
-            storage.setRequestedServices(services);
-          }
-          return services;
-        });
-    });
+    return await storage.app.request.promise
+      .get(storage.api() + "orders")
+      .then((res) => {
+        let data = JSON.parse(res.data);
+        if(data.error){
+          storage.requestLogout().then(res => {
+            if (!res) {
+              return;
+            }
+            storage.app.dialog.alert("Sessão expirada ou inválida, faça login novamente!");
+            storage.app.views.main.router.navigate("/");
+          })
+          return;
+        }
+        let services = JSON.parse(res.data).data;
+        let servicesToSave = [];
+        
+        for (let i = 0; i < services.length; i++) {
+          servicesToSave[i] = {
+            id: services[i].id,
+            status: services[i].status,
+            title: services[i].title,
+            description: services[i].description,
+            created_at: services[i].created_at
+          };
+        }
+        const settings = storage.getSettings();
+        
+        if (settings.offlineStorage) {
+          storage.setRequestedServices(servicesToSave);
+        }
+        return services;
+      });
   },
 
   getLocations: async () => {
