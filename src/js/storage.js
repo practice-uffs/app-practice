@@ -310,39 +310,49 @@ const storage = {
   },
 
   getRequestedServices: async () => {
-    return await storage.app.request.promise
-      .get(storage.api() + "orders")
-      .then((res) => {
-        let data = JSON.parse(res.data);
-        if(data.error){
-          storage.requestLogout().then(res => {
-            if (!res) {
-              return;
+    return await storage.getUserData().then(async (userData) => {
+      return await storage.app.request.promise
+        .get(storage.api() + "orders")
+        .then((res) => {
+          let data = JSON.parse(res.data);
+          if(data.error){
+            storage.requestLogout().then(res => {
+              if (!res) {
+                return;
+              }
+              storage.app.dialog.alert("Sessão expirada ou inválida, faça login novamente!");
+              storage.app.views.main.router.navigate("/");
+            })
+            return;
+          }
+          let services = JSON.parse(res.data).data;
+          let servicesToSave = [];
+          let userServices = [];
+          let user_id = userData.id;
+          
+          for (let i = 0; i < services.length; i++) {
+            if (services[i].user_id == user_id) {
+              servicesToSave[i] = {
+                id: services[i].id,
+                status: services[i].status,
+                title: services[i].title,
+                description: services[i].description,
+                created_at: services[i].created_at
+              };
+              userServices[i] = services[i];
             }
-            storage.app.dialog.alert("Sessão expirada ou inválida, faça login novamente!");
-            storage.app.views.main.router.navigate("/");
-          })
-          return;
-        }
-        let services = JSON.parse(res.data).data;
-        let servicesToSave = [];
-        
-        for (let i = 0; i < services.length; i++) {
-          servicesToSave[i] = {
-            id: services[i].id,
-            status: services[i].status,
-            title: services[i].title,
-            description: services[i].description,
-            created_at: services[i].created_at
-          };
-        }
-        const settings = storage.getSettings();
-        
-        if (settings.offlineStorage) {
-          storage.setRequestedServices(servicesToSave);
-        }
-        return services;
+          }
+          userServices.sort((a, b) => (a.id > b.id ? -1 : 1));
+          servicesToSave.sort((a, b) => (a.id > b.id ? -1 : 1));
+
+          const settings = storage.getSettings();
+          
+          if (settings.offlineStorage) {
+            storage.setRequestedServices(servicesToSave);
+          }
+          return userServices;
       });
+    });
   },
 
   getLocations: async () => {

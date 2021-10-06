@@ -25,7 +25,7 @@
       <div class="toolbar-inner" id="toolbar_inner"><a href="#tab-1" class="tab-link tab-link-active">Aguardando Aprovação</a>
         <a href="#tab-2" class="tab-link">Em Progresso</a>
         <a href="#tab-3" class="tab-link">Fila de trabalho</a>
-        <a href="#tab-4" class="tab-link">Em revisão</a>
+        <a href="#tab-4" class="tab-link">Aguardando revisão</a>
         <a href="#tab-5" class="tab-link">Concluídos</a>
         <a href="#tab-6" class="tab-link">Recusados</a>
       </div>
@@ -422,10 +422,10 @@
       return {
         approvalServices : null,
         progressServices : null,
+        queueServices: null,
+        reviewServices: null,
         doneServices : null,
         refusedServices : null,
-        reviewServices: null,
-        queueServices: null
       };
     },
     methods: {
@@ -455,39 +455,35 @@
         // Processing data
         let approvalServices = new Array();
         let progressServices = new Array();
-        let doneServices = new Array();
-        let refusedServices = new Array();
         let queueServices = new Array();
         let reviewServices = new Array();
-        let user_id;
-        app.storage.getUserData().then(res => {
-          user_id = res.id;
+        let doneServices = new Array();
+        let refusedServices = new Array();
 
-          for (let i = 0; i < services.length; i++) {
-            if (services[i].status === null){
-              approvalServices.push(services[i]);
-            } else if (services[i].status === 'doing'){
-              progressServices.push(services[i]);
-            } else if (services[i].status === 'todo'){
-              queueServices.push(services[i]);
-            } else if (services[i].status === 'review'){
-              reviewServices.push(services[i]);
-            }else if (services[i].status === 'completed'){
-              doneServices.push(services[i]);
-            } else if (services[i].status === 'closed'){
-              refusedServices.push(services[i]);
-            }
+        for (let i = 0; i < services.length; i++) {
+          if (services[i].status === null){
+            approvalServices.push(services[i]);
+          } else if (services[i].status === 'doing'){
+            progressServices.push(services[i]);
+          } else if (services[i].status === 'todo'){
+            queueServices.push(services[i]);
+          } else if (services[i].status === 'review'){
+            reviewServices.push(services[i]);
+          }else if (services[i].status === 'completed'){
+            doneServices.push(services[i]);
+          } else if (services[i].status === 'closed'){
+            refusedServices.push(services[i]);
           }
-        });
+        }
         self.resizeListServices();
         
         self.$setState({
           approvalServices : approvalServices,
           progressServices : progressServices,
+          queueServices : queueServices,
+          reviewServices : reviewServices,
           doneServices : doneServices,
           refusedServices : refusedServices,
-          reviewServices : reviewServices,
-          queueServices : queueServices,
         });
       },
       resizeListServices : function () {
