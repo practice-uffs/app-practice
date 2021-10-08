@@ -309,10 +309,10 @@ const storage = {
     return JSON.parse(services);
   },
 
-  getRequestedServices: async () => {
+  getRequestedServices: async (page = 1) => {
     return await storage.getUserData().then(async (userData) => {
       return await storage.app.request.promise
-        .get(storage.api() + "orders")
+        .get(storage.api() + "orders?page="+page)
         .then((res) => {
           let data = JSON.parse(res.data);
           if(data.error){
@@ -327,7 +327,10 @@ const storage = {
           }
           let services = JSON.parse(res.data).data;
           let servicesToSave = [];
-          let userServices = [];
+          let toReturn = {
+            services: new Array(),
+            meta: data.meta
+          };
           let user_id = userData.id;
           
           for (let i = 0; i < services.length; i++) {
@@ -339,10 +342,10 @@ const storage = {
                 description: services[i].description,
                 created_at: services[i].created_at
               };
-              userServices[i] = services[i];
+              toReturn.services[i] = services[i];
             }
           }
-          userServices.sort((a, b) => (a.id > b.id ? -1 : 1));
+          toReturn.services.sort((a, b) => (a.id > b.id ? -1 : 1));
           servicesToSave.sort((a, b) => (a.id > b.id ? -1 : 1));
 
           const settings = storage.getSettings();
@@ -350,7 +353,7 @@ const storage = {
           if (settings.offlineStorage) {
             storage.setRequestedServices(servicesToSave);
           }
-          return userServices;
+          return toReturn;
       });
     });
   },

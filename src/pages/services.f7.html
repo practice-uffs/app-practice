@@ -1,391 +1,393 @@
 <template>
-  <div data-name="services" id="services-tab">
-    <div class="block">
-      <div class="row">
-        <div class="col-50">
-          <img
-            src="static/images/work.png"
-            style="width: 100%; height: auto"
-          />
-        </div>
-        <div class="col-50">
-          <p class="text-color-gray text-align-justify no-margin">
-            Conheça os serviços que o PRACTICE oferece!
-          </p>
-          <a
-            href="/services/service-request/"
-            class="button button-raised button-fill margin-top-half"
-            >Solicitar serviço</a
-          >
+  <div class="page-content infinite-scroll-content no-padding" @infinite=loadMore>
+    <div data-name="services" id="services-tab">
+      <div class="block">
+        <div class="row">
+          <div class="col-50">
+            <img
+              src="static/images/work.png"
+              style="width: 100%; height: auto"
+            />
+          </div>
+          <div class="col-50">
+            <p class="text-color-gray text-align-justify no-margin">
+              Conheça os serviços que o PRACTICE oferece!
+            </p>
+            <a
+              href="/services/service-request/"
+              class="button button-raised button-fill margin-top-half"
+              >Solicitar serviço</a
+            >
+          </div>
         </div>
       </div>
+  
+      <div class="toolbar tabbar tabbar-scrollable toolbar-bottom" id="tabbar">
+        <div class="toolbar-inner" id="toolbar_inner"><a href="#tab-1" class="tab-link tab-link-active">Aguardando Aprovação</a>
+          <a href="#tab-2" class="tab-link">Em Progresso</a>
+          <a href="#tab-3" class="tab-link">Fila de trabalho</a>
+          <a href="#tab-4" class="tab-link">Aguardando revisão</a>
+          <a href="#tab-5" class="tab-link">Concluídos</a>
+          <a href="#tab-6" class="tab-link">Recusados</a>
+        </div>
+        <div id="arrow_tabbar">
+          <i class="f7-icons" >chevron_right</i>
+        </div>
+      </div>
+  
+      <div class="tabs" id="tab-content">
+        <div class="tab tab-active" id="tab-1">
+          <!-- Active services -->
+          <div class="card">
+            <div class="list media-list no-margin">
+              <ul>
+                {{#if approvalServices}} {{#unless approvalServices.length}}
+                <li class="item-content">
+                  <div class="item-inner">
+                    <div class="item-title">Nada para mostrar aqui...</div>
+                    <div class="item-text no-wrap">
+                      <a href="/services/service-request/"
+                        >Clique aqui para solicitar um serviço!</a
+                      >
+                    </div>
+                  </div>
+                </li>
+                {{else}} {{#each approvalServices}}
+                <li>
+                  <a href="/services/{{this.id}}/" class="item-link item-content">
+                    <div class="item-inner">
+                      <div class="item-title-row">
+                        <div
+                          style="
+                            color: var(--color-3);
+                            position: absolute;
+                            left: -9px;
+                          "
+                        >
+                          &#8226;
+                        </div>
+                        <div class="item-title">{{this.title}}</div>
+                        <div class="item-after">{{this.created_at}}</div>
+                      </div>
+                      <div class="item-text no-wrap">{{this.description}}</div>
+                    </div>
+                  </a>
+                </li>
+                {{/each}} {{/unless}} {{else}} 
+                {{#each '123'}}
+                <li>
+                  <a
+                    class="item-link item-content skeleton-text skeleton-effect-blink"
+                  >
+                    <div class="item-inner">
+                      <div class="item-title-row">
+                        <div class="item-title">____________</div>
+                        <div class="item-after">_____</div>
+                      </div>
+                      <div class="item-text no-wrap">
+                        ____________________________________
+                      </div>
+                    </div>
+                  </a>
+                </li>
+                {{/each}} {{/if}}
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="tab" id="tab-2">
+          <!-- Progress services -->
+          <div class="card">
+            <div class="list media-list no-margin">
+              <ul>
+                {{#if progressServices}} {{#unless progressServices.length}}
+                <li class="item-content">
+                  <div class="item-inner">
+                    <div class="item-title">Nada para mostrar aqui...</div>
+                    <div class="item-text no-wrap">
+                      <a href="/services/service-request/"
+                        >Clique aqui para solicitar um serviço!</a
+                      >
+                    </div>
+                  </div>
+                </li>
+                {{else}} {{#each progressServices}}
+                <li>
+                  <a href="/services/{{this.id}}/" class="item-link item-content">
+                    <div class="item-inner">
+                      <div class="item-title-row">
+                        <div
+                          style="
+                            color: var(--color-2);
+                            position: absolute;
+                            left: -9px;
+                          "
+                        >
+                          &#8226;
+                        </div>
+                        <div class="item-title">{{this.title}}</div>
+                        <div class="item-after">{{this.created_at}}</div>
+                      </div>
+                      <div class="item-text no-wrap">{{this.description}}</div>
+                    </div>
+                  </a>
+                </li>
+                {{/each}} {{/unless}} {{else}} {{#each '123'}}
+                <li>
+                  <a
+                    class="item-link item-content skeleton-text skeleton-effect-blink"
+                  >
+                    <div class="item-inner">
+                      <div class="item-title-row">
+                        <div class="item-title">____________</div>
+                        <div class="item-after">_____</div>
+                      </div>
+                      <div class="item-text no-wrap">
+                        ____________________________________
+                      </div>
+                    </div>
+                  </a>
+                </li>
+                {{/each}} {{/if}}
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="tab" id="tab-3">
+          <!-- In queue services -->
+          <div class="card">
+            <div class="list media-list no-margin">
+              <ul>
+                {{#if queueServices}} {{#unless queueServices.length}}
+                <li class="item-content">
+                  <div class="item-inner">
+                    <div class="item-title">Nada para mostrar aqui...</div>
+                    <div class="item-text no-wrap">
+                      <a href="/services/service-request/"
+                        >Clique aqui para solicitar um serviço!</a
+                      >
+                    </div>
+                  </div>
+                </li>
+                {{else}} {{#each queueServices}}
+                <li>
+                  <a href="/services/{{this.id}}/" class="item-link item-content">
+                    <div class="item-inner">
+                      <div class="item-title-row">
+                        <div
+                          style="
+                            color: var(--color-2);
+                            position: absolute;
+                            left: -9px;
+                          "
+                        >
+                          &#8226;
+                        </div>
+                        <div class="item-title">{{this.title}}</div>
+                        <div class="item-after">{{this.created_at}}</div>
+                      </div>
+                      <div class="item-text no-wrap">{{this.description}}</div>
+                    </div>
+                  </a>
+                </li>
+                {{/each}} {{/unless}} {{else}} {{#each '123'}}
+                <li>
+                  <a
+                    class="item-link item-content skeleton-text skeleton-effect-blink"
+                  >
+                    <div class="item-inner">
+                      <div class="item-title-row">
+                        <div class="item-title">____________</div>
+                        <div class="item-after">_____</div>
+                      </div>
+                      <div class="item-text no-wrap">
+                        ____________________________________
+                      </div>
+                    </div>
+                  </a>
+                </li>
+                {{/each}} {{/if}}
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="tab" id="tab-4">
+          <!-- Review services -->
+          <div class="card">
+            <div class="list media-list no-margin">
+              <ul>
+                {{#if reviewServices}} {{#unless reviewServices.length}}
+                <li class="item-content">
+                  <div class="item-inner">
+                    <div class="item-title">Nada para mostrar aqui...</div>
+                    <div class="item-text no-wrap">
+                      <a href="/services/service-request/"
+                        >Clique aqui para solicitar um serviço!</a
+                      >
+                    </div>
+                  </div>
+                </li>
+                {{else}} {{#each reviewServices}}
+                <li>
+                  <a href="/services/{{this.id}}/" class="item-link item-content">
+                    <div class="item-inner">
+                      <div class="item-title-row">
+                        <div
+                          style="
+                            color: var(--color-2);
+                            position: absolute;
+                            left: -9px;
+                          "
+                        >
+                          &#8226;
+                        </div>
+                        <div class="item-title">{{this.title}}</div>
+                        <div class="item-after">{{this.created_at}}</div>
+                      </div>
+                      <div class="item-text no-wrap">{{this.description}}</div>
+                    </div>
+                  </a>
+                </li>
+                {{/each}} {{/unless}} {{else}} {{#each '123'}}
+                <li>
+                  <a
+                    class="item-link item-content skeleton-text skeleton-effect-blink"
+                  >
+                    <div class="item-inner">
+                      <div class="item-title-row">
+                        <div class="item-title">____________</div>
+                        <div class="item-after">_____</div>
+                      </div>
+                      <div class="item-text no-wrap">
+                        ____________________________________
+                      </div>
+                    </div>
+                  </a>
+                </li>
+                {{/each}} {{/if}}
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="tab" id="tab-5">
+          <!-- Done services -->
+          <div class="card">
+            <div class="list media-list no-margin">
+              <ul>
+                {{#if doneServices}} {{#unless doneServices.length}}
+                <li class="item-content">
+                  <div class="item-inner">
+                    <div class="item-title">Nada para mostrar aqui...</div>
+                    <div class="item-text no-wrap">
+                      <a href="/services/service-request/"
+                        >Clique aqui para solicitar um serviço!</a
+                      >
+                    </div>
+                  </div>
+                </li>
+                {{else}} {{#each doneServices}}
+                <li>
+                  <a href="/services/{{this.id}}/" class="item-link item-content">
+                    <div class="item-inner">
+                      <div class="item-title-row">
+                        <div
+                          style="
+                            color: var(--color-5);
+                            position: absolute;
+                            left: -9px;
+                          "
+                        >
+                          &#8226;
+                        </div>
+                        <div class="item-title">{{this.title}}</div>
+                        <div class="item-after">{{this.created_at}}</div>
+                      </div>
+                      <div class="item-text no-wrap">{{this.description}}</div>
+                    </div>
+                  </a>
+                </li>
+                {{/each}} {{/unless}} {{else}} {{#each '123'}}
+                <li>
+                  <a
+                    class="item-link item-content skeleton-text skeleton-effect-blink"
+                  >
+                    <div class="item-inner">
+                      <div class="item-title-row">
+                        <div class="item-title">____________</div>
+                        <div class="item-after">_____</div>
+                      </div>
+                      <div class="item-text no-wrap">
+                        ____________________________________
+                      </div>
+                    </div>
+                  </a>
+                </li>
+                {{/each}} {{/if}}
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="tab" id="tab-6">
+          <!-- Done services -->
+          <div class="card">
+            <div class="list media-list no-margin">
+              <ul>
+                {{#if refusedServices}} {{#unless refusedServices.length}}
+                <li class="item-content">
+                  <div class="item-inner">
+                    <div class="item-title">Nada para mostrar aqui...</div>
+                    <div class="item-text no-wrap">
+                      <a href="/services/service-request/"
+                        >Clique aqui para solicitar um serviço!</a
+                      >
+                    </div>
+                  </div>
+                </li>
+                {{else}} {{#each refusedServices}}
+                <li>
+                  <a href="/services/{{this.id}}/" class="item-link item-content">
+                    <div class="item-inner">
+                      <div class="item-title-row">
+                        <div
+                          style="
+                            color: var(--f7-color-red);
+                            position: absolute;
+                            left: -9px;
+                          "
+                        >
+                          &#8226;
+                        </div>
+                        <div class="item-title">{{this.title}}</div>
+                        <div class="item-after">{{this.created_at}}</div>
+                      </div>
+                      <div class="item-text no-wrap">{{this.description}}</div>
+                    </div>
+                  </a>
+                </li>
+                {{/each}} {{/unless}} {{else}} {{#each '123'}}
+                <li>
+                  <a
+                    class="item-link item-content skeleton-text skeleton-effect-blink"
+                  >
+                    <div class="item-inner">
+                      <div class="item-title-row">
+                        <div class="item-title">____________</div>
+                        <div class="item-after">_____</div>
+                      </div>
+                      <div class="item-text no-wrap">
+                        ____________________________________
+                      </div>
+                    </div>
+                  </a>
+                </li>
+                {{/each}} {{/if}}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+  
     </div>
-
-    <div class="toolbar tabbar tabbar-scrollable toolbar-bottom" id="tabbar">
-      <div class="toolbar-inner" id="toolbar_inner"><a href="#tab-1" class="tab-link tab-link-active">Aguardando Aprovação</a>
-        <a href="#tab-2" class="tab-link">Em Progresso</a>
-        <a href="#tab-3" class="tab-link">Fila de trabalho</a>
-        <a href="#tab-4" class="tab-link">Aguardando revisão</a>
-        <a href="#tab-5" class="tab-link">Concluídos</a>
-        <a href="#tab-6" class="tab-link">Recusados</a>
-      </div>
-      <div id="arrow_tabbar">
-        <i class="f7-icons" >chevron_right</i>
-      </div>
-    </div>
-
-    <div class="tabs" id="tab-content">
-      <div class="tab tab-active" id="tab-1">
-        <!-- Active services -->
-        <div class="card">
-          <div class="list media-list no-margin">
-            <ul>
-              {{#if approvalServices}} {{#unless approvalServices.length}}
-              <li class="item-content">
-                <div class="item-inner">
-                  <div class="item-title">Nada para mostrar aqui...</div>
-                  <div class="item-text no-wrap">
-                    <a href="/services/service-request/"
-                      >Clique aqui para solicitar um serviço!</a
-                    >
-                  </div>
-                </div>
-              </li>
-              {{else}} {{#each approvalServices}}
-              <li>
-                <a href="/services/{{this.id}}/" class="item-link item-content">
-                  <div class="item-inner">
-                    <div class="item-title-row">
-                      <div
-                        style="
-                          color: var(--color-3);
-                          position: absolute;
-                          left: -9px;
-                        "
-                      >
-                        &#8226;
-                      </div>
-                      <div class="item-title">{{this.title}}</div>
-                      <div class="item-after">{{this.created_at}}</div>
-                    </div>
-                    <div class="item-text no-wrap">{{this.description}}</div>
-                  </div>
-                </a>
-              </li>
-              {{/each}} {{/unless}} {{else}} 
-              {{#each '123'}}
-              <li>
-                <a
-                  class="item-link item-content skeleton-text skeleton-effect-blink"
-                >
-                  <div class="item-inner">
-                    <div class="item-title-row">
-                      <div class="item-title">____________</div>
-                      <div class="item-after">_____</div>
-                    </div>
-                    <div class="item-text no-wrap">
-                      ____________________________________
-                    </div>
-                  </div>
-                </a>
-              </li>
-              {{/each}} {{/if}}
-            </ul>
-          </div>
-        </div>
-      </div>
-      <div class="tab" id="tab-2">
-        <!-- Progress services -->
-        <div class="card">
-          <div class="list media-list no-margin">
-            <ul>
-              {{#if progressServices}} {{#unless progressServices.length}}
-              <li class="item-content">
-                <div class="item-inner">
-                  <div class="item-title">Nada para mostrar aqui...</div>
-                  <div class="item-text no-wrap">
-                    <a href="/services/service-request/"
-                      >Clique aqui para solicitar um serviço!</a
-                    >
-                  </div>
-                </div>
-              </li>
-              {{else}} {{#each progressServices}}
-              <li>
-                <a href="/services/{{this.id}}/" class="item-link item-content">
-                  <div class="item-inner">
-                    <div class="item-title-row">
-                      <div
-                        style="
-                          color: var(--color-2);
-                          position: absolute;
-                          left: -9px;
-                        "
-                      >
-                        &#8226;
-                      </div>
-                      <div class="item-title">{{this.title}}</div>
-                      <div class="item-after">{{this.created_at}}</div>
-                    </div>
-                    <div class="item-text no-wrap">{{this.description}}</div>
-                  </div>
-                </a>
-              </li>
-              {{/each}} {{/unless}} {{else}} {{#each '123'}}
-              <li>
-                <a
-                  class="item-link item-content skeleton-text skeleton-effect-blink"
-                >
-                  <div class="item-inner">
-                    <div class="item-title-row">
-                      <div class="item-title">____________</div>
-                      <div class="item-after">_____</div>
-                    </div>
-                    <div class="item-text no-wrap">
-                      ____________________________________
-                    </div>
-                  </div>
-                </a>
-              </li>
-              {{/each}} {{/if}}
-            </ul>
-          </div>
-        </div>
-      </div>
-      <div class="tab" id="tab-3">
-        <!-- In queue services -->
-        <div class="card">
-          <div class="list media-list no-margin">
-            <ul>
-              {{#if queueServices}} {{#unless queueServices.length}}
-              <li class="item-content">
-                <div class="item-inner">
-                  <div class="item-title">Nada para mostrar aqui...</div>
-                  <div class="item-text no-wrap">
-                    <a href="/services/service-request/"
-                      >Clique aqui para solicitar um serviço!</a
-                    >
-                  </div>
-                </div>
-              </li>
-              {{else}} {{#each queueServices}}
-              <li>
-                <a href="/services/{{this.id}}/" class="item-link item-content">
-                  <div class="item-inner">
-                    <div class="item-title-row">
-                      <div
-                        style="
-                          color: var(--color-2);
-                          position: absolute;
-                          left: -9px;
-                        "
-                      >
-                        &#8226;
-                      </div>
-                      <div class="item-title">{{this.title}}</div>
-                      <div class="item-after">{{this.created_at}}</div>
-                    </div>
-                    <div class="item-text no-wrap">{{this.description}}</div>
-                  </div>
-                </a>
-              </li>
-              {{/each}} {{/unless}} {{else}} {{#each '123'}}
-              <li>
-                <a
-                  class="item-link item-content skeleton-text skeleton-effect-blink"
-                >
-                  <div class="item-inner">
-                    <div class="item-title-row">
-                      <div class="item-title">____________</div>
-                      <div class="item-after">_____</div>
-                    </div>
-                    <div class="item-text no-wrap">
-                      ____________________________________
-                    </div>
-                  </div>
-                </a>
-              </li>
-              {{/each}} {{/if}}
-            </ul>
-          </div>
-        </div>
-      </div>
-      <div class="tab" id="tab-4">
-        <!-- Review services -->
-        <div class="card">
-          <div class="list media-list no-margin">
-            <ul>
-              {{#if reviewServices}} {{#unless reviewServices.length}}
-              <li class="item-content">
-                <div class="item-inner">
-                  <div class="item-title">Nada para mostrar aqui...</div>
-                  <div class="item-text no-wrap">
-                    <a href="/services/service-request/"
-                      >Clique aqui para solicitar um serviço!</a
-                    >
-                  </div>
-                </div>
-              </li>
-              {{else}} {{#each reviewServices}}
-              <li>
-                <a href="/services/{{this.id}}/" class="item-link item-content">
-                  <div class="item-inner">
-                    <div class="item-title-row">
-                      <div
-                        style="
-                          color: var(--color-2);
-                          position: absolute;
-                          left: -9px;
-                        "
-                      >
-                        &#8226;
-                      </div>
-                      <div class="item-title">{{this.title}}</div>
-                      <div class="item-after">{{this.created_at}}</div>
-                    </div>
-                    <div class="item-text no-wrap">{{this.description}}</div>
-                  </div>
-                </a>
-              </li>
-              {{/each}} {{/unless}} {{else}} {{#each '123'}}
-              <li>
-                <a
-                  class="item-link item-content skeleton-text skeleton-effect-blink"
-                >
-                  <div class="item-inner">
-                    <div class="item-title-row">
-                      <div class="item-title">____________</div>
-                      <div class="item-after">_____</div>
-                    </div>
-                    <div class="item-text no-wrap">
-                      ____________________________________
-                    </div>
-                  </div>
-                </a>
-              </li>
-              {{/each}} {{/if}}
-            </ul>
-          </div>
-        </div>
-      </div>
-      <div class="tab" id="tab-5">
-        <!-- Done services -->
-        <div class="card">
-          <div class="list media-list no-margin">
-            <ul>
-              {{#if doneServices}} {{#unless doneServices.length}}
-              <li class="item-content">
-                <div class="item-inner">
-                  <div class="item-title">Nada para mostrar aqui...</div>
-                  <div class="item-text no-wrap">
-                    <a href="/services/service-request/"
-                      >Clique aqui para solicitar um serviço!</a
-                    >
-                  </div>
-                </div>
-              </li>
-              {{else}} {{#each doneServices}}
-              <li>
-                <a href="/services/{{this.id}}/" class="item-link item-content">
-                  <div class="item-inner">
-                    <div class="item-title-row">
-                      <div
-                        style="
-                          color: var(--color-5);
-                          position: absolute;
-                          left: -9px;
-                        "
-                      >
-                        &#8226;
-                      </div>
-                      <div class="item-title">{{this.title}}</div>
-                      <div class="item-after">{{this.created_at}}</div>
-                    </div>
-                    <div class="item-text no-wrap">{{this.description}}</div>
-                  </div>
-                </a>
-              </li>
-              {{/each}} {{/unless}} {{else}} {{#each '123'}}
-              <li>
-                <a
-                  class="item-link item-content skeleton-text skeleton-effect-blink"
-                >
-                  <div class="item-inner">
-                    <div class="item-title-row">
-                      <div class="item-title">____________</div>
-                      <div class="item-after">_____</div>
-                    </div>
-                    <div class="item-text no-wrap">
-                      ____________________________________
-                    </div>
-                  </div>
-                </a>
-              </li>
-              {{/each}} {{/if}}
-            </ul>
-          </div>
-        </div>
-      </div>
-      <div class="tab" id="tab-6">
-        <!-- Done services -->
-        <div class="card">
-          <div class="list media-list no-margin">
-            <ul>
-              {{#if refusedServices}} {{#unless refusedServices.length}}
-              <li class="item-content">
-                <div class="item-inner">
-                  <div class="item-title">Nada para mostrar aqui...</div>
-                  <div class="item-text no-wrap">
-                    <a href="/services/service-request/"
-                      >Clique aqui para solicitar um serviço!</a
-                    >
-                  </div>
-                </div>
-              </li>
-              {{else}} {{#each refusedServices}}
-              <li>
-                <a href="/services/{{this.id}}/" class="item-link item-content">
-                  <div class="item-inner">
-                    <div class="item-title-row">
-                      <div
-                        style="
-                          color: var(--f7-color-red);
-                          position: absolute;
-                          left: -9px;
-                        "
-                      >
-                        &#8226;
-                      </div>
-                      <div class="item-title">{{this.title}}</div>
-                      <div class="item-after">{{this.created_at}}</div>
-                    </div>
-                    <div class="item-text no-wrap">{{this.description}}</div>
-                  </div>
-                </a>
-              </li>
-              {{/each}} {{/unless}} {{else}} {{#each '123'}}
-              <li>
-                <a
-                  class="item-link item-content skeleton-text skeleton-effect-blink"
-                >
-                  <div class="item-inner">
-                    <div class="item-title-row">
-                      <div class="item-title">____________</div>
-                      <div class="item-after">_____</div>
-                    </div>
-                    <div class="item-text no-wrap">
-                      ____________________________________
-                    </div>
-                  </div>
-                </a>
-              </li>
-              {{/each}} {{/if}}
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
-
   </div>
 </template>
 
@@ -426,17 +428,24 @@
         reviewServices: null,
         doneServices : null,
         refusedServices : null,
+        nextPage: null
       };
     },
     methods: {
+      loadMore: function () {
+        this.loadServices()
+        console.log(this.nextPage)
+      },
       loadServices: function () {
         var self = this;
         var app = self.$app;
-
         app.storage
-          .getRequestedServices()
-          .then((services) => {
-            this.separateServices(services);
+          .getRequestedServices(this.nextPage)
+          .then((res) => {
+            if (res.meta.last_page != this.nextPage) {
+              this.nextPage = res.meta.current_page + 1;
+            }
+            this.separateServices(res.services);
           })
           .catch(() => {
             let services = app.storage.getRequestedServicesFromLocalstorage();
@@ -528,6 +537,7 @@
     },
     on: {
       tabInit: function (e, page) {
+        this.nextPage = 1;
         this.loadServices();
 
         this.animateArrow();
