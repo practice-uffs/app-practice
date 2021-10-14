@@ -416,7 +416,7 @@ const storage = {
   getServiceById: async (id) => {
     return await storage.getUserData().then(async (userData) => {
       return await storage.app.request.promise
-        .get(storage.api() + "service/" + id)
+        .get(storage.api() + "orders/" + id)
         .then((res) => {
           let data = JSON.parse(res.data);
           if(data.error){
@@ -430,16 +430,18 @@ const storage = {
             return;
           }
           let service = JSON.parse(res.data);
-          service.timestamp = storage.dateDifference(service.created_at);
-          service.created_at = storage.formatDateDifference(service.timestamp);
-          service.user_id = Number(service.user_id);
-          service.category_id = Number(service.category_id);
-          service.location_id = Number(service.location_id);
-          service.specification_id = Number(service.specification_id);
-          service.github_issue_link = service.github_issue_link;
-          service.status = Number(service.status);
-          service.type = Number(service.type);
-          service.hidden = Number(service.hidden);
+          
+          service.comments.forEach(comment => {
+            if (comment.user_id != userData.id) {
+              comment.user_name = "Equipe PRACTICE"
+            } else {
+              comment.user_name = userData.name
+            }
+
+            comment.created_at = new Date(comment.created_at).toLocaleDateString("pt-br", {timeZone: 'UTC'});
+          });
+          
+          service.requested_due_date = new Date(service.requested_due_date).toLocaleDateString("pt-br", {timeZone: 'UTC'});
           service.user = userData;
 
           const settings = storage.getSettings();
@@ -457,13 +459,6 @@ const storage = {
     service = JSON.parse(service);
     service = {...service, comments: comments};
     localStorage["serviceDetails"+service_id] =  JSON.stringify(service);
-  },
-
-  getServiceCommentsFromLocalstorage: (service_id) => {
-    let serviceDetails = localStorage.getItem("serviceDetails"+service_id);
-    serviceDetails = JSON.parse(serviceDetails);
-    if (serviceDetails)
-      return serviceDetails.comments;
   },
 
   getServiceComments: async (service_id) => {

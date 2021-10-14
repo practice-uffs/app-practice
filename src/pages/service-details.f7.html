@@ -55,9 +55,9 @@
             <a class="link external" href="{{service.github_issue_link}}"><b>Acessar no Github</b></a>
           </p>
         {{/if}}
-        <p class="text-color-gray no-margin"><b>Categoria:</b> {{specification}}</p>
-        <p class="text-color-gray no-margin"><b>Localização:</b> {{location}}</p>
-        <p class="text-color-gray no-margin"><b>Sugestão de entrega:</b> {{delivery_date}}</p>
+        <p class="text-color-gray no-margin"><b>Categoria:</b> {{ specification.name }}</p>
+        <p class="text-color-gray no-margin"><b>Localização:</b> {{ location.name }}</p>
+        <p class="text-color-gray no-margin"><b>Sugestão de entrega:</b> {{service.requested_due_date}}</p>
       </div>
 
       <!-- Service content -->
@@ -66,14 +66,14 @@
           <div class="timeline-item-divider"></div>
           <div class="timeline-item-content">
             <div class="row">
-              <div class="timeline-item-time">{{service.user.name}}</div>
+              <div class="timeline-item-time">{{ service.user.name }}</div>
             </div>
             <div class="card">
               <div class="card-content card-content-padding">
-                {{service.description}}
+                {{ service.description }}
               </div>
             </div>
-            <div class="timeline-item-time">{{service.created_at}}</div>
+            <div class="timeline-item-time">{{ service.created_at }}</div>
           </div>
         </div>
 
@@ -106,12 +106,12 @@
           <div class="timeline-item-divider"></div>
           <div class="timeline-item-content">
             <div class="row">
-              <div class="timeline-item-time">{{this.user}}&nbsp;</div>
+              <div class="timeline-item-time">{{ this.user_name }}&nbsp;</div>
             </div>
             <div class="card">
-              <div class="card-content card-content-padding">{{this.text}}</div>
+              <div class="card-content card-content-padding">{{ this.content }}</div>
             </div>
-            <div class="timeline-item-time">{{this.date}}</div>
+            <div class="timeline-item-time">{{ this.created_at }}</div>
           </div>
         </div>
         {{/each}} {{/if}}
@@ -203,8 +203,7 @@
         service: null,
         comments: null,
         location: null,
-        specification: null,
-        delivery_date: null,
+        specification: null
       };
     },
     methods: {
@@ -218,45 +217,12 @@
             if (service.error) {
               throw service.error;
             }
-            console.log(service);
-            // Pegando informação de localização do Serviço
-            app.storage
-              .getLocations()
-              .then((locations) => {
-                if (locations.error) {
-                  throw locations.error
-                }
-                let location = locations.find(location => location.id == service.location_id);
-                self.$setState({
-                  location: location.name,
-                });
-              })
-              .catch(() => {
-                app.dialog.alert("Ocorreu um erro inesperado, tente novamente!");
-              });
-            
-            // Pegando informação de Categoria do Serviço
-            app.storage
-              .getServiceSpecifications()
-              .then((specifications) => {
-                if (specifications.error) {
-                  throw specifications.error
-                }
-                let specification = specifications[service.category_id].find(specification => specification.id == service.specification_id);
-                self.$setState({
-                  specification: specification.title,
-                });
-              })
-              .catch(() => {
-                app.dialog.alert("Ocorreu um erro inesperado, tente novamente!");
-              });
-
-            // Ajustando formato da data
-            let delivery_date = new Date(service.delivery_date).toLocaleDateString("pt-br");
-            
+              
             self.$setState({
               service: service,
-              delivery_date: delivery_date,
+              comments: service.comments,
+              location: service.location,
+              specification: service.service
             });
           })
           .catch(() => {
@@ -264,31 +230,14 @@
             if (service) {
               self.$setState({
                 service: service,
+                comments: service.comments,
+                location: service.location,
+                specification: service.service,
               });
             }
             app.dialog.alert("Ocorreu um erro inesperado, tente novamente!");
           });
-        app.storage
-          .getServiceComments(self.$route.params.id)
-          .then((comments) => {
-            if (comments.error) {
-              throw comments.error
-            }
-            self.$setState({
-              comments: comments,
-            });
-          })
-          .catch(() => {
-            let comments = app.storage.getServiceCommentsFromLocalstorage(self.$route.params.id);
-
-            if (comments) {
-              self.$setState({
-                comments: comments,
-              });
-            }
-              
-            app.dialog.alert("Ocorreu um erro inesperado, tente novamente!");
-          });
+        
       },
       newComment: function () {
         var self = this;
