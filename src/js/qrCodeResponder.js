@@ -41,9 +41,9 @@ const QrCodeResponder = {
                 data.extUrl = "#";
                 data.description = content;
                 if (res.is_valid) {
-                    data.title = 'Checkin Realizado <span class="badge color-green">OK</span>';
+                    data.title = 'Check-in Realizado <span class="badge color-green">OK</span>';
                 } else {
-                    data.title = 'Erro ao realizar Checkin <span class="badge color-red">warning/error</span>';
+                    data.title = 'Erro ao realizar Check-in <span class="badge color-red">warning/error</span>';
                 }
             }).catch(() => {
                 app.dialog.alert("Ocorreu um erro inesperado, tente novamente!");
