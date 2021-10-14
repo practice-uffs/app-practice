@@ -605,6 +605,17 @@ const storage = {
       });
   },
 
+  requestAuraAnswer: async (input) => {
+    let encodeInput = encodeURI(input);
+    return await storage.app.request.promise
+      .get(storage.api() + "aura/nlp/qna/" + encodeInput)
+      .then(async (res) => {
+        let data = JSON.parse(res.data);
+        return data.answer;
+      }).catch((err) => {
+        return err;
+      });
+  },
 };
 
 export { storage };
