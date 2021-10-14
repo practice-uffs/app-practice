@@ -1,6 +1,7 @@
 const storage = {
   prodApiURL: "https://mural.practice.uffs.cc/api/",
-  testApiURL: "https://qa.mural.practice.uffs.cc/api/",
+  // testApiURL: "https://qa.mural.practice.uffs.cc/api/",
+  testApiURL: "https://practice.uffs.edu.br/api/v0/",
 
   api: () => {
     const settings = storage.getSettings();
@@ -121,17 +122,18 @@ const storage = {
 
   requestLogin: async (username, password) => {
     return await storage.app.request.promise
-      .post(storage.api() + "auth/login", {
-        username: username,
-        password: password,
+      .post(storage.api() + "auth", {
+        "user": username,
+        "password": password,
+        "app_id": "1"
       })
       .then( async (res) => {
         let data = JSON.parse(res.data);
-        if (data.access_token) {
+        if (data.passport) {
           storage.setUserCredentials(data);
           storage.app.request.setup({
             headers: {
-              Authorization: "Bearer " + data.access_token,
+              Authorization: "Bearer " + data.passport,
             },
           });
           const settings = storage.getSettings();
@@ -149,22 +151,14 @@ const storage = {
 
   requestLogout: async () => {
     await storage.deleteFcmToken();
-    return await storage.app.request.promise
-      .post(storage.api() + "auth/logout")
-      .then((res) => {
-        if (res.data) {
-          storage.removeAllButUserData();
-          storage.clearUserCredentials();
-          storage.app.request.setup({
-            headers: {
-              Authorization: "",
-            },
-          });
-          return true;
-        } else {
-          return false;
-        }
-      });
+    storage.removeAllButUserData();
+    storage.clearUserCredentials();
+    storage.app.request.setup({
+      headers: {
+        Authorization: "",
+      },
+    });
+    return true;
   },
 
   getUserCredentials: () => {
@@ -174,7 +168,7 @@ const storage = {
       userCredentials = JSON.parse(userCredentials);
       storage.app.request.setup({
         headers: {
-          Authorization: "Bearer " + userCredentials.access_token,
+          Authorization: "Bearer " + userCredentials.passport,
         },
       });
       return userCredentials;
@@ -550,7 +544,7 @@ const storage = {
           fcm_token: token
         }
         let userToken = JSON.parse(localStorage["userCredentials"]);
-        userToken = "Bearer " + userToken.access_token;
+        userToken = "Bearer " + userToken.passport;
         return await storage.app.request.promise({
           url: storage.api()+"user/channels",
           method: "PATCH",
@@ -578,7 +572,7 @@ const storage = {
   deleteFcmToken: async () => {
     document.addEventListener('deviceready', async () => {
       let userToken = JSON.parse(localStorage["userCredentials"]);
-      userToken = "Bearer " + userToken.access_token;
+      userToken = "Bearer " + userToken.passport;
       storage.removeFcmToken();
       return await storage.app.request.promise({
         url: storage.api()+"user/channels",
@@ -596,7 +590,20 @@ const storage = {
 
   removeFcmToken: () => {
     localStorage.removeItem("fcmToken");
-  }
+  },
+
+  requestCheckin: async (url) => {
+    return await storage.app.request.promise
+      .post(storage.api() + "checkin", {
+        'url': url,
+      })
+      .then(async (res) => {
+        let data = JSON.parse(res.data);
+        return data;
+      }).catch((err) => {
+        return err;
+      });
+  },
 
 };
 

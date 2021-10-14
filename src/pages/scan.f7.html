@@ -141,7 +141,6 @@
         horizontalShadow = horizontalShadow.substring(0, horizontalShadow.length - 2)*2;
         let qrBoxWidth = qrbox.width() - horizontalShadow;
 
-        console.log(initialPosRight);
         this.setDropInitialPos(drop, initialPosTop, initialPosRight);
 
         drop
@@ -254,16 +253,16 @@
 
         bar.css("display", "none");
       },
-      addContent: function (content) {
+      addContent: async function (content) {
         let self = this;
         
         if(this.data_scanned.indexOf(content) != -1 || content.trim() == ""){}
         else{
           this.data_scanned.unshift(content);
           this.animationAddContent();
-
+          
           var dad = document.getElementById('qr-reader-results').childNodes[0].childNodes[0];
-          let text = this.contentTreatment(content);
+          let text = await this.contentTreatment(content);
           dad.innerHTML = text;
           var item = Dom7('.item');
           
@@ -285,39 +284,23 @@
           Dom7("#scanner_bar").css("display", "block");
         }, 2500);
       },
-      contentTreatment : function (content) {
-        let text = '';
-        this.data_scanned.forEach(element => {
-          let urlPattern = new RegExp('(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})');
-          let routePattern = new RegExp('\/[a-zA-Z0-9]+(\-[a-zA-Z0-9]+)?(\_[a-zA-Z0-9]+)?(\/)');
+      contentTreatment : async function (content) {
+        var self = this;
+        var app = self.$app;
+        var text = "";
 
-          if(urlPattern.test(element)){
-            var route = "#";
-            var extUrl = element;
-            var title = element;
-            var description = "URL Externa";
-          } else if(routePattern.test(element)){
-            var route = element;
-            var extUrl = "";
-            var title = element;
-            var description = "Aba do App";
-          } else{
-            var route = "#";
-            var extUrl = "#";
-            var title = element;
-            var description = "Texto";
-          }
-          
-          text += `<li class="item" extUrl="${extUrl}"><a href="${route}" class="item-link item-content"> 
+        for await(let element of this.data_scanned){
+          let res = await app.QrCodeResponder.check(element);
+          text += `<li class="item" extUrl="${res.extUrl}"><a href="${res.route}" class="item-link item-content"> 
             <div class="item-inner">
               <div class="item-title-row">
-                <div class="item-title">${title}</div>
+                <div class="item-title">${res.title}</div>
               </div>
-              <div class="item-text no-wrap">${description}</div>
+              <div class="item-text no-wrap">${res.description}</div>
             </div>
           </a></li>`;
-        });
-        console.log(text);
+        }
+
         return text;
       },
       onDeviceReady: function () {
@@ -353,7 +336,7 @@
     on: {
       tabInit: async function(e, page) {
         this.getCamPermission()
-        // this.initScan() //Para funcionar na web, descomente essa linhas
+        this.initScan() //Para funcionar na web, descomente essa linhas
         document.addEventListener('deviceready', this.onDeviceReady, false);
       },
       tabBeforeRemove: function (e) {

@@ -14,6 +14,7 @@ import routes from './routes.js'
 // Import analytics stuff 
 import Abalytics from './abalytics.js'
 import { storage } from './storage.js'
+import { QrCodeResponder } from './qrCodeResponder.js'
 
 // Import main app component
 import App from '../app.f7.html'
@@ -69,6 +70,7 @@ var app = new Framework7({
 
       Abalytics.init(f7)
       storage.init(f7)
+      QrCodeResponder.init(f7);
     },
   },
 })
