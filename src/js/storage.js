@@ -328,22 +328,25 @@ const storage = {
           let services = JSON.parse(res.data).data;
           let servicesToSave = [];
           let toReturn = {
-            services: new Array(),
+            services: [],
             meta: data.meta
           };
           let user_id = userData.id;
           
           for (let i = 0; i < services.length; i++) {
-            if (services[i].user_id == user_id) {
-              servicesToSave[i] = {
-                id: services[i].id,
-                status: services[i].status,
-                title: services[i].title,
-                description: services[i].description,
-                created_at: services[i].created_at
-              };
-              toReturn.services[i] = services[i];
+            if (services[i].user_id != user_id) {
+              continue;
             }
+            
+            servicesToSave[i] = {
+              id: services[i].id,
+              status: services[i].status,
+              title: services[i].title,
+              description: services[i].description,
+              created_at: services[i].created_at
+            };
+            
+            toReturn.services[i] = services[i];
           }
 
           const settings = storage.getSettings();
@@ -430,11 +433,7 @@ const storage = {
           let service = JSON.parse(res.data);
           
           service.comments.forEach(comment => {
-            if (comment.user_id != userData.id) {
-              comment.user_name = "Equipe PRACTICE"
-            } else {
-              comment.user_name = userData.name
-            }
+            comment.user_name = comment.user_id != userData.id ? "Equipe PRACTICE" : userData.name;
 
             comment.created_at = new Date(comment.created_at).toLocaleDateString("pt-br", {timeZone: 'UTC'});
           });
