@@ -1,6 +1,6 @@
 const storage = {
-  prodApiURL: "https://practice.uffs.edu.br/mural/api/",
-  testApiURL: "https://v2.mural.practice.uffs.cc/api/",
+  prodApiURL: "https://mural.practice.uffs.cc/api/",
+  testApiURL: "https://practice.uffs.edu.br/api/v0/",
 
   api: () => {
     const settings = storage.getSettings();
@@ -312,7 +312,7 @@ const storage = {
   getRequestedServices: async (page = 1) => {
     return await storage.getUserData().then(async (userData) => {
       return await storage.app.request.promise
-        .get(storage.api() + "orders?page="+page)
+        .get(storage.api() + "mural/orders?page="+page)
         .then((res) => {
           let data = JSON.parse(res.data);
           if(data.error){
@@ -345,8 +345,6 @@ const storage = {
               toReturn.services[i] = services[i];
             }
           }
-          toReturn.services.sort((a, b) => (a.id > b.id ? -1 : 1));
-          servicesToSave.sort((a, b) => (a.id > b.id ? -1 : 1));
 
           const settings = storage.getSettings();
           
@@ -416,7 +414,7 @@ const storage = {
   getServiceById: async (id) => {
     return await storage.getUserData().then(async (userData) => {
       return await storage.app.request.promise
-        .get(storage.api() + "orders/" + id)
+        .get(storage.api() + "mural/orders/" + id)
         .then((res) => {
           let data = JSON.parse(res.data);
           if(data.error){

@@ -422,19 +422,24 @@
   export default {
     data: function () {
       return {
-        approvalServices : null,
-        progressServices : null,
-        queueServices: null,
-        reviewServices: null,
-        doneServices : null,
-        refusedServices : null,
-        nextPage: null
+        approvalServices : new Array(),
+        progressServices : new Array(),
+        queueServices: new Array(),
+        reviewServices: new Array(),
+        doneServices : new Array(),
+        refusedServices : new Array(),
+        nextPage: new Array(),
+        allowInfinite: true
       };
     },
     methods: {
       loadMore: function () {
-        this.loadServices()
-        console.log(this.nextPage)
+        if (!this.allowInfinite) return;
+        this.allowInfinite = false;
+        setTimeout(() => {
+          this.loadServices();
+          this.allowInfinite = true;
+        }, 500);
       },
       loadServices: function () {
         var self = this;
@@ -444,6 +449,8 @@
           .then((res) => {
             if (res.meta.last_page != this.nextPage) {
               this.nextPage = res.meta.current_page + 1;
+            } else {
+              this.allowInfinite = false;
             }
             this.separateServices(res.services);
           })
@@ -462,12 +469,12 @@
         var app = self.$app;
         
         // Processing data
-        let approvalServices = new Array();
-        let progressServices = new Array();
-        let queueServices = new Array();
-        let reviewServices = new Array();
-        let doneServices = new Array();
-        let refusedServices = new Array();
+        let approvalServices = this.approvalServices;
+        let progressServices = this.progressServices;
+        let queueServices = this.queueServices;
+        let reviewServices = this.reviewServices;
+        let doneServices = this.doneServices;
+        let refusedServices = this.refusedServices;
 
         for (let i = 0; i < services.length; i++) {
           if (services[i].status === null){
