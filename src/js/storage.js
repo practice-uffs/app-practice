@@ -145,7 +145,7 @@ export class Storage{
 		var self = this;
 		var app = self.app;
 
-		let userData = localStorage["userData"];
+    let userData = localStorage["userData"];
 
 		if (!userData) {
 			return await app.api.requestUserData();

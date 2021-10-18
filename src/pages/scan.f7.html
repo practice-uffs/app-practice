@@ -336,7 +336,7 @@
     on: {
       tabInit: async function(e, page) {
         this.getCamPermission()
-        this.initScan() //Para funcionar na web, descomente essa linhas
+        // this.initScan() //Para funcionar na web, descomente essa linhas
         document.addEventListener('deviceready', this.onDeviceReady, false);
       },
       tabBeforeRemove: function (e) {
