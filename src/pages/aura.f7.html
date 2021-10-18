@@ -50,7 +50,7 @@
         var self = this;
         var app = self.$app;
 
-        return app.storage.requestAuraAnswer(input).then((answer) => {
+        return app.aura.requestAnswer(input).then((answer) => {
           return answer;
         });
       },

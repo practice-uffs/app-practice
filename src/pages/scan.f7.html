@@ -290,7 +290,7 @@
         var text = "";
 
         for await(let element of this.data_scanned){
-          let res = await app.QrCodeResponder.check(element);
+          let res = await app.qrCodeResponder.check(element);
           text += `<li class="item" extUrl="${res.extUrl}"><a href="${res.route}" class="item-link item-content"> 
             <div class="item-inner">
               <div class="item-title-row">
@@ -336,7 +336,7 @@
     on: {
       tabInit: async function(e, page) {
         this.getCamPermission()
-        // this.initScan() //Para funcionar na web, descomente essa linhas
+        this.initScan() //Para funcionar na web, descomente essa linhas
         document.addEventListener('deviceready', this.onDeviceReady, false);
       },
       tabBeforeRemove: function (e) {

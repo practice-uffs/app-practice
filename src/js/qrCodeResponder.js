@@ -1,17 +1,20 @@
-const QrCodeResponder = {
-    actionUrls : {
-        "forms": new RegExp('(https?:\/\/)?(practice.uffs.edu.br\/forms)(.*)'),
-        "mural": new RegExp('(https?:\/\/)?(practice.uffs.edu.br\/mural)(.*)'),
-        "checkin": new RegExp('(https?:\/\/)?(practice.uffs.edu.br\/qr)(.*)'),
-        "extUrl": new RegExp('(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})'),
-        "route": new RegExp('\/[a-zA-Z0-9]+(\-[a-zA-Z0-9]+)?(\_[a-zA-Z0-9]+)?(\/)')
-    },
-    init: (app) => {
-        QrCodeResponder.app = app;
-        app.QrCodeResponder = QrCodeResponder;
-    },
-    check: async (content) => {
-        var self = QrCodeResponder;
+export class QrCodeResponder {
+    constructor(app) {
+        this.app = app;
+        app.qrCodeResponder = this;
+
+        this.actionUrls = {
+            "forms": new RegExp('(https?:\/\/)?(practice.uffs.edu.br\/forms)(.*)'),
+            "mural": new RegExp('(https?:\/\/)?(practice.uffs.edu.br\/mural)(.*)'),
+            "checkin": new RegExp('(https?:\/\/)?(practice.uffs.edu.br\/qr)(.*)'),
+            "extUrl": new RegExp('(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})'),
+            "route": new RegExp('\/[a-zA-Z0-9]+(\-[a-zA-Z0-9]+)?(\_[a-zA-Z0-9]+)?(\/)')
+        }
+    }
+
+    async check (content){
+        var self = this;
+        var app = self.app;
         
         var data = {
             "route" : "",
@@ -34,9 +37,8 @@ const QrCodeResponder = {
             data.description = "URL Mural";
         } else if (self.actionUrls.checkin.test(content)) {
             console.log("link de checkin");
-            var app = self.app;
 
-            await app.storage.requestCheckin(content).then((res) => {
+            await app.checkin.requestCheckin(content).then((res) => {
                 data.route = "#";
                 data.extUrl = "#";
                 data.description = content;
@@ -71,5 +73,3 @@ const QrCodeResponder = {
     }
 
 }
-
-export { QrCodeResponder };
