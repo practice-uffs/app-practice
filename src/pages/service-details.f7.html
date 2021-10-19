@@ -211,7 +211,7 @@
         var self = this;
         var app = self.$app;
 
-        app.storage
+        app.api
           .getServiceById(self.$route.params.id)
           .then((service) => {
             if (service.error) {
@@ -237,7 +237,6 @@
             }
             app.dialog.alert("Ocorreu um erro inesperado, tente novamente!");
           });
-        
       },
       newComment: function () {
         var self = this;
@@ -248,7 +247,7 @@
           function () {
             let comment = app.form.convertToData("#new-comment-form");
 
-            app.storage
+            app.api
               .postCommentByServiceId(self.$route.params.id, comment)
               .then(() => {
                 app.sheet.close();

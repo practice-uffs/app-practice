@@ -169,8 +169,10 @@
           // Disable all dev options
           if (self.settings['devMode']) {
             app.dialog.confirm('Deseja realmente desativar o modo de desenvolvimento?', function () {
+              app.storage.clearAll()
               self.changeSetting('devMode', false)
               self.changeSetting('testApi', false)
+              app.view.main.router.navigate('/')
             })
           }
           // Enable dev options
@@ -185,11 +187,11 @@
         } else if (e.target.name === 'allowNotifications') {
           if (e.target.checked) {
             document.addEventListener('deviceready', async () => {
-              await app.storage.postFcmToken()
+              await app.api.postFcmToken()
               self.changeSetting(e.target.name, e.target.checked)  
             });
           } else {
-            app.storage.deleteFcmToken()
+            app.api.deleteFcmToken()
             self.changeSetting( e.target.name, e.target.checked)
           }
         } else if (e.target.name === 'offlineStorage') {

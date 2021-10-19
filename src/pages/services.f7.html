@@ -444,7 +444,7 @@
       loadServices: function () {
         var self = this;
         var app = self.$app;
-        app.storage
+        app.api
           .getRequestedServices(this.nextPage)
           .then((res) => {
             if (res.meta.last_page != this.nextPage) {
