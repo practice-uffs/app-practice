@@ -131,52 +131,47 @@ export class Api {
     };
 
     async getRequestedServices(page = 1) {
-        return await app.storage.getUserData().then(async (userData) => {
-          return await app.request.promise
-            .get(app.api.url + "mural/orders?page="+page)
-            .then((res) => {
-              let data = JSON.parse(res.data);
-              if(data.error){
+        var self = this;
+        var app = self.app;
+        return await app.request.promise
+        .get(app.api.url + "mural/orders?page="+page)
+        .then((res) => {
+            let data = JSON.parse(res.data);
+            if(data.error){
                 app.storage.requestLogout().then(res => {
-                  if (!res) {
-                    return;
-                  }
-                  app.dialog.alert("Sessão expirada ou inválida, faça login novamente!");
-                  app.views.main.router.navigate("/");
+                    if (!res) {
+                        return;
+                    }
+                    app.dialog.alert("Sessão expirada ou inválida, faça login novamente!");
+                    app.views.main.router.navigate("/");
                 })
                 return;
-              }
-              let services = JSON.parse(res.data).data;
-              let servicesToSave = [];
-              let toReturn = {
+            }
+            let services = JSON.parse(res.data).data;
+            let servicesToSave = [];
+            let toReturn = {
                 services: [],
                 meta: data.meta
-              };
-              let user_id = userData.id;
-              
-              for (let i = 0; i < services.length; i++) {
-                if (services[i].user_id != user_id) {
-                  continue;
-                }
-                
+            };
+            
+            for (let i = 0; i < services.length; i++) {
                 servicesToSave[i] = {
-                  id: services[i].id,
-                  status: services[i].status,
-                  title: services[i].title,
-                  description: services[i].description,
-                  created_at: services[i].created_at
+                    id: services[i].id,
+                    status: services[i].status,
+                    title: services[i].title,
+                    description: services[i].description,
+                    created_at: services[i].created_at
                 };
                 
                 toReturn.services[i] = services[i];
-              }
-    
-              const settings = app.storage.getSettings();
-              
-              if (settings.offlineStorage) {
+            }
+
+            const settings = app.storage.getSettings();
+            
+            if (settings.offlineStorage) {
                 app.storage.setRequestedServices(servicesToSave);
-              }
-              return toReturn;
-            });
+            }
+            return toReturn;
         });
     };
 
