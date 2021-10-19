@@ -596,8 +596,18 @@ const storage = {
 
   removeFcmToken: () => {
     localStorage.removeItem("fcmToken");
-  }
+  },
 
+  // Aura
+
+  setAuraConsent: (consent) => {
+    localStorage["auraConsent"] = JSON.stringify(consent);
+  },
+
+  getAuraConsent: () => {
+    let data  = localStorage.getItem("auraConsent");
+    return JSON.parse(data);
+  },
 };
 
 export { storage };

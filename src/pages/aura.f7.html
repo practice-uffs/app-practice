@@ -5,7 +5,11 @@
       <div class="messages">
       </div>  
     </div>
-
+    
+    <div class="aura-consent-buttons padding-left padding-right justify-content-space-between">
+      <button class="margin-right button button-raised" @click="auraConsentAnswer(true)">Concordo</button>
+      <button class="margin-left button button-raised" @click="auraConsentAnswer(false)">Discordo</button>
+    </div>
     <div class="toolbar messagebar">
       <div class="toolbar-inner">
         <div class="messagebar-area">
@@ -18,11 +22,16 @@
 </template>
 
 <style>  
-  .messages-content{
+  .messages-content {
     padding-bottom : 0px;
     padding-top: 0px;
   }
-  #logo_aura{
+  .aura-consent-buttons {
+    padding-bottom: 10px;
+    display: none;
+    background-color: #fff;
+  }
+  #logo_aura {
     position: absolute;
     z-index: 3;
     text-align: center;
@@ -38,6 +47,7 @@
       return {
         chat: null,
         messages : null,
+        showButtons: null
       }
     },
     methods: {
@@ -207,7 +217,13 @@
                 answer.type = "received";
                 var user = app.storage.getUserData().then(res => {
                   var user_name = self.capitalize(res.name.split(" ")[0].toLowerCase());
-                  answer.text = "Olá <b>"+user_name+"</b>. Espero lhe encontrar bem 🙂! Meu nome é Aura e estou aqui para lhe ajudar.<br> Atualmente, me encontro em fase de desenvolvimento e logo disponibilizarei funções pra você 😉<br>Para demonstração, utilize as seguintes palavras:<br><ul><li>Acc</li><li>Alexa</li><li>Random</li></ul>"
+                  answer.text = "Olá <b>"+user_name+"</b>. Espero lhe encontrar bem 🙂! Meu nome é Aura e estou aqui para lhe ajudar.<br> "
+                  if (app.storage.getAuraConsent() === null) {
+                    answer.text += "<br>Para que eu consiga evoluir constantemente, todas as mensagens e interações que você fizer comigo são armazenadas em um banco de dados, na íntegra. As mensagens não estão associadas a você (a autoria é anonimizada). Você concorda com isso?";
+                    this.showButtons = true;
+                  } else {
+                    answer.text += "Atualmente, me encontro em fase de desenvolvimento e logo disponibilizarei funções pra você 😉<br>Para demonstração, utilize as seguintes palavras:<br><ul><li>Acc</li><li>Alexa</li><li>Random</li></ul>";
+                  }
                 })
               } else if(received.toLowerCase().search('alexa') != -1) {
                 var answer = answers.alexa[Math.floor(Math.random() * answers.alexa.length)];
@@ -230,6 +246,11 @@
                 self.messages.addMessage(answer);
                 // Hide typing indicator
                 self.messages.hideTyping();
+                
+                if (this.showButtons) {
+                  const consentButtons = document.querySelector('.aura-consent-buttons');
+                  consentButtons.style.display = "flex";
+                }
                 responseInProgress = false;
               }, 3000);
             }, 1000);
@@ -239,7 +260,42 @@
       },
       capitalize : function (text) {
         return text.charAt(0).toUpperCase() + text.slice(1);
-      }
+      },
+      auraConsentAnswer: function (consent) {
+        var self = this;
+        var app = self.$app;
+
+        app.storage.setAuraConsent(consent);
+
+        var answer = new Object();
+        answer.name = "Aura";
+        answer.avatar = "https://img.icons8.com/plasticine/2x/bot.png";
+        answer.type = "received";
+        answer.text = "";
+
+        
+        if (consent) {
+          answer.text = "Ótimo, obrigado! Com o que eu posso ajudar hoje?<br><br>";
+        } 
+
+        answer.text += "Atualmente, me encontro em fase de desenvolvimento e logo disponibilizarei funções pra você 😉<br>Para demonstração, utilize as seguintes palavras:<br><ul><li>Acc</li><li>Alexa</li><li>Random</li></ul>";
+
+        self.messages.showTyping({
+          header: answer.name + ' is typing',
+          avatar: answer.avatar
+        });
+
+        setTimeout(function () {
+          self.messages.addMessage(answer);
+          self.messages.hideTyping();
+          
+          const consentButtons = document.querySelector('.aura-consent-buttons');
+          consentButtons.style.display = "none";
+    
+          this.showButtons = false;
+          responseInProgress = false;
+        }, 3000);
+      },
     },
     on: {
       tabInit: function (e, page) {
@@ -247,6 +303,7 @@
         this.resizeMessagesContent();
         this.messageInit();
         var self = this;
+        this.showButtons = false;
 
         window.onresize = function() {
           self.resizeMessagesContent();
