@@ -117,7 +117,7 @@
         let loginData = app.form.convertToData("#login-form");
 
         // Request login
-        app.storage
+        app.api
           .requestLogin(loginData.iduffs, loginData.password)
           .then((res) => {
             app.dialog.close();

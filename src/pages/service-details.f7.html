@@ -212,7 +212,7 @@
         var self = this;
         var app = self.$app;
 
-        app.storage
+        app.api
           .getServiceById(self.$route.params.id)
           .then((service) => {
             if (service.error) {
@@ -220,7 +220,7 @@
             }
             console.log(service);
             // Pegando informação de localização do Serviço
-            app.storage
+            app.api
               .getLocations()
               .then((locations) => {
                 if (locations.error) {
@@ -236,7 +236,7 @@
               });
             
             // Pegando informação de Categoria do Serviço
-            app.storage
+            app.api
               .getServiceSpecifications()
               .then((specifications) => {
                 if (specifications.error) {
@@ -268,7 +268,7 @@
             }
             app.dialog.alert("Ocorreu um erro inesperado, tente novamente!");
           });
-        app.storage
+        app.api
           .getServiceComments(self.$route.params.id)
           .then((comments) => {
             if (comments.error) {
@@ -299,7 +299,7 @@
           function () {
             let comment = app.form.convertToData("#new-comment-form");
 
-            app.storage
+            app.api
               .postCommentByServiceId(self.$route.params.id, comment)
               .then(() => {
                 app.sheet.close();
