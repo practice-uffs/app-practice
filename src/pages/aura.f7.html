@@ -1,5 +1,9 @@
 <template>
   <div data-name="aura" id="tab_aura" style="height: 100%;">
+
+    <div id="logo_aura">
+      <img src="static/images/aura/aura_logo.png" alt="" width="40%">
+    </div>
     
     <div class="page-content messages-content">
       <div class="messages">
@@ -20,13 +24,15 @@
 <style>  
   .messages-content{
     padding-bottom : 0px;
-    padding-top: 0px;
+    padding-top : 0px;
   }
   #logo_aura{
     position: absolute;
+    padding: 20px 0px;
     z-index: 3;
     text-align: center;
-    background-image: linear-gradient(to bottom, white, rgba(255,255,255,0.8),rgba(255,255,255,0));
+    width: 100%;
+    background-image: linear-gradient(to bottom, white, white, rgba(255,255,255,0.8),rgba(255,255,255,0));
   }
 </style>
 
@@ -55,11 +61,14 @@
         });
       },
       resizeMessagesContent: function (){
+        let logo_aura = Dom7('#logo_aura');
         let aura = Dom7('#tab_aura');
         let messagebar = Dom7('.messagebar');
         let messagesContent = Dom7('.messages-content');
         let height = aura.height() - messagebar.height() +'px';
         messagesContent.css('height', height);
+        console.log(logo_aura.height());
+        messagesContent.css('padding-top', logo_aura.height()+10+'px');
       },
       messageInit: function () {
         var self = this;
@@ -146,7 +155,7 @@
             setTimeout(function () {
               var answer = new Object();
               answer.name = "Aura";
-              answer.avatar = "https://img.icons8.com/plasticine/2x/bot.png";
+              answer.avatar = "static/images/aura/aura_icon.png";
               answer.type = "received";
               answer.text = data? data : "Desculpe, infelizmente eu não entendi";
 
@@ -173,17 +182,20 @@
     },
     on: {
       tabInit: function (e, page) {
-        this.resizeMessagesContent();
         this.messageInit();
         var self = this;
 
+        setTimeout(() => {
+          this.resizeMessagesContent();
+        }, 1000)
+        
         window.onresize = function() {
           self.resizeMessagesContent();
           var doc = document.getElementsByClassName("messages-content")[0];
           var maxScroll = Dom7(".messages").height();
           doc.scrollTo({ top: maxScroll, behavior: 'smooth' });
         }
-      }
+      },
     },
   };
 </script>
