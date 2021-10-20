@@ -230,5 +230,5 @@ export class Storage {
 
 	removeFcmToken() {
 		localStorage.removeItem("fcmToken");
-	}
+	};
 };
