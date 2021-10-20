@@ -63,8 +63,8 @@ export class Api{
         var app = self.app;
 
         return await app.request.promise.get("https://practice.uffs.edu.br/feed.xml").then((res) => {
-            let xml_parser = require("fast-xml-parser");
-            let obj = xml_parser.parse(res.data);
+            let xmlParser = require("fast-xml-parser");
+            let feed = xmlParser.parse(res.data);
             let news = obj.rss.channel.item;
 
             for (let i = 0; i < news.length; i++) {
