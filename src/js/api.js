@@ -240,7 +240,7 @@ export class Api {
                 let service = JSON.parse(res.data);
                 
                 service.comments.forEach(comment => {
-                    comment.user_name = comment.user_id != userData.id ? "Equipe PRACTICE" : userData.name;
+                    comment.user_name = comment.user_id != service.user_id ? "Equipe PRACTICE" : userData.name;
                     comment.created_at = new Date(comment.created_at).toLocaleDateString("pt-br", {timeZone: 'UTC'});
                 });
                 
