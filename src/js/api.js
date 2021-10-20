@@ -195,30 +195,6 @@ export class Api {
         });
     };
 
-
-    async postServiceRequest(service){
-        var self = this;
-        var app = self.app;
-
-        return await app.storage.getUserData().then(async (userData) => {
-            service.user_id = userData.id;
-            return await app.request.promise.post(app.api.url + "services", service).then((res) => {
-                let data = JSON.parse(res.data);
-                if(data.error){
-                    app.storage.requestLogout().then(res => {
-                    if (!res) {
-                        return;
-                    }
-                    app.dialog.alert("Sessão expirada ou inválida, faça login novamente!");
-                    app.views.main.router.navigate("/");
-                    })
-                    return;
-                }
-                return true;
-                });
-        });
-    };
-
     async getServiceById(id) {
         var self = this;
         var app = self.app;

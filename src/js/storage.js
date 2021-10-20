@@ -228,7 +228,7 @@ export class Storage {
 		localStorage["fcmToken"] = JSON.stringify(fcmToken);
 	};
 
-	removeFcmToken(){
+	removeFcmToken() {
 		localStorage.removeItem("fcmToken");
 	};
 };
