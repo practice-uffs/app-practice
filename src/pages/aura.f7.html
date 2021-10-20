@@ -135,6 +135,11 @@
           });
 
           if (responseInProgress) return;
+          app.aura.addMessageToChat({
+            text: text,
+            textFooter: self.getTimestamp(),
+            type: "sent"
+          })
           // Receive dummy message
           receiveMessage(text);
         });       
@@ -152,6 +157,8 @@
 
               answer.textFooter = self.getTimestamp();
 
+              app.aura.addMessageToChat(answer);
+
               // Show typing indicator
               self.messages.showTyping({
                 header: answer.name + ' is typing',
@@ -168,7 +175,21 @@
             }, 1000);
           }); 
         }
-        receiveMessage("se apresente");
+        function loadOldMessages() {
+          let chat = app.aura.getChat();
+
+          if (!chat) {
+            receiveMessage("se apresente");
+            return;
+          }
+
+          for (let i = 0; i < chat.length; i++) {
+            self.messages.addMessage(chat[i]);
+          }
+          self.messages.scroll();
+        }
+
+        loadOldMessages();
       },
     },
     on: {
