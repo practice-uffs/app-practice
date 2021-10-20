@@ -33,9 +33,13 @@
       "cordova-plugin-local-notification": {
         "ANDROID_SUPPORT_V4_VERSION": "26.+"
       },
-      "cordova-plugin-firebase-messaging": {},
+      "cordova-plugin-firebase-messaging": {
+        "ANDROID_FIREBASE_MESSAGING_VERSION": "22.0.+",
+        "ANDROIDX_CORE_VERSION": "1.6.+"
+      },
       "cordova-plugin-inappbrowser": {},
-      "cordova-plugin-device": {}
+      "cordova-plugin-device": {},
+      "cordova-plugin-vibration": {}
     },
     "platforms": [
       "ios",
@@ -52,6 +56,7 @@
     "cordova-plugin-firebase-messaging": "^6.0.0",
     "cordova-plugin-inappbrowser": "^4.1.0",
     "cordova-plugin-local-notification": "github:katzer/cordova-plugin-local-notifications",
+    "cordova-plugin-vibration": "^3.1.1",
     "cordova-plugin-whitelist": "^1.3.5",
     "cordova-support-android-plugin": "^1.0.2"
   }

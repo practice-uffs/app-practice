@@ -126,7 +126,7 @@
         let app = self.$app;
 
         app.dialog.confirm("Tem certeza que deseja sair?", function () {
-          app.storage
+          app.api
             .requestLogout()
             .then((res) => {
               if (res) {

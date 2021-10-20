@@ -187,11 +187,11 @@
         } else if (e.target.name === 'allowNotifications') {
           if (e.target.checked) {
             document.addEventListener('deviceready', async () => {
-              await app.storage.postFcmToken()
+              await app.api.postFcmToken()
               self.changeSetting(e.target.name, e.target.checked)  
             });
           } else {
-            app.storage.deleteFcmToken()
+            app.api.deleteFcmToken()
             self.changeSetting( e.target.name, e.target.checked)
           }
         } else if (e.target.name === 'offlineStorage') {

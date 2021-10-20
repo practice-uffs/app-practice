@@ -1,315 +1,232 @@
-const storage = {
-  prodApiURL: "https://mural.practice.uffs.cc/api/",
-  testApiURL: "https://qa.mural.practice.uffs.cc/api/",
+export class Storage{
+	constructor(app) {
+		this.prodApiURL = "https://mural.practice.uffs.cc/api/";
+		this.testApiURL = "https://practice.uffs.edu.br/api/v0/";
+		this.app = app;
+		app.storage = this;
+	}
 
-  api: () => {
-    const settings = storage.getSettings();
+	// Value processing methods
+	dateDifference(date){
+		date = new Date(date);
+		const now = new Date();
+		return now - date;
+	};
 
-    if (settings.devMode && settings.testApi) return storage.testApiURL;
-    else return storage.prodApiURL;
-  },
+	formatDateDifference(difference){
+		let seconds = Math.floor(difference / 1000);
+		let minutes = Math.floor(seconds / 60);
+		let hours = Math.floor(minutes / 60);
+		let days = Math.floor(hours / 24);
+		let months = Math.floor(days / 30);
+		let years = Math.floor(months / 12);
 
-  init: (app) => {
-    storage.app = app;
-    app.storage = storage;
-  },
+		if (years > 0) {
+			return years === 1 ? years + " ano" : years + " anos";
+		} else if (months > 0) {
+			return months === 1 ? months + " mês" : months + " meses";
+		} else if (days > 0) {
+			return days === 1 ? days + " dia" : days + " dias";
+		} else if (hours > 0) {
+			return hours === 1 ? hours + " hora" : hours + " horas";
+		} else if (minutes > 0) {
+			return minutes === 1 ? minutes + " minuto" : minutes + " minutos";
+		} else if (seconds > 0) {
+			return seconds === 1 ? seconds + " segundo" : seconds + " segundos";
+		} else {
+			return "agora mesmo";
+		}
+	};
 
-  // Value processing methods
+	formatDate(date){
+		date = date.split(" ");
+		date = new Date(Date.parse(date[2] + " " + date[1] + ", " + date[3]));
 
-  dateDifference: (date) => {
-    date = new Date(date);
-    const now = new Date();
-    return now - date;
-  },
+		const options = { year: "numeric", month: "long", day: "numeric" };
+		date = date.toLocaleDateString(undefined, options);
 
-  formatDateDifference: (difference) => {
-    let seconds = Math.floor(difference / 1000);
-    let minutes = Math.floor(seconds / 60);
-    let hours = Math.floor(minutes / 60);
-    let days = Math.floor(hours / 24);
-    let months = Math.floor(days / 30);
-    let years = Math.floor(months / 12);
+		return date.toUpperCase().charAt(0).toUpperCase() + date.slice(1);
+	};
 
-    if (years > 0) {
-      return years === 1 ? years + " ano" : years + " anos";
-    } else if (months > 0) {
-      return months === 1 ? months + " mês" : months + " meses";
-    } else if (days > 0) {
-      return days === 1 ? days + " dia" : days + " dias";
-    } else if (hours > 0) {
-      return hours === 1 ? hours + " hora" : hours + " horas";
-    } else if (minutes > 0) {
-      return minutes === 1 ? minutes + " minuto" : minutes + " minutos";
-    } else if (seconds > 0) {
-      return seconds === 1 ? seconds + " segundo" : seconds + " segundos";
-    } else {
-      return "agora mesmo";
-    }
-  },
+	processHTML(input){
+		var e = document.createElement("div");
+		e.innerHTML = input;
+		return e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue;
+	};
 
-  formatDate: (date) => {
-    date = date.split(" ");
-    date = new Date(Date.parse(date[2] + " " + date[1] + ", " + date[3]));
+	// LocalStorage methods
+	clearAll(){
+		localStorage.clear();
+	};
 
-    const options = { year: "numeric", month: "long", day: "numeric" };
-    date = date.toLocaleDateString(undefined, options);
+	removeAllButUserData(){
+		const settings = JSON.parse(localStorage.getItem("settings"));
+		const userCredentials = JSON.parse(localStorage.getItem("userCredentials"));
+		const userData = JSON.parse(localStorage.getItem("userData"));
 
-    return date.toUpperCase().charAt(0).toUpperCase() + date.slice(1);
-  },
+		localStorage.clear();
 
-  processHTML: (input) => {
-    var e = document.createElement("div");
-    e.innerHTML = input;
-    return e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue;
-  },
+		this.setUserCredentials(userCredentials);
+		this.setSettings(settings);
+		this.setUserData(userData);
+	};
 
-  // LocalStorage methods
+	// Settings methods
+	getSettings(){
+		let settings = localStorage["settings"];
 
-  clearAll: () => {
-    localStorage.clear();
-  },
+		if (!settings) {
+			const env = process.env.NODE_ENV || 'development';
+			if (env == 'production') {
+				settings = {
+					offlineStorage: true,
+					allowNotifications: true,
+					// Dev options
+					devMode: false,
+					testApi: false,
+				};
+			} else {
+				settings = {
+					offlineStorage: true,
+					allowNotifications: true,
+					// Dev options
+					devMode: true,
+					testApi: true,
+				};
+			}
+			localStorage["settings"] = JSON.stringify(settings);
+		} else {
+			settings = JSON.parse(settings);
+		}
 
-  removeAllButUserData: () => {
-    const settings = JSON.parse(localStorage.getItem("settings"));
-    const userCredentials = JSON.parse(localStorage.getItem("userCredentials"));
-    const userData = JSON.parse(localStorage.getItem("userData"));
+		return settings;
+	};
 
-    localStorage.clear();
+	setSettings(settings){
+		localStorage["settings"] = JSON.stringify(settings);
+	};
 
-    storage.setUserCredentials(userCredentials);
-    storage.setSettings(settings);
-    storage.setUserData(userData);
-  },
+	// User credentials methods
+	getUserCredentials(){
+		var self = this;
+		var app = self.app;
+		
+		let userCredentials = localStorage["userCredentials"];
 
-  // Settings methods
+		if (userCredentials) {
+			userCredentials = JSON.parse(userCredentials);
+			app.request.setup({
+				headers: {
+					Authorization: "Bearer " + userCredentials.passport,
+				},
+			});
+			return userCredentials;
+		} else {
+			app.request.setup({
+				headers: {
+					Authorization: "",
+				},
+			});
+			return false;
+		}
+	};
 
-  getSettings: () => {
-    let settings = localStorage["settings"];
+	setUserCredentials(userCredentials){
+		localStorage["userCredentials"] = JSON.stringify(userCredentials);
+	};
 
-    if (!settings) {
-      const env = process.env.NODE_ENV || 'development';
-      if (env == 'production') {
-        settings = {
-          offlineStorage: true,
-          allowNotifications: true,
-          // Dev options
-          devMode: false,
-          testApi: false,
-        };
-      } else {
-        settings = {
-          offlineStorage: true,
-          allowNotifications: true,
-          // Dev options
-          devMode: true,
-          testApi: true,
-        };
-      }
-      localStorage["settings"] = JSON.stringify(settings);
-    } else {
-      settings = JSON.parse(settings);
-    }
+	clearUserCredentials(){
+		localStorage.removeItem("userCredentials");
+		localStorage.removeItem("userData");
+	};
 
-    return settings;
-  },
+	// User data methods
+	async getUserData(){
+		var self = this;
+		var app = self.app;
 
-  setSettings: (settings) => {
-    localStorage["settings"] = JSON.stringify(settings);
-  },
-
-  // User credentials methods
-
-  requestLogin: async (username, password) => {
-    return await storage.app.request.promise
-      .post(storage.api() + "auth/login", {
-        username: username,
-        password: password,
-      })
-      .then( async (res) => {
-        let data = JSON.parse(res.data);
-        if (data.access_token) {
-          storage.setUserCredentials(data);
-          storage.app.request.setup({
-            headers: {
-              Authorization: "Bearer " + data.access_token,
-            },
-          });
-          const settings = storage.getSettings();
-          if (settings.allowNotifications) {
-            await storage.postFcmToken();
-          }
-          return true;
-        } else {
-          return false;
-        }
-      }).catch((err) => {
-        return false;
-      });
-  },
-
-  requestLogout: async () => {
-    await storage.deleteFcmToken();
-    return await storage.app.request.promise
-      .post(storage.api() + "auth/logout")
-      .then((res) => {
-        if (res.data) {
-          storage.removeAllButUserData();
-          storage.clearUserCredentials();
-          storage.app.request.setup({
-            headers: {
-              Authorization: "",
-            },
-          });
-          return true;
-        } else {
-          return false;
-        }
-      });
-  },
-
-  getUserCredentials: () => {
-    let userCredentials = localStorage["userCredentials"];
-
-    if (userCredentials) {
-      userCredentials = JSON.parse(userCredentials);
-      storage.app.request.setup({
-        headers: {
-          Authorization: "Bearer " + userCredentials.access_token,
-        },
-      });
-      return userCredentials;
-    } else {
-      storage.app.request.setup({
-        headers: {
-          Authorization: "",
-        },
-      });
-      return false;
-    }
-  },
-
-  setUserCredentials: (userCredentials) => {
-    localStorage["userCredentials"] = JSON.stringify(userCredentials);
-  },
-
-  clearUserCredentials: () => {
-    localStorage.removeItem("userCredentials");
-    localStorage.removeItem("userData");
-  },
-
-  // User data methods
-
-  requestUserData: async () => {
-    return await storage.app.request.promise
-      .post(storage.api() + "auth/me")
-      .then((res) => {
-        let data = JSON.parse(res.data);
-        if(data.error){
-          storage.requestLogout().then(res => {
-            if (res) {
-              storage.app.dialog.alert(
-                "Sessão expirada ou inválida, faça login novamente!"
-              );
-              storage.app.views.main.router.navigate("/");
-            }
-          })
-          return;
-        }
-        const userData = JSON.parse(res.data);
-        storage.setUserData(userData);
-        return userData;
-      });
-  },
-
-  getUserData: async () => {
     let userData = localStorage["userData"];
 
-    if (!userData) {
-      return await storage.requestUserData();
-    } else {
-      return JSON.parse(userData);
-    }
-  },
+		if (!userData) {
+			return await app.api.requestUserData();
+		} else {
+			return JSON.parse(userData);
+		}
+	};
 
-  setUserData: (userData) => {
-    localStorage["userData"] = JSON.stringify(userData);
-  },
+	setUserData(userData){
+		localStorage["userData"] = JSON.stringify(userData);
+	};
 
-  // Audio recording methods
+	// Audio recording methods
+	getRecordings(){
+		let recordings = localStorage["recordings"];
 
-  getRecordings: () => {
-    let recordings = localStorage["recordings"];
+		if (!recordings) {
+			recordings = [];
+			localStorage["recordings"] = JSON.stringify(recordings);
+		} else recordings = JSON.parse(recordings);
 
-    if (!recordings) {
-      recordings = [];
-      localStorage["recordings"] = JSON.stringify(recordings);
-    } else recordings = JSON.parse(recordings);
+		return recordings;
+	};
 
-    return recordings;
-  },
+	addRecording(recording){
+		let recordings = localStorage["recordings"];
 
-  addRecording: (recording) => {
-    let recordings = localStorage["recordings"];
+		if (!recordings) recordings = [];
 
-    if (!recordings) recordings = [];
+		recordings = JSON.parse(recordings);
+		recordings.push(recording);
 
-    recordings = JSON.parse(recordings);
-    recordings.push(recording);
+		localStorage["recordings"] = JSON.stringify(recordings);
+	};
 
-    localStorage["recordings"] = JSON.stringify(recordings);
-  },
+	clearRecordings(){
+		localStorage.removeItem("recordings");
+	};
 
-  clearRecordings: () => {
-    localStorage.removeItem("recordings");
-  },
+	// Services methods
+	setRequestedServices(services){
+		localStorage["requestedServices"] = JSON.stringify(services);
+	};
 
-  // News methods
+	getRequestedServicesFromLocalstorage(){
+		let services = localStorage.getItem("requestedServices");
+		return JSON.parse(services);
+	};
 
-  getNews: async () => {
-    return await storage.app.request.promise
-      .get("https://practice.uffs.cc/feed.xml")
-      .then((res) => {
-        let xml_parser = require("fast-xml-parser");
-        let obj = xml_parser.parse(res.data);
-        let news = obj.rss.channel.item;
+	setServiceDetails(service){
+		let storagedService = localStorage.getItem("serviceDetails"+service.id);
+		storagedService = JSON.parse(storagedService);
+		localStorage["serviceDetails"+service.id] =  JSON.stringify({...storagedService, service: service});
+	};
 
-        for (let i = 0; i < news.length; i++) {
-          const content = storage.processHTML(news[i].content);
-          news[i].content = content;
+	getServiceDetailsFromLocalstorage(service_id){
+		let service = localStorage.getItem("serviceDetails"+service_id);
+		service = JSON.parse(service);
+		if (service) {
+			return service.service;
+		}
+	};
 
-          const pubDate = storage.formatDate(news[i].pubDate);
-          news[i].pubDate = pubDate;
-        }
-        return news;
-      });
-  },
+	setServiceComments(service_id, comments){
+		let service = localStorage.getItem("serviceDetails"+service_id);
+		service = JSON.parse(service);
+		service = {...service, comments: comments};
+		localStorage["serviceDetails"+service_id] =  JSON.stringify(service);
+	};
 
-  // Services methods
+	getServiceCommentsFromLocalstorage(service_id){
+		let serviceDetails = localStorage.getItem("serviceDetails"+service_id);
+		serviceDetails = JSON.parse(serviceDetails);
+		if (serviceDetails) {
+			return serviceDetails.comments;
+		}
+	};
 
-  getServiceSpecifications: async () => {
-    return await storage.app.request.promise
-      .get(storage.api() + "specifications")
-      .then((res) => {
-        let data = JSON.parse(res.data);
-        if(data.error){
-          storage.requestLogout().then(res => {
-            if (!res) {
-              return;
-            }
-            storage.app.dialog.alert("Sessão expirada ou inválida, faça login novamente!");
-            storage.app.views.main.router.navigate("/");
-          })
-          return;
-        }
-        // Grouping services by category
-        let service_specifications = JSON.parse(res.data);
-        service_specifications = service_specifications.reduce((list, x) => {
-          (list[x["category_id"]] = list[x["category_id"]] || []).push(x);
-          return list;
-        }, {});
-        return service_specifications;
-      });
-  },
+	setFcmToken(fcmToken){
+		localStorage["fcmToken"] = JSON.stringify(fcmToken);
+	};
 
   setRequestedServices: (services) => {
     localStorage["requestedServices"] = JSON.stringify(services);
@@ -577,5 +494,3 @@ const storage = {
   }
 
 };
-
-export { storage };

@@ -31,5 +31,119 @@
   </div>
 </template>
 <script>
-  export default {}
+  import 'dom7/dist/dom7.js';
+
+  export default {
+    data: function () {
+      return {
+        serviceSpecifications: null,
+        requestedService: null,
+        locations: null,
+        sheetInitialSize: 350,
+        minDate: null,
+        deliveryDate: null,
+      }
+    },
+    methods: {
+      lodaData: function () {
+        var self = this
+        var app = self.$app
+
+        //Load min date
+        this.$setState({
+          minDate: new Date(new Date().setDate(new Date().getDate() + 10)).toISOString("yyyy-mm-dd").substring(0, 10)
+        })
+        // Load service specifications
+        app.api.getServiceSpecifications().then((serviceSpecifications) => {
+          if (serviceSpecifications) {
+            self.$setState({
+              serviceSpecifications: serviceSpecifications
+            })
+          }
+        }).catch(() => {
+          app.dialog.alert("Ocorreu um erro em sua rede, tente novamente!");
+        })
+        // Load locations
+        app.api.getLocations().then((locations) => {
+          self.$setState({
+            locations: locations
+          })
+        }).catch(()=>{
+          app.dialog.alert("Ocorreu um erro em sua rede, tente novamente!");
+        })
+      },
+      setServiceRequest: async function (title, specification_id, category_id, delivery_date) {
+        var self = this
+
+        await self.$setState({
+          requestedService: {
+            title: title,
+            specification_id: specification_id,
+            category_id: category_id,
+            delivery_date : delivery_date,
+          }
+        });
+        self.setSheetInitialSize();
+      },
+      requestService: function () {
+        var self = this
+        var app = self.$app
+
+        let serviceData = app.form.convertToData('#service-request-form');
+
+        if (!self.checkDeliveryDate(serviceData.delivery_date)) {
+          app.dialog.close()
+          app.dialog.alert('Data de entrega inválida')
+          return;
+        }
+
+        app.dialog.confirm("Tem certeza que deseja fazer esta solicitação?", function () {
+          app.dialog.preloader("Realizando solicitação...")
+ 
+          serviceData.location_id = Number(serviceData.location_id)
+          serviceData.category_id = Number(serviceData.category_id)
+          serviceData.specification_id = Number(serviceData.specification_id)
+
+          app.api.postServiceRequest(serviceData).then((res) => {
+            app.dialog.close()
+            app.sheet.close()
+            app.view.main.router.navigate('/')
+          }).catch(() => {
+            app.dialog.close()
+            app.dialog.alert('Ocorreu um erro inesperado, tente novamente!')
+          })
+        })
+      },
+      resizeSheetContent: function (){
+        var tab = Dom7('#tab_service_request');
+        var sheet = Dom7('#sheet');
+        
+        if(tab.height() < this.sheetInitialSize){
+          sheet.css("height",tab.height()+"px");
+          return;
+        }
+        sheet.css("height","auto");
+      },
+      setSheetInitialSize: function (){
+        this.sheetInitialSize = Dom7("#sheet").height();
+      },
+      checkDeliveryDate: function (delivery_date) {
+        if (new Date(delivery_date) < new Date(this.minDate) || delivery_date == null) {
+          return false;
+        }
+        return true;
+      },
+    },
+    on: {
+      pageInit: function (e, page) {
+        let self = this;
+
+        this.lodaData();
+
+        window.onresize = function() {
+          self.resizeSheetContent();
+        }
+      }
+    },
+  }
 </script>
