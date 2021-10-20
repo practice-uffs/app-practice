@@ -57,7 +57,7 @@
         var self = this;
         var app = self.$app;
 
-        app.storage.getNews().then((news) => {
+        app.api.getNews().then((news) => {
           self.$setState({
             news: news,
           });

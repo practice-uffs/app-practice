@@ -2,21 +2,26 @@ import $$ from 'dom7'
 import Framework7 from 'framework7/framework7.esm.bundle.js'
 
 // Import F7 Styles
-import 'framework7/css/framework7.bundle.css'
+import 'framework7/css/framework7.bundle.css';
 
 // Import Icons and App Custom Styles
-import '../css/icons.css'
-import '../css/app.css'
+import '../css/icons.css';
+import '../css/app.css';
 // Import Cordova APIs
-import cordovaApp from './cordova-app.js'
+import cordovaApp from './cordova-app.js';
 // Import Routes
-import routes from './routes.js'
+import routes from './routes.js';
 // Import analytics stuff 
-import Abalytics from './abalytics.js'
-import { storage } from './storage.js'
+import Abalytics from './abalytics.js';
+
+import { Api } from './api';
+import { Checkin } from './checkin';
+import { Storage } from './storage.js';
+import { QrCodeResponder } from './qrCodeResponder.js';
+import { Aura } from './aura';
 
 // Import main app component
-import App from '../app.f7.html'
+import App from '../app.f7.html';
 
 var app = new Framework7({
   root: '#app', // App root element
@@ -68,7 +73,11 @@ var app = new Framework7({
       }
 
       Abalytics.init(f7)
-      storage.init(f7)
+      new Storage(f7);
+      new Api(f7);
+      new Checkin(f7);
+      new QrCodeResponder(f7);
+      new Aura(f7);
     },
   },
 })

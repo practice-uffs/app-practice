@@ -313,7 +313,7 @@
         var self = this;
         var app = self.$app;
 
-        app.storage
+        app.api
           .getRequestedServices()
           .then((services) => {
             this.separateServices(services);
