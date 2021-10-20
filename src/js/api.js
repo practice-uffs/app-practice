@@ -103,33 +103,6 @@ export class Api{
         });
     };
 
-    async getServiceSpecifications(){
-        var self = this;
-        var app = self.app;
-
-        return await app.request.promise.get(app.api.url + "specifications")
-        .then((res) => {
-            let data = JSON.parse(res.data);
-            if(data.error){
-                storage.requestLogout().then(res => {
-                    if (!res) {
-                        return;
-                    }
-                    app.dialog.alert("Sessão expirada ou inválida, faça login novamente!");
-                    app.views.main.router.navigate("/");
-                })
-                return;
-            }
-            // Grouping services by category
-            let service_specifications = JSON.parse(res.data);
-            service_specifications = service_specifications.reduce((list, x) => {
-                (list[x["category_id"]] = list[x["category_id"]] || []).push(x);
-                return list;
-            }, {});
-            return service_specifications;
-        });
-    };
-
     async getRequestedServices() {
         var self = this;
         var app = self.app;
@@ -187,30 +160,6 @@ export class Api{
                 return;
             }
             return JSON.parse(res.data);
-        });
-    };
-
-
-    async postServiceRequest(service){
-        var self = this;
-        var app = self.app;
-
-        return await app.storage.getUserData().then(async (userData) => {
-            service.user_id = userData.id;
-            return await app.request.promise.post(app.api.url + "services", service).then((res) => {
-                let data = JSON.parse(res.data);
-                if(data.error){
-                    app.storage.requestLogout().then(res => {
-                    if (!res) {
-                        return;
-                    }
-                    app.dialog.alert("Sessão expirada ou inválida, faça login novamente!");
-                    app.views.main.router.navigate("/");
-                    })
-                    return;
-                }
-                return true;
-                });
         });
     };
 
