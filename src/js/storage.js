@@ -1,4 +1,4 @@
-export class Storage{
+export class Storage {
 	constructor(app) {
 		this.prodApiURL = "https://mural.practice.uffs.cc/api/";
 		this.testApiURL = "https://practice.uffs.edu.br/api/v0/";
@@ -228,7 +228,7 @@ export class Storage{
 		localStorage["fcmToken"] = JSON.stringify(fcmToken);
 	};
 
-	removeFcmToken(){
+	removeFcmToken() {
 		localStorage.removeItem("fcmToken");
 	};
 };
