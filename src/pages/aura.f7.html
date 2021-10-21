@@ -164,6 +164,9 @@
                 text : data? data : "Desculpe, infelizmente eu não entendi",
                 textFooter : self.getTimestamp(),
               }
+
+              app.aura.addMessageToChat(answer);
+
               // Show typing indicator
               self.messages.showTyping({
                 header: answer.name + ' is typing',
