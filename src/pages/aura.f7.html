@@ -144,16 +144,16 @@
           });
 
           if (responseInProgress) return;
+
+          if (!app.aura.getConsent()) {
+            self.askAuraConsent();
+            return;
+          }
           // Receive dummy message
           receiveMessage(text);
         });       
 
         async function receiveMessage(received) {
-          if (app.aura.getConsent() === null) {
-            console.log("Tem q pedir")
-            self.askAuraConsent();
-            return;
-          }
           self.getAuraAnswer(received).then(data => {
             responseInProgress = true;
   
@@ -181,8 +181,6 @@
               }, 1000);
             }, 1000);
           }); 
-          
-          
         }
         receiveMessage("se apresente");
       },
@@ -196,14 +194,18 @@
         answer.name = "Aura";
         answer.avatar = "https://img.icons8.com/plasticine/2x/bot.png";
         answer.type = "received";
-        answer.text = "";
 
+        const consentButtons = document.querySelector('.aura-consent-buttons');
+        consentButtons.style.display = "none";
 
-        if (consent) {
-          answer.text = "Ótimo, obrigado! ";
+        if (!consent) {
+          self.messages.clear();
+          this.messageInit();
+          return;
         }
-        answer.text += "Com o que eu posso ajudar hoje?<br><br>"; 
 
+        answer.text = "Ótimo, obrigada! Com o que eu posso ajudar hoje?";
+        
         self.messages.showTyping({
           header: answer.name + ' is typing',
           avatar: answer.avatar
@@ -211,10 +213,7 @@
 
         setTimeout(function () {
           self.messages.addMessage(answer);
-          self.messages.hideTyping();
-
-          const consentButtons = document.querySelector('.aura-consent-buttons');
-          consentButtons.style.display = "none";
+          self.messages.hideTyping();   
         }, 3000);
       },
       askAuraConsent: function () {
@@ -225,7 +224,7 @@
         answer.avatar = "https://img.icons8.com/plasticine/2x/bot.png";
         answer.type = "received";
           
-        answer.text = "Olá, meu nome é Aura e estou aqui para lhe ajudar.<br>Para que eu consiga evoluir constantemente, todas as mensagens e interações que você fizer comigo são armazenadas em um banco de dados, na íntegra. As mensagens não estão associadas a você (a autoria é anonimizada). Você concorda com isso?"; 
+        answer.text = "Para que eu consiga evoluir constantemente, todas as mensagens e interações que você fizer comigo são armazenadas em um banco de dados, na íntegra. As mensagens não estão associadas a você (a autoria é anonimizada). Você concorda com isso?"; 
         answer.textFooter = self.getTimestamp();
         // Show typing indicator
         self.messages.showTyping({
@@ -239,7 +238,7 @@
           self.messages.hideTyping();
           const consentButtons = document.querySelector('.aura-consent-buttons');
           consentButtons.style.display = "flex";
-        }, 3000);
+        }, 1500);
       },
     },
     on: {
