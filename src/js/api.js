@@ -1,4 +1,4 @@
-export class Api{
+export class Api {
     constructor(app) {
         this.app = app;
         this.app.api = this;
@@ -130,43 +130,48 @@ export class Api{
         });
     };
 
-    async getRequestedServices() {
+    async getRequestedServices(page = 1) {
         var self = this;
         var app = self.app;
-
-        return await app.storage.getUserData().then(async (userData) => {
-            return await app.request.promise.get(app.api.url + "services", { user_id: userData.id }).then((res) => {
-                let data = JSON.parse(res.data);
-                if(data.error){
-                    app.storage.requestLogout().then(res => {
-                        if (!res) {
-                            return;
-                        }
-                        app.dialog.alert("Sessão expirada ou inválida, faça login novamente!");
-                        app.views.main.router.navigate("/");
-                    })
-                    return;
-                }
-                let services = JSON.parse(res.data).data;
-                for (let i = 0; i < services.length; i++) {
-                    services[i].timestamp = app.storage.dateDifference(services[i].created_at);
-                    services[i].created_at = app.storage.formatDateDifference(services[i].timestamp);
-                    services[i].user_id = Number(services[i].user_id);
-                    services[i].category_id = Number(services[i].category_id);
-                    services[i].location_id = Number(services[i].location_id);
-                    services[i].specification_id = Number(services[i].specification_id);
-                    services[i].github_issue_link = services.github_issue_link;
-                    services[i].status = Number(services[i].status);
-                }
-                services.sort((a, b) => (a.timestamp > b.timestamp ? 1 : -1));
-
-                const settings = app.storage.getSettings();
+        return await app.request.promise
+        .get(app.api.url + "mural/orders?page="+page)
+        .then((res) => {
+            let data = JSON.parse(res.data);
+            if(data.error){
+                app.storage.requestLogout().then(res => {
+                    if (!res) {
+                        return;
+                    }
+                    app.dialog.alert("Sessão expirada ou inválida, faça login novamente!");
+                    app.views.main.router.navigate("/");
+                })
+                return;
+            }
+            let services = JSON.parse(res.data).data;
+            let servicesToSave = [];
+            let toReturn = {
+                services: [],
+                meta: data.meta
+            };
+            
+            for (let i = 0; i < services.length; i++) {
+                servicesToSave[i] = {
+                    id: services[i].id,
+                    status: services[i].status,
+                    title: services[i].title,
+                    description: services[i].description,
+                    created_at: services[i].created_at
+                };
                 
-                if (settings.offlineStorage) {
-                    app.storage.setRequestedServices(services);
-                }
-                return services;
-            });
+                toReturn.services[i] = services[i];
+            }
+
+            const settings = app.storage.getSettings();
+            
+            if (settings.offlineStorage) {
+                app.storage.setRequestedServices(servicesToSave);
+            }
+            return toReturn;
         });
     };
 
@@ -190,36 +195,13 @@ export class Api{
         });
     };
 
-
-    async postServiceRequest(service){
+    async getServiceById(id) {
         var self = this;
         var app = self.app;
-
         return await app.storage.getUserData().then(async (userData) => {
-            service.user_id = userData.id;
-            return await app.request.promise.post(app.api.url + "services", service).then((res) => {
-                let data = JSON.parse(res.data);
-                if(data.error){
-                    app.storage.requestLogout().then(res => {
-                    if (!res) {
-                        return;
-                    }
-                    app.dialog.alert("Sessão expirada ou inválida, faça login novamente!");
-                    app.views.main.router.navigate("/");
-                    })
-                    return;
-                }
-                return true;
-                });
-        });
-    };
-
-    async getServiceById(id){
-        var self = this;
-        var app = self.app;
-
-        return await app.storage.getUserData().then(async (userData) => {
-            return await app.request.promise.get(app.api.url + "service/" + id).then((res) => {
+            return await app.request.promise
+            .get(app.api.url + "mural/orders/" + id)
+            .then((res) => {
                 let data = JSON.parse(res.data);
                 if(data.error){
                     app.storage.requestLogout().then(res => {
@@ -228,20 +210,17 @@ export class Api{
                         }
                         app.dialog.alert("Sessão expirada ou inválida, faça login novamente!");
                         app.views.main.router.navigate("/");
-                    });
+                    })
                     return;
                 }
                 let service = JSON.parse(res.data);
-                service.timestamp = app.storage.dateDifference(service.created_at);
-                service.created_at = app.storage.formatDateDifference(service.timestamp);
-                service.user_id = Number(service.user_id);
-                service.category_id = Number(service.category_id);
-                service.location_id = Number(service.location_id);
-                service.specification_id = Number(service.specification_id);
-                service.github_issue_link = service.github_issue_link;
-                service.status = Number(service.status);
-                service.type = Number(service.type);
-                service.hidden = Number(service.hidden);
+                
+                service.comments.forEach(comment => {
+                    comment.user_name = comment.user_id != service.user_id ? "Equipe PRACTICE" : userData.name;
+                    comment.created_at = new Date(comment.created_at).toLocaleDateString("pt-br", {timeZone: 'UTC'});
+                });
+                
+                service.requested_due_date = new Date(service.requested_due_date).toLocaleDateString("pt-br", {timeZone: 'UTC'});
                 service.user = userData;
 
                 const settings = app.storage.getSettings();

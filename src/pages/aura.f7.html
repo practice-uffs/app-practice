@@ -145,6 +145,12 @@
 
           if (responseInProgress) return;
 
+          app.aura.addMessageToChat({
+            text: text,
+            textFooter: self.getTimestamp(),
+            type: "sent"
+          })
+
           if (!app.aura.getConsent()) {
             self.askAuraConsent();
             return;
@@ -166,6 +172,8 @@
 
               answer.textFooter = self.getTimestamp();
 
+              app.aura.addMessageToChat(answer);
+
               // Show typing indicator
               self.messages.showTyping({
                 header: answer.name + ' is typing',
@@ -182,7 +190,21 @@
             }, 1000);
           }); 
         }
-        receiveMessage("se apresente");
+        function loadOldMessages() {
+          let chat = app.aura.getChat();
+
+          if (!chat) {
+            receiveMessage("se apresente");
+            return;
+          }
+
+          for (let i = 0; i < chat.length; i++) {
+            self.messages.addMessage(chat[i]);
+          }
+          self.messages.scroll();
+        }
+
+        loadOldMessages();
       },
       auraConsentAnswer: function (consent) {
         var self = this;
@@ -200,11 +222,13 @@
 
         if (!consent) {
           self.messages.clear();
+          app.aura.clearChat();
           this.messageInit();
           return;
         }
 
         answer.text = "Ótimo, obrigada! Com o que eu posso ajudar hoje?";
+        app.aura.addMessageToChat(answer);
         
         self.messages.showTyping({
           header: answer.name + ' is typing',
@@ -226,11 +250,15 @@
           
         answer.text = "Para que eu consiga evoluir constantemente, todas as mensagens e interações que você fizer comigo são armazenadas em um banco de dados, na íntegra. As mensagens não estão associadas a você (a autoria é anonimizada). Você concorda com isso?"; 
         answer.textFooter = self.getTimestamp();
+
+        app.aura.addMessageToChat(answer);
+
         // Show typing indicator
         self.messages.showTyping({
           header: answer.name + ' is typing',
           avatar: answer.avatar
         });
+
         setTimeout(function () {
           // Add received dummy message
           self.messages.addMessage(answer);

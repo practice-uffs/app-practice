@@ -24,4 +24,35 @@ export class Aura{
         let data  = localStorage.getItem("auraConsent");
         return JSON.parse(data);
     }
+
+    addMessageToChat(message) {
+        var self = this;
+        var app = self.app;
+        const settings = app.storage.getSettings();
+        if (!settings.offlineStorage) {
+            return;
+        }
+
+        let chat = JSON.parse(localStorage.getItem("auraChat"));
+        
+        if (!chat) {
+            chat = [];
+        }
+        if (chat.length >= 200) {
+            chat.shift();
+        }
+
+        chat.push(message);
+
+        localStorage["auraChat"] =  JSON.stringify(chat);
+    }
+
+    getChat() {
+        let chat = JSON.parse(localStorage.getItem("auraChat"));
+		return chat;
+    }
+
+    clearChat() {
+        localStorage.removeItem("auraChat");
+    }
 }
