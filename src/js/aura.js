@@ -16,6 +16,15 @@ export class Aura{
         }).catch(err => err);
     }
 
+    setConsent(consent) {
+        localStorage["auraConsent"] = JSON.stringify(consent);
+    }
+    
+    getConsent() {
+        let data  = localStorage.getItem("auraConsent");
+        return JSON.parse(data);
+    }
+
     addMessageToChat(message) {
         var self = this;
         var app = self.app;
@@ -41,5 +50,9 @@ export class Aura{
     getChat() {
         let chat = JSON.parse(localStorage.getItem("auraChat"));
 		return chat;
+    }
+
+    clearChat() {
+        localStorage.removeItem("auraChat");
     }
 }
