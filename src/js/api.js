@@ -62,18 +62,17 @@ export class Api {
         var self = this;
         var app = self.app;
 
-        return await app.request.promise.get("https://practice.uffs.cc/feed.xml")
-        .then((res) => {
-            let xml_parser = require("fast-xml-parser");
-            let obj = xml_parser.parse(res.data);
-            let news = obj.rss.channel.item;
+        return await app.request.promise.get("https://practice.uffs.edu.br/feed.xml").then((res) => {
+            let xmlParser = require("fast-xml-parser");
+            let feed = xmlParser.parse(res.data);
+            let news = feed.rss.channel.item;
 
             for (let i = 0; i < news.length; i++) {
-            const content = storage.processHTML(news[i].content);
-            news[i].content = content;
+                const content = app.storage.processHTML(news[i].content);
+                news[i].content = content;
 
-            const pubDate = storage.formatDate(news[i].pubDate);
-            news[i].pubDate = pubDate;
+                const pubDate = app.storage.formatDate(news[i].pubDate);
+                news[i].pubDate = pubDate;
             }
             return news;
         });
@@ -111,7 +110,7 @@ export class Api {
         .then((res) => {
             let data = JSON.parse(res.data);
             if(data.error){
-                storage.requestLogout().then(res => {
+                app.storage.requestLogout().then(res => {
                     if (!res) {
                         return;
                     }
@@ -299,7 +298,7 @@ export class Api {
                     fcm_token: token
                 }
 
-                return await storage.app.request.promise.post(app.api.url + "user/channels", data).then( async (res) => {
+                return await app.request.promise.post(app.api.url + "user/channels", data).then( async (res) => {
                     let responseData = JSON.parse(res.data)
                     if(!responseData.id) {
                         return await self.updateFcmToken();

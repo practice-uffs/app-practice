@@ -25,7 +25,7 @@ export class Aura{
         }
 
         let chat = JSON.parse(localStorage.getItem("auraChat"));
-        
+
         if (!chat) {
             chat = [];
         }
