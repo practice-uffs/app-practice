@@ -209,21 +209,6 @@ export class Storage {
 		}
 	};
 
-	setServiceComments(service_id, comments){
-		let service = localStorage.getItem("serviceDetails"+service_id);
-		service = JSON.parse(service);
-		service = {...service, comments: comments};
-		localStorage["serviceDetails"+service_id] =  JSON.stringify(service);
-	};
-
-	getServiceCommentsFromLocalstorage(service_id){
-		let serviceDetails = localStorage.getItem("serviceDetails"+service_id);
-		serviceDetails = JSON.parse(serviceDetails);
-		if (serviceDetails) {
-			return serviceDetails.comments;
-		}
-	};
-
 	setFcmToken(fcmToken){
 		localStorage["fcmToken"] = JSON.stringify(fcmToken);
 	};

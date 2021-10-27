@@ -102,33 +102,6 @@ export class Api {
         });
     };
 
-    async getServiceSpecifications(){
-        var self = this;
-        var app = self.app;
-
-        return await app.request.promise.get(app.api.url + "specifications")
-        .then((res) => {
-            let data = JSON.parse(res.data);
-            if(data.error){
-                app.storage.requestLogout().then(res => {
-                    if (!res) {
-                        return;
-                    }
-                    app.dialog.alert("Sessão expirada ou inválida, faça login novamente!");
-                    app.views.main.router.navigate("/");
-                })
-                return;
-            }
-            // Grouping services by category
-            let service_specifications = JSON.parse(res.data);
-            service_specifications = service_specifications.reduce((list, x) => {
-                (list[x["category_id"]] = list[x["category_id"]] || []).push(x);
-                return list;
-            }, {});
-            return service_specifications;
-        });
-    };
-
     async getRequestedServices(page = 1) {
         var self = this;
         var app = self.app;
@@ -174,26 +147,6 @@ export class Api {
         });
     };
 
-    async getLocations(){
-        var self = this;
-        var app = self.app;
-        
-        return await app.request.promise.get(app.api.url + "locations").then((res) => {
-            let data = JSON.parse(res.data);
-            if(data.error){
-                app.storage.requestLogout().then(res => {
-                    if (!res) {
-                        return;
-                    }
-                    app.dialog.alert("Sessão expirada ou inválida, faça login novamente!");
-                    app.views.main.router.navigate("/");
-                })
-                return;
-            }
-            return JSON.parse(res.data);
-        });
-    };
-
     async getServiceById(id) {
         var self = this;
         var app = self.app;
@@ -229,36 +182,6 @@ export class Api {
                 }
                 return service;
             });
-        });
-    };
-
-    async getServiceComments(service_id){
-        var self = this;
-        var app = self.app;
-
-        return await app.request.promise.get(app.api.url + "service/" + service_id + "/comments").then((res) => {
-            let data = JSON.parse(res.data);
-            if(data.error){
-                app.storage.requestLogout().then(res => {
-                    if (!res) {
-                        return;
-                    }
-                    app.dialog.alert("Sessão expirada ou inválida, faça login novamente!");
-                    app.views.main.router.navigate("/");
-                });
-                return;
-            }
-            let comments = JSON.parse(res.data).data;
-            for (let i = 0; i < comments.length; i++) {
-                comments[i].timestamp = app.storage.dateDifference(comments[i].date);
-                comments[i].date = app.storage.formatDateDifference(comments[i].timestamp);
-            }
-            const settings = app.storage.getSettings();
-
-            if (settings.offlineStorage && !comments.error) {
-                app.storage.setServiceComments(service_id, comments);
-            }
-            return comments;
         });
     };
 
