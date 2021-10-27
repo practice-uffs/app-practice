@@ -19,6 +19,9 @@ import { Checkin } from './checkin';
 import { Storage } from './storage.js';
 import { QrCodeResponder } from './qrCodeResponder.js';
 import { Aura } from './aura';
+import { Websocket } from './websocket';
+
+import Echo from 'laravel-echo';
 
 // Import main app component
 import App from '../app.f7.html';
@@ -78,6 +81,31 @@ var app = new Framework7({
       new Checkin(f7);
       new QrCodeResponder(f7);
       new Aura(f7);
+
+      f7.Pusher = require('pusher-js');
+      f7.Pusher.logToConsole = true
+
+      f7.Echo = new Echo({
+        broadcaster: 'pusher',
+        key: "test",
+        wsHost: "localhost",
+        wsPort: 6001,
+        wssPort: 6001,
+        cluster: 'mt1',
+        forceTLS: false,
+        disableStats: true,
+      });
+
+      var pusher = f7.Echo.connector.pusher
+      var channel = pusher.subscribe("channel-test");
+
+      channel.bind("teste", (data) => {
+          console.log('Recebeu o evento')
+      });
+      // new Websocket(f7);
+
+      // app.websocket.createConnection();
+      // app.websocket.listenToTestEvent();
     },
   },
 })
