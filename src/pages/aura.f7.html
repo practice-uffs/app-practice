@@ -83,69 +83,44 @@
         var app = self.$app;
         var $$ = Dom7;
 
-        // Init Messages
         self.messages = app.messages.create({
           el: '.messages',
 
-          // First message rule
           firstMessageRule: function (message, previousMessage, nextMessage) {
-            // Skip if title
             if (message.isTitle) return false;
-            /* if:
-              - there is no previous message
-              - or previous message type (send/received) is different
-              - or previous message sender name is different
-            */
+
             if (!previousMessage || previousMessage.type !== message.type || previousMessage.name !== message.name) return true;
             return false;
           },
-          // Last message rule
+
           lastMessageRule: function (message, previousMessage, nextMessage) {
-            // Skip if title
             if (message.isTitle) return false;
-            /* if:
-              - there is no next message
-              - or next message type (send/received) is different
-              - or next message sender name is different
-            */
+            
             if (!nextMessage || nextMessage.type !== message.type || nextMessage.name !== message.name) return true;
             return false;
           },
-          // Last message rule
+
           tailMessageRule: function (message, previousMessage, nextMessage) {
-            // Skip if title
             if (message.isTitle) return false;
-              /* if (basically same as lastMessageRule):
-              - there is no next message
-              - or next message type (send/received) is different
-              - or next message sender name is different
-            */
+            
             if (!nextMessage || nextMessage.type !== message.type || nextMessage.name !== message.name) return true;
             return false;
           }
         });
 
-        // Init Messagebar
         var messagebar = app.messagebar.create({
           el: '.messagebar'
         });
 
-        // Response flag
         var responseInProgress = false;
 
-        // Send Message
         $$('.send-link').on('click', function () {
           var text = messagebar.getValue().replace(/\n/g, '<br>').trim();
-          // return if empty message
           if (!text.length) return;
 
-          // Clear area
           messagebar.clear();
-
-          // Return focus to area
           messagebar.focus();
 
-          // Add message to messages
           self.messages.addMessage({
             text: text,
             textFooter: self.getTimestamp(),
@@ -163,7 +138,7 @@
             self.askAuraConsent();
             return;
           }
-          // Receive dummy message
+          
           receiveMessage(text);
         });       
 
@@ -182,16 +157,13 @@
 
               app.aura.addMessageToChat(answer);
 
-              // Show typing indicator
               self.messages.showTyping({
                 header: answer.name + ' is typing',
                 avatar: answer.avatar
               });
 
               setTimeout(function () {
-                // Add received dummy message
                 self.messages.addMessage(answer);
-                // Hide typing indicator
                 self.messages.hideTyping();
                 responseInProgress = false;
               }, 1000);
@@ -220,11 +192,6 @@
 
         app.aura.setConsent(consent);
 
-        var answer = new Object();
-        answer.name = "Aura";
-        answer.avatar = "static/images/aura/aura_icon.png";
-        answer.type = "received";
-
         const consentButtons = document.querySelector('.aura-consent-buttons');
         consentButtons.style.display = "none";
 
@@ -235,7 +202,25 @@
           return;
         }
 
-        answer.text = "Ótimo, obrigada! Com o que eu posso ajudar hoje?";
+        self.messages.addMessage({
+          text: "Concordo",
+          textFooter: self.getTimestamp(),
+        });
+
+        app.aura.addMessageToChat({
+          text: "Concordo",
+          textFooter: self.getTimestamp(),
+          type: "sent"
+        });
+
+        var answer = {
+          name: "Aura",
+          avatar: "static/images/aura/aura_icon.png",
+          type: "received",
+          text: "Ótimo, obrigada! Com o que eu posso ajudar hoje?",
+          textFooter: self.getTimestamp()
+        };
+
         app.aura.addMessageToChat(answer);
         
         self.messages.showTyping({
@@ -251,26 +236,23 @@
       askAuraConsent: function () {
         var self = this;
         var app = self.$app
-        var answer = new Object();
-        answer.name = "Aura";
-        answer.avatar = "static/images/aura/aura_icon.png";
-        answer.type = "received";
-          
-        answer.text = "Para que eu consiga evoluir constantemente, todas as mensagens e interações que você fizer comigo são armazenadas em um banco de dados, na íntegra. As mensagens não estão associadas a você (a autoria é anonimizada). Você concorda com isso?"; 
-        answer.textFooter = self.getTimestamp();
-
+        var answer = {
+          name: "Aura",
+          avatar: "static/images/aura/aura_icon.png",
+          type: "received",
+          text: "Para que eu consiga evoluir constantemente, todas as mensagens e interações que você fizer comigo são armazenadas em um banco de dados, na íntegra. As mensagens não estão associadas a você (a autoria é anonimizada). Você concorda com isso?",
+          textFooter: self.getTimestamp()
+        };
+        
         app.aura.addMessageToChat(answer);
 
-        // Show typing indicator
         self.messages.showTyping({
           header: answer.name + ' is typing',
           avatar: answer.avatar
         });
 
         setTimeout(function () {
-          // Add received dummy message
           self.messages.addMessage(answer);
-          // Hide typing indicator
           self.messages.hideTyping();
           const consentButtons = document.querySelector('.aura-consent-buttons');
           consentButtons.style.display = "flex";
