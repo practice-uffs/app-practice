@@ -185,15 +185,42 @@ export class Api {
         });
     };
 
+    async requestUserFromMural() {
+        var self = this;
+        var app = self.app;
+
+        return await app.request.promise.get(app.api.url + "mural/me")
+        .then((res) => {
+            let data = JSON.parse(res.data);
+            if(data.error){
+                this.requestLogout().then(res => {
+                    if (res) {
+                        app.dialog.alert(
+                            "Sessão expirada ou inválida, faça login novamente!"
+                        );
+                        app.views.main.router.navigate("/");
+                    }
+                });
+                return;
+            }
+            return data.user;
+        });
+    }
+
     async postCommentByServiceId(service_id, comment){
         var self = this;
         var app = self.app;
 
-        return await app.storage.getUserData().then(async (userData) => {
-            comment.user_id = userData.id;
-            comment.user = userData.username;
+        return await app.api.requestUserFromMural().then(async (userData) => {
+            var newComment = {
+                content: comment.text,
+                is_hidden: 0,
+                user_id: userData.id,
+                commentable_id: service_id,
+                commentable_type: "App\\Models\\Order"
+            }
 
-            return await app.request.promise.post(app.api.url + "service/" + service_id + "/comments", comment).then((res) => {
+            return await app.request.promise.post(app.api.url + "mural/comments", newComment).then((res) => {
                 let data = JSON.parse(res.data);
                 if(data.error){
                     app.storage.requestLogout().then(res => {
