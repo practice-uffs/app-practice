@@ -2,33 +2,26 @@
   <div class="page-content infinite-scroll-content no-padding" @infinite=loadMore>
     <div data-name="services" id="services-tab">
       <div class="block">
-        <div class="row">
-          <div class="col-50">
-            <img
-              src="static/images/work.png"
-              style="width: 100%; height: auto"
-            />
-          </div>
-          <div class="col-50">
-            <p class="text-color-gray text-align-justify no-margin">
-              Conheça os serviços que o PRACTICE oferece!
-            </p>
+
+            <lottie-player 
+            src="static/lottie/services.json" background="rgba(0, 0, 0, 0)"  speed="1"  style="width: 85%; height: auto; margin: 0 auto;" loop  autoplay>
+            </lottie-player>
+
+        <div class="block-title block-title-medium elegant">Serviços</div>
+        <div class="block block-strong">
+            <p class="">O PRACTICE conta com vários serviços para ajudar você em suas atividades e projetos.</p>
             <a
               href="/services/service-request/"
               class="button button-raised button-fill margin-top-half"
               >Solicitar serviço</a
             >
-          </div>
         </div>
       </div>
-  
+
       <div class="toolbar tabbar tabbar-scrollable toolbar-bottom" id="tabbar">
-        <div class="toolbar-inner" id="toolbar_inner"><a href="#tab-1" class="tab-link tab-link-active">Aguardando Aprovação</a>
-          <a href="#tab-2" class="tab-link">Em Progresso</a>
-          <a href="#tab-3" class="tab-link">Fila de trabalho</a>
-          <a href="#tab-4" class="tab-link">Aguardando revisão</a>
-          <a href="#tab-5" class="tab-link">Concluídos</a>
-          <a href="#tab-6" class="tab-link">Recusados</a>
+        <div class="toolbar-inner" id="toolbar_inner"><a href="#tab-1" class="tab-link tab-link-active">Solicitados</a>
+          <a href="#tab-2" class="tab-link">Concluídos</a>
+          <a href="#tab-3" class="tab-link">Recusados</a>
         </div>
         <div id="arrow_tabbar">
           <i class="f7-icons" >chevron_right</i>
@@ -41,10 +34,10 @@
           <div class="card">
             <div class="list media-list no-margin">
               <ul>
-                {{#if approvalServices}} {{#unless approvalServices.length}}
+                {{#if orders}} {{#unless orders.length}}
                 <li class="item-content">
                   <div class="item-inner">
-                    <div class="item-title">Nada para mostrar aqui...</div>
+                    <div class="item-title">Nada por aqui ainda 😥</div>
                     <div class="item-text no-wrap">
                       <a href="/services/service-request/"
                         >Clique aqui para solicitar um serviço!</a
@@ -52,24 +45,22 @@
                     </div>
                   </div>
                 </li>
-                {{else}} {{#each approvalServices}}
+                {{else}} {{#each orders}}
                 <li>
                   <a href="/services/{{this.id}}/" class="item-link item-content">
                     <div class="item-inner">
                       <div class="item-title-row">
-                        <div
-                          style="
-                            color: var(--color-3);
-                            position: absolute;
-                            left: -9px;
-                          "
-                        >
-                          &#8226;
-                        </div>
-                        <div class="item-title">{{this.title}}</div>
-                        <div class="item-after">{{this.created_at}}</div>
+                        <div class="item-title small">{{ this.service.name}}</div>
+                        <div class="item-after"><span class="badge color-{{ this.status_color }}">{{ this.status_text }}</span></div>
                       </div>
-                      <div class="item-text no-wrap">{{this.description}}</div>
+                      <div class="item-title mt-2"><strong>{{this.title}}</strong></div>
+                      <div class="item-text no-wrap mt-2">{{this.description}}</div>
+                      <div class="item-text mt-2">
+                          <svg xmlns="http://www.w3.org/2000/svg" style="width: 16px;" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                          </svg>
+                          {{this.created_at}}
+                      </div>
                     </div>
                   </a>
                 </li>
@@ -96,14 +87,14 @@
           </div>
         </div>
         <div class="tab" id="tab-2">
-          <!-- Progress services -->
+          <!-- Done services -->
           <div class="card">
             <div class="list media-list no-margin">
               <ul>
-                {{#if progressServices}} {{#unless progressServices.length}}
+                {{#if completedOrders}} {{#unless completedOrders.length}}
                 <li class="item-content">
                   <div class="item-inner">
-                    <div class="item-title">Nada para mostrar aqui...</div>
+                    <div class="item-title">Nada por aqui ainda 😥</div>
                     <div class="item-text no-wrap">
                       <a href="/services/service-request/"
                         >Clique aqui para solicitar um serviço!</a
@@ -111,19 +102,18 @@
                     </div>
                   </div>
                 </li>
-                {{else}} {{#each progressServices}}
+                {{else}} {{#each completedOrders}}
                 <li>
                   <a href="/services/{{this.id}}/" class="item-link item-content">
                     <div class="item-inner">
                       <div class="item-title-row">
                         <div
                           style="
-                            color: var(--color-2);
+                            color: var(--color-5);
                             position: absolute;
                             left: -9px;
                           "
                         >
-                          &#8226;
                         </div>
                         <div class="item-title">{{this.title}}</div>
                         <div class="item-after">{{this.created_at}}</div>
@@ -154,130 +144,14 @@
           </div>
         </div>
         <div class="tab" id="tab-3">
-          <!-- In queue services -->
-          <div class="card">
-            <div class="list media-list no-margin">
-              <ul>
-                {{#if queueServices}} {{#unless queueServices.length}}
-                <li class="item-content">
-                  <div class="item-inner">
-                    <div class="item-title">Nada para mostrar aqui...</div>
-                    <div class="item-text no-wrap">
-                      <a href="/services/service-request/"
-                        >Clique aqui para solicitar um serviço!</a
-                      >
-                    </div>
-                  </div>
-                </li>
-                {{else}} {{#each queueServices}}
-                <li>
-                  <a href="/services/{{this.id}}/" class="item-link item-content">
-                    <div class="item-inner">
-                      <div class="item-title-row">
-                        <div
-                          style="
-                            color: var(--color-2);
-                            position: absolute;
-                            left: -9px;
-                          "
-                        >
-                          &#8226;
-                        </div>
-                        <div class="item-title">{{this.title}}</div>
-                        <div class="item-after">{{this.created_at}}</div>
-                      </div>
-                      <div class="item-text no-wrap">{{this.description}}</div>
-                    </div>
-                  </a>
-                </li>
-                {{/each}} {{/unless}} {{else}} {{#each '123'}}
-                <li>
-                  <a
-                    class="item-link item-content skeleton-text skeleton-effect-blink"
-                  >
-                    <div class="item-inner">
-                      <div class="item-title-row">
-                        <div class="item-title">____________</div>
-                        <div class="item-after">_____</div>
-                      </div>
-                      <div class="item-text no-wrap">
-                        ____________________________________
-                      </div>
-                    </div>
-                  </a>
-                </li>
-                {{/each}} {{/if}}
-              </ul>
-            </div>
-          </div>
-        </div>
-        <div class="tab" id="tab-4">
-          <!-- Review services -->
-          <div class="card">
-            <div class="list media-list no-margin">
-              <ul>
-                {{#if reviewServices}} {{#unless reviewServices.length}}
-                <li class="item-content">
-                  <div class="item-inner">
-                    <div class="item-title">Nada para mostrar aqui...</div>
-                    <div class="item-text no-wrap">
-                      <a href="/services/service-request/"
-                        >Clique aqui para solicitar um serviço!</a
-                      >
-                    </div>
-                  </div>
-                </li>
-                {{else}} {{#each reviewServices}}
-                <li>
-                  <a href="/services/{{this.id}}/" class="item-link item-content">
-                    <div class="item-inner">
-                      <div class="item-title-row">
-                        <div
-                          style="
-                            color: var(--color-2);
-                            position: absolute;
-                            left: -9px;
-                          "
-                        >
-                          &#8226;
-                        </div>
-                        <div class="item-title">{{this.title}}</div>
-                        <div class="item-after">{{this.created_at}}</div>
-                      </div>
-                      <div class="item-text no-wrap">{{this.description}}</div>
-                    </div>
-                  </a>
-                </li>
-                {{/each}} {{/unless}} {{else}} {{#each '123'}}
-                <li>
-                  <a
-                    class="item-link item-content skeleton-text skeleton-effect-blink"
-                  >
-                    <div class="item-inner">
-                      <div class="item-title-row">
-                        <div class="item-title">____________</div>
-                        <div class="item-after">_____</div>
-                      </div>
-                      <div class="item-text no-wrap">
-                        ____________________________________
-                      </div>
-                    </div>
-                  </a>
-                </li>
-                {{/each}} {{/if}}
-              </ul>
-            </div>
-          </div>
-        </div>
-        <div class="tab" id="tab-5">
           <!-- Done services -->
           <div class="card">
             <div class="list media-list no-margin">
               <ul>
-                {{#if doneServices}} {{#unless doneServices.length}}
+                {{#if refusedOrders}} {{#unless refusedOrders.length}}
                 <li class="item-content">
                   <div class="item-inner">
-                    <div class="item-title">Nada para mostrar aqui...</div>
+                    <div class="item-title">Nada por aqui ainda 😁</div>
                     <div class="item-text no-wrap">
                       <a href="/services/service-request/"
                         >Clique aqui para solicitar um serviço!</a
@@ -285,65 +159,7 @@
                     </div>
                   </div>
                 </li>
-                {{else}} {{#each doneServices}}
-                <li>
-                  <a href="/services/{{this.id}}/" class="item-link item-content">
-                    <div class="item-inner">
-                      <div class="item-title-row">
-                        <div
-                          style="
-                            color: var(--color-5);
-                            position: absolute;
-                            left: -9px;
-                          "
-                        >
-                          &#8226;
-                        </div>
-                        <div class="item-title">{{this.title}}</div>
-                        <div class="item-after">{{this.created_at}}</div>
-                      </div>
-                      <div class="item-text no-wrap">{{this.description}}</div>
-                    </div>
-                  </a>
-                </li>
-                {{/each}} {{/unless}} {{else}} {{#each '123'}}
-                <li>
-                  <a
-                    class="item-link item-content skeleton-text skeleton-effect-blink"
-                  >
-                    <div class="item-inner">
-                      <div class="item-title-row">
-                        <div class="item-title">____________</div>
-                        <div class="item-after">_____</div>
-                      </div>
-                      <div class="item-text no-wrap">
-                        ____________________________________
-                      </div>
-                    </div>
-                  </a>
-                </li>
-                {{/each}} {{/if}}
-              </ul>
-            </div>
-          </div>
-        </div>
-        <div class="tab" id="tab-6">
-          <!-- Done services -->
-          <div class="card">
-            <div class="list media-list no-margin">
-              <ul>
-                {{#if refusedServices}} {{#unless refusedServices.length}}
-                <li class="item-content">
-                  <div class="item-inner">
-                    <div class="item-title">Nada para mostrar aqui...</div>
-                    <div class="item-text no-wrap">
-                      <a href="/services/service-request/"
-                        >Clique aqui para solicitar um serviço!</a
-                      >
-                    </div>
-                  </div>
-                </li>
-                {{else}} {{#each refusedServices}}
+                {{else}} {{#each refusedOrders}}
                 <li>
                   <a href="/services/{{this.id}}/" class="item-link item-content">
                     <div class="item-inner">
@@ -422,12 +238,9 @@
   export default {
     data: function () {
       return {
-        approvalServices : [],
-        progressServices : [],
-        queueServices: [],
-        reviewServices: [],
-        doneServices : [],
-        refusedServices : [],
+        orders : [],
+        completedOrders : [],
+        refusedOrders : [],
         nextPage: [],
         allowInfinite: true
       };
@@ -464,42 +277,48 @@
             );
           });
       },
+      statusInfo: function ( status ) {
+          let info = {
+              'todo': { 'text': 'Em análise', 'color': 'pink'},
+              'doing': { 'text': 'Em andamento', 'color': 'blue'},
+              'review': { 'text': 'Aguardando sua opinião', 'color': 'red'},
+              'completed': { 'text': 'Aguardando', 'color': 'green'}
+          };
+          
+          return info[status] ? info[status] : { 'text': 'Análise', 'color': 'red'};
+      },
       separateServices: function ( services ) {
         var self = this;
         var app = self.$app;
         
         // Processing data
-        let approvalServices = this.approvalServices;
-        let progressServices = this.progressServices;
-        let queueServices = this.queueServices;
-        let reviewServices = this.reviewServices;
-        let doneServices = this.doneServices;
-        let refusedServices = this.refusedServices;
+        let orders = this.orders;
+        let completedOrders = this.completedOrders;
+        let refusedOrders = this.refusedOrders;
 
         for (let i = 0; i < services.length; i++) {
-          if (services[i].status === null){
-            approvalServices.push(services[i]);
-          } else if (services[i].status === 'doing'){
-            progressServices.push(services[i]);
-          } else if (services[i].status === 'todo'){
-            queueServices.push(services[i]);
-          } else if (services[i].status === 'review'){
-            reviewServices.push(services[i]);
-          }else if (services[i].status === 'completed'){
-            doneServices.push(services[i]);
-          } else if (services[i].status === 'closed'){
-            refusedServices.push(services[i]);
+
+          let isFinished = services[i].status &&
+                           (services[i].status === 'completed' || services[i].status === 'closed');            
+          
+          let statusInfo = this.statusInfo(services[i].status);
+          services[i].status_text = statusInfo.text;
+          services[i].status_color = statusInfo.color;
+
+          if (!isFinished) {
+            orders.push(services[i]);
+          } else if (services[i].status === 'completed') {
+            completedOrders.push(services[i]);
+          } else if (services[i].status === 'closed') {
+            refusedOrders.push(services[i]);
           }
         }
         self.resizeListServices();
         
         self.$setState({
-          approvalServices : approvalServices,
-          progressServices : progressServices,
-          queueServices : queueServices,
-          reviewServices : reviewServices,
-          doneServices : doneServices,
-          refusedServices : refusedServices,
+          orders : orders,
+          completedOrders : completedOrders,
+          refusedOrders : refusedOrders,
         });
       },
       resizeListServices : function () {
