@@ -10,6 +10,9 @@
   --color-3: #FCAE17;
   --color-4: #FA8334;
   --color-5: #07a092;
+  --practice-color-azul: #007C9D;
+  --practice-color-amarelo: #FFAF00;
+  --practice-color-laranja: #FF8429;
   --f7-theme-color: var(--color-2);
   --f7-theme-color-rgb: var(--color-2);
   --f7-theme-color-shade: var(--color-1);
@@ -174,4 +177,29 @@ a.link {
     font-weight: 200;
     font-size: 2em;
     text-transform: upperCase;
+}
+
+.elegant {
+    font-weight: 400;
+}
+
+.profile-img {
+    object-fit: cover;
+    border-radius:50%;
+    width: 120px;
+    height: 120px;
+}
+
+.small {
+    font-size: 0.8em;
+}
+
+.icon-service {
+    width: 16px;
+    height: 16px;
+    margin-right: 3px;
+}
+
+.mt-2 {
+    margin-top: 0.5em;
 }
