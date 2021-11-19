@@ -35,7 +35,10 @@
             </div>
             {{/js_if}}
 
-            <div class="block-title block-title-medium">{{service.title}}</div>
+            <div class="block-title block-title-medium display-flex">
+                <i class="f7-icons margin-right">briefcase</i>
+                <span class="flex-grow">{{service.title}}</span>
+            </div>
 
             <div class="list media-list">
                 <ul>
@@ -61,13 +64,13 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                     </svg>
-                    Local: {{ location.name }}
+                    <strong>Local:</strong> {{ location.name }}
                 </div>
                 <div class="block-footer">
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon-service" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                     </svg>
-                    Sugestão de entrega:</b> {{service.requested_due_date}}
+                    <strong>Sugestão de entrega:</strong> {{service.requested_due_date}}
                 </div>
                 {{#if service.github_issue_link}}
                 <div class="block-footer">
@@ -79,7 +82,7 @@
                 {{/if}}
             </div>
 
-            <div class="block-header">Interações</div>
+            <div class="block-header block-title-medium">Interações</div>
 
             <div class="timeline no-padding-left no-margin-top">
                 <!-- Comment skeletons -->
@@ -113,9 +116,12 @@
                         <div class="card">
                             <div class="card-content card-content-padding">{{ this.content }}</div>
                         </div>
-                        <div class="row">
+                        <div class="row mt-2">
                             <div class="timeline-item-time">
-                                {{ this.user_name }} <small>em {{ this.created_at }}</small>
+                                <div class="display-flex">
+                                    <i class="f7-icons" style="font-size: 18px; margin-right: 3px;">person_circle</i>
+                                    <span class="flex-grow">{{ this.user_name }} <small>em {{ this.created_at }}</small></span>
+                                </div>
                             </div>
                         </div>                        
                     </div>
