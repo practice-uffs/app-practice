@@ -1,34 +1,6 @@
 <template>
   <div data-name="news">
     {{#if news}} {{#each news}}
-    <!-- <div class="card card-expandable">
-      <div class="card-content">
-        <div class="card-expandable-header">
-          <div
-            class="thumb-image"
-            style="background-image: url(https://practice.uffs.cc/{{this.image.feature}});"
-          ></div>
-          <a
-            href="#"
-            class="link card-close card-opened-fade-in"
-            style="position: absolute; right: 15px; top: 15px"
-          >
-            <i class="icon f7-icons">multiply_circle_fill</i>
-          </a>
-        </div>
-        <div class="card-content-padding">
-          <h4
-            class="no-margin margin-bottom margin-right"
-            style="font-weight: normal"
-          >
-            {{this.title}}
-          </h4>
-          <p><small>{{this.pubDate}}</small></p>
-          <br />
-          <div class="block text-align-justify">{{this.content}}</div>
-        </div>
-      </div>
-    </div> -->
     <div class="card card-expandable">
       <div class="card-content">
         <div class="thumb-image" style="background-image: url(https://practice.uffs.cc/{{this.image.feature}});">
