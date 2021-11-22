@@ -72,6 +72,8 @@ var app = new Framework7({
         })
       }
 
+      window.screen.orientation.lock('portrait');
+
       Abalytics.init(f7)
       new Storage(f7);
       new Api(f7);
