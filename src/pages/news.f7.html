@@ -1,7 +1,7 @@
 <template>
   <div data-name="news">
     {{#if news}} {{#each news}}
-    <div class="card card-expandable">
+    <!-- <div class="card card-expandable">
       <div class="card-content">
         <div class="card-expandable-header">
           <div
@@ -28,7 +28,26 @@
           <div class="block text-align-justify">{{this.content}}</div>
         </div>
       </div>
+    </div> -->
+    <div class="card card-expandable">
+      <div class="card-content">
+        <div class="thumb-image" style="background-image: url(https://practice.uffs.cc/{{this.image.feature}});">
+          <a href="#" class="link card-close card-opened-fade-in color-white"
+            style="position: absolute; right: 15px; top: 15px">
+            <i class="icon f7-icons">xmark_circle_fill</i>
+          </a>
+        </div>
+        <div class="card-content-padding">
+          <h4 class="no-margin margin-right">
+            {{this.title}}
+          </h4>
+          <p class="no-margin margin-bottom margin-right"><small style="opacity: 0.7"></small>>{{this.pubDate}}</small></p>
+          <br>
+          <div class="block text-align-justify padding-bottom content" style="display:none;">{{this.content}}</div>
+        </div>
+      </div>
     </div>
+
     {{/each}} {{else}} {{#each '01'}}
     <div class="card skeleton-text skeleton-effect-blink">
       <div class="card-content">
@@ -65,10 +84,31 @@
           app.dialog.alert("Ocorreu um erro inesperado, tente novamente!");
         });
       },
+      hideShowContent: function(element, show) {
+        var self = this;
+        var app = self.$app;
+
+        if(show){
+          app.$$(element).find('.content').show();
+          return;
+        } 
+        app.$$(element).find('.content').hide();
+      }
     },
     on: {
       tabInit: function (e, page) {
         this.loadData();
+
+        var self = this;
+        var app = self.$app;
+
+        app.$$(document).on('card:beforeopen', (e) => {
+          self.hideShowContent(e.target, true);
+        });
+
+        app.$$(document).on('card:closed', (e) => {
+          self.hideShowContent(e.target, false);
+        });
       },
     }
   };

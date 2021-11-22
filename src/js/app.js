@@ -1,4 +1,4 @@
-import $$ from 'dom7'
+import 'dom7'
 import Framework7 from 'framework7/framework7.esm.bundle.js'
 
 // Import F7 Styles
@@ -57,7 +57,9 @@ var app = new Framework7({
 
   on: {
     init: function() {
-      var f7 = this
+      var f7 = this;
+      f7.$$ = Dom7;
+      
       if (f7.device.cordova) {
         // Init cordova APIs (see cordova-app.js)
         cordovaApp.init(f7)
