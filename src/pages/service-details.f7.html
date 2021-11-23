@@ -1,299 +1,300 @@
 <template>
-  <div class="page" data-name="service-details">
-    <div class="navbar">
-      <div class="navbar-bg"></div>
-      <div class="navbar-inner sliding">
-        <div class="left">
-          <a href="#" class="link back">
-            <i class="icon icon-back"></i>
-            <span class="if-not-md">Voltar</span>
-          </a>
+    <div class="page" data-name="service-details">
+        <div class="navbar">
+            <div class="navbar-bg"></div>
+            <div class="navbar-inner sliding">
+                <div class="left">
+                    <a href="#" class="link back">
+                        <i class="icon icon-back"></i>
+                        <span class="if-not-md">Voltar</span>
+                    </a>
+                </div>
+                <div class="title">Visualização de serviço</div>
+            </div>
         </div>
-        <div class="title">Visualização de serviço</div>
-      </div>
-    </div>
 
-    <div class="page-content">
-      {{#if service}}
+        <div class="page-content">
+            {{#if service}}
 
-      <!-- Service status -->
-      {{#js_if "this.service.status === 1"}}
-      <div
-        class="block no-margin padding-half text-align-center"
-        style="background-color: var(--color-3)"
-      >
-        <h3 class="text-color-white">Aguardando na fila</h3>
-      </div>
-      {{/js_if}} {{#js_if "this.service.status === 2"}}
-      <div
-        class="block no-margin padding-half text-align-center"
-        style="background-color: var(--color-2)"
-      >
-        <h3 class="text-color-white">Em progresso</h3>
-      </div>
-      {{/js_if}} {{#js_if "this.service.status === 3"}}
-      <div
-        class="block no-margin padding-half text-align-center"
-        style="background-color: var(--color-5)"
-      >
-        <h3 class="text-color-white">Concluído</h3>
-      </div>
-      {{/js_if}} {{#js_if "this.service.status === 4"}}
-      <div
-        class="block no-margin padding-half text-align-center"
-        style="background-color: var(--f7-color-red)"
-      >
-        <h3 class="text-color-white">Recusado</h3>
-      </div>
-      {{/js_if}}
+            <!-- Service status -->
+            {{#js_if "this.service.status === 1"}}
+            <div class="block no-margin padding-half text-align-center" style="background-color: var(--color-3)">
+                <h3 class="text-color-white">Aguardando na fila</h3>
+            </div>
+            {{/js_if}} {{#js_if "this.service.status === 2"}}
+            <div class="block no-margin padding-half text-align-center" style="background-color: var(--color-2)">
+                <h3 class="text-color-white">Em progresso</h3>
+            </div>
+            {{/js_if}} {{#js_if "this.service.status === 3"}}
+            <div class="block no-margin padding-half text-align-center" style="background-color: var(--color-5)">
+                <h3 class="text-color-white">Concluído</h3>
+            </div>
+            {{/js_if}} {{#js_if "this.service.status === 4"}}
+            <div class="block no-margin padding-half text-align-center" style="background-color: var(--f7-color-red)">
+                <h3 class="text-color-white">Recusado</h3>
+            </div>
+            {{/js_if}}
 
-      <!-- Service title -->
-      <div class="block no-margin margin-top-half margin-bottom">
-        <h2 class="text-color-gray">{{service.title}}</h2>
-        {{#if service.github_issue_link}}
-          <p class="text-color-gray no-margin">
-            <a class="link external" href="{{service.github_issue_link}}"><b>Acessar no Github</b></a>
-          </p>
+            <div class="block-title block-title-medium display-flex">
+                <i class="f7-icons margin-right">briefcase</i>
+                <span class="flex-grow">{{service.title}}</span>
+            </div>
+
+            <div class="list media-list">
+                <ul>
+                    <li>
+                        <a href="#" class="item-content">
+                            <div class="item-inner">
+                                <div class="item-title-row">
+                                    <div class="item-title"><strong>{{specification.name}}</strong></div>
+                                    <div class="item-after">{{service.created_at}}</div>
+                                </div>
+                                <div class="item-text" style="margin-top: 10px;">{{ service.description }}</div>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Service content -->
+            <div class="block small">
+                <div class="block-header"></div>
+                <div class="block-footer">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon-service" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                    <strong>Local:</strong> {{ location.name }}
+                </div>
+                <div class="block-footer">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon-service" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    <strong>Sugestão de entrega:</strong> {{service.requested_due_date}}
+                </div>
+                {{#if service.github_issue_link}}
+                <div class="block-footer">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon-service" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                    </svg>
+                    <a class="link external" href="{{service.github_issue_link}}"><b>Acessar no Github</b></a>
+                </div>
+                {{/if}}
+            </div>
+
+            <div class="block-header block-title-medium">Interações</div>
+
+            <div class="timeline no-padding-left no-margin-top">
+                <!-- Comment skeletons -->
+                {{#unless comments}}
+                <div class="skeleton-text skeleton-effect-blink">
+                    {{#each "123"}}
+                    <div class="timeline-item">
+                        <div class="timeline-item-divider"></div>
+                        <div class="timeline-item-content">
+                            <div class="row">
+                                <div class="timeline-item-time">____________________</div>
+                                <div class="timeline-item-time">___________</div>
+                            </div>
+                            <div class="card">
+                                <div class="card-content card-content-padding">
+                                    ________________________________
+                                </div>
+                            </div>
+                            <small>__________________</small>
+                        </div>
+                    </div>
+                    {{/each}}
+                </div>
+                {{/unless}}
+
+                <!-- Comments -->
+                {{#if comments} {{#each comments}}
+                <div class="timeline-item">
+                    <div class="timeline-item-divider"></div>
+                    <div class="timeline-item-content">
+                        <div class="card">
+                            <div class="card-content card-content-padding">{{ this.content }}</div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="timeline-item-time">
+                                <div class="display-flex">
+                                    <i class="f7-icons" style="font-size: 18px; margin-right: 3px;">person_circle</i>
+                                    <span class="flex-grow">{{ this.user_name }} <small>em {{ this.created_at }}</small></span>
+                                </div>
+                            </div>
+                        </div>                        
+                    </div>
+                </div>
+                {{/each}} {{/if}}
+            </div>
+            {{else}}
+            <div class="skeleton-text skeleton-effect-blink">
+                <!-- Service status skeleton -->
+                <div class="block no-margin no-padding">
+                    <div class="skeleton-block" style="height: 40px; width: 100%"></div>
+                </div>
+
+                <!-- Service title skeleton -->
+                <div class="block no-margin margin-top-half margin-bottom">
+                    <h3>_________________________</h3>
+                </div>
+
+                <!-- Service and comment skeletons -->
+                <div class="timeline no-padding-left no-margin-top">
+                    {{#each "1234"}}
+                    <div class="timeline-item">
+                        <div class="timeline-item-divider"></div>
+                        <div class="timeline-item-content">
+                            <div class="row">
+                                <div class="timeline-item-time">____________________</div>
+                                <div class="timeline-item-time">___________</div>
+                            </div>
+                            <div class="card">
+                                <div class="card-content card-content-padding">
+                                    ________________________________
+                                </div>
+                            </div>
+                            <small>__________________</small>
+                        </div>
+                    </div>
+                    {{/each}}
+                </div>
+            </div>
+            {{/if}}
+        </div>
+
+        {{#if comments}}
+        <!-- New comment FAB -->
+        <div class="fab fab-right-bottom color-teal">
+            <a class="sheet-open" href="#" data-sheet=".new-comment-modal"><span><i class="icon f7-icons">plus_bubble</i></span></a>
+        </div>
+
+        <!-- New comment modal -->
+        <div class="sheet-modal new-comment-modal" style="height: auto">
+            <div class="sheet-modal-inner">
+                <form class="list no-margin" id="new-comment-form" onSubmit="return false;" @submit="newComment()">
+                    <ul>
+                        <!-- Text -->
+                        <li class="item-content item-input item-input-outline">
+                            <div class="item-inner">
+                                <div class="item-title item-floating-label">Comentário</div>
+                                <div class="item-input-wrap">
+                                    <textarea name="text" required validate></textarea>
+                                </div>
+                            </div>
+                        </li>
+                        <!-- Buttons -->
+                        <li class="item-content item-input">
+                            <div class="item-inner row">
+                                <input type="submit" class="button button-raised button-fill" value="Confirmar" />
+                            </div>
+                        </li>
+                    </ul>
+                </form>
+            </div>
+        </div>
         {{/if}}
-        <p class="text-color-gray no-margin"><b>Categoria:</b> {{ specification.name }}</p>
-        <p class="text-color-gray no-margin"><b>Localização:</b> {{ location.name }}</p>
-        <p class="text-color-gray no-margin"><b>Sugestão de entrega:</b> {{service.requested_due_date}}</p>
-      </div>
-
-      <!-- Service content -->
-      <div class="timeline no-padding-left no-margin-top">
-        <div class="timeline-item">
-          <div class="timeline-item-divider"></div>
-          <div class="timeline-item-content">
-            <div class="row">
-              <div class="timeline-item-time">{{ service.user.name }}</div>
-            </div>
-            <div class="card">
-              <div class="card-content card-content-padding">
-                {{ service.description }}
-              </div>
-            </div>
-            <div class="timeline-item-time">{{ service.created_at }}</div>
-          </div>
-        </div>
-
-        <!-- Comment skeletons -->
-        {{#unless comments}}
-        <div class="skeleton-text skeleton-effect-blink">
-          {{#each "123"}}
-          <div class="timeline-item">
-            <div class="timeline-item-divider"></div>
-            <div class="timeline-item-content">
-              <div class="row">
-                <div class="timeline-item-time">____________________</div>
-                <div class="timeline-item-time">___________</div>
-              </div>
-              <div class="card">
-                <div class="card-content card-content-padding">
-                  ________________________________
-                </div>
-              </div>
-              <small>__________________</small>
-            </div>
-          </div>
-          {{/each}}
-        </div>
-        {{/unless}}
-
-        <!-- Comments -->
-        {{#if comments} {{#each comments}}
-        <div class="timeline-item">
-          <div class="timeline-item-divider"></div>
-          <div class="timeline-item-content">
-            <div class="row">
-              <div class="timeline-item-time">{{ this.user_name }}&nbsp;</div>
-            </div>
-            <div class="card">
-              <div class="card-content card-content-padding">{{ this.content }}</div>
-            </div>
-            <div class="timeline-item-time">{{ this.created_at }}</div>
-          </div>
-        </div>
-        {{/each}} {{/if}}
-      </div>
-      {{else}}
-      <div class="skeleton-text skeleton-effect-blink">
-        <!-- Service status skeleton -->
-        <div class="block no-margin no-padding">
-          <div class="skeleton-block" style="height: 40px; width: 100%"></div>
-        </div>
-
-        <!-- Service title skeleton -->
-        <div class="block no-margin margin-top-half margin-bottom">
-          <h3>_________________________</h3>
-        </div>
-
-        <!-- Service and comment skeletons -->
-        <div class="timeline no-padding-left no-margin-top">
-          {{#each "1234"}}
-          <div class="timeline-item">
-            <div class="timeline-item-divider"></div>
-            <div class="timeline-item-content">
-              <div class="row">
-                <div class="timeline-item-time">____________________</div>
-                <div class="timeline-item-time">___________</div>
-              </div>
-              <div class="card">
-                <div class="card-content card-content-padding">
-                  ________________________________
-                </div>
-              </div>
-              <small>__________________</small>
-            </div>
-          </div>
-          {{/each}}
-        </div>
-      </div>
-      {{/if}}
     </div>
-
-    {{#if comments}}
-    <!-- New comment FAB -->
-    <div class="fab fab-right-bottom color-teal">
-      <a class="sheet-open" href="#" data-sheet=".new-comment-modal"
-        ><span><i class="icon f7-icons">plus_bubble</i></span></a
-      >
-    </div>
-
-    <!-- New comment modal -->
-    <div class="sheet-modal new-comment-modal" style="height: auto">
-      <div class="sheet-modal-inner">
-        <form
-          class="list no-margin"
-          id="new-comment-form"
-          onSubmit="return false;"
-          @submit="newComment()"
-        >
-          <ul>
-            <!-- Text -->
-            <li class="item-content item-input item-input-outline">
-              <div class="item-inner">
-                <div class="item-title item-floating-label">Comentário</div>
-                <div class="item-input-wrap">
-                  <textarea name="text" required validate></textarea>
-                </div>
-              </div>
-            </li>
-            <!-- Buttons -->
-            <li class="item-content item-input">
-              <div class="item-inner row">
-                <input
-                  type="submit"
-                  class="button button-raised button-fill"
-                  value="Confirmar"
-                />
-              </div>
-            </li>
-          </ul>
-        </form>
-      </div>
-    </div>
-    {{/if}}
-  </div>
 </template>
 <script>
-  export default {
-    data: function () {
-      return {
-        service: null,
-        comments: null,
-        location: null,
-        specification: null
-      };
-    },
-    methods: {
-      loadServices: function () {
-        var self = this;
-        var app = self.$app;
+    export default {
+        data: function () {
+            return {
+                service: null,
+                comments: null,
+                location: null,
+                specification: null
+            };
+        },
+        methods: {
+            loadServices: function () {
+                var self = this;
+                var app = self.$app;
 
-        app.api
-          .getServiceById(self.$route.params.id)
-          .then((service) => {
-            if (service.error) {
-              throw service.error;
-            }
-              
-            self.$setState({
-              service: service,
-              comments: service.comments,
-              location: service.location,
-              specification: service.service
-            });
-          })
-          .catch(() => {
-            let service = app.storage.getServiceDetailsFromLocalstorage(self.$route.params.id);
-            if (service) {
-              self.$setState({
-                service: service,
-                comments: service.comments,
-                location: service.location,
-                specification: service.service,
-              });
-            }
-            app.dialog.alert("Ocorreu um erro inesperado, tente novamente!");
-          });
-      },
-      newComment: function () {
-        var self = this;
-        var app = self.$app;
+                app.api
+                    .getServiceById(self.$route.params.id)
+                    .then((service) => {
+                        if (service.error) {
+                            throw service.error;
+                        }
 
-        app.dialog.confirm(
-          "Tem certeza que deseja criar este comentário?",
-          function () {
-            let comment = app.form.convertToData("#new-comment-form");
+                        self.$setState({
+                            service: service,
+                            comments: service.comments,
+                            location: service.location,
+                            specification: service.service
+                        });
+                    })
+                    .catch(() => {
+                        let service = app.storage.getServiceDetailsFromLocalstorage(self.$route.params.id);
+                        if (service) {
+                            self.$setState({
+                                service: service,
+                                comments: service.comments,
+                                location: service.location,
+                                specification: service.service,
+                            });
+                        }
+                        app.dialog.alert("Ocorreu um erro inesperado, tente novamente!");
+                    });
+            },
+            newComment: function () {
+                var self = this;
+                var app = self.$app;
 
-            app.api
-              .postCommentByServiceId(self.$route.params.id, comment)
-              .then(() => {
-                app.sheet.close();
-                app.view.main.router.refreshPage();
-              })
-              .catch(() => {
-                app.dialog.alert("Ocorreu um erro inesperado, tente novamente!");
-              });
-          }
-        );
-      },
-      onDeviceReady: function () {
-        if (!window.device) {
-          window.device = { platform: 'Browser' };
-        }
+                app.dialog.confirm(
+                    "Tem certeza que deseja criar este comentário?",
+                    function () {
+                        let comment = app.form.convertToData("#new-comment-form");
 
-        this.handleExternalURLs();
-      },
-      handleExternalURLs: function () {
-        if (device.platform.toUpperCase() === 'ANDROID') {
-          Dom7(document).on('click', "a", function (e) {
-            if (Dom7(this).attr('href') != "") {
-              var url = Dom7(this).attr('href');
-              navigator.app.loadUrl(url, { openExternal: true });
-              e.preventDefault();
+                        app.api
+                            .postCommentByServiceId(self.$route.params.id, comment)
+                            .then(() => {
+                                app.sheet.close();
+                                app.view.main.router.refreshPage();
+                            })
+                            .catch(() => {
+                                app.dialog.alert("Ocorreu um erro inesperado, tente novamente!");
+                            });
+                    }
+                );
+            },
+            onDeviceReady: function () {
+                if (!window.device) {
+                    window.device = { platform: 'Browser' };
+                }
+
+                this.handleExternalURLs();
+            },
+            handleExternalURLs: function () {
+                if (device.platform.toUpperCase() === 'ANDROID') {
+                    Dom7(document).on('click', "a", function (e) {
+                        if (Dom7(this).attr('href') != "") {
+                            var url = Dom7(this).attr('href');
+                            navigator.app.loadUrl(url, { openExternal: true });
+                            e.preventDefault();
+                        }
+                    });
+                } else if (device.platform.toUpperCase() === 'IOS') {
+                    Dom7(document).on('click', "a", function (e) {
+                        if (Dom7(this).attr('href') != "") {
+                            var url = Dom7(this).attr('href');
+                            window.open(url, '_system');
+                            e.preventDefault();
+                        }
+                    });
+                } else {
+                    console.log("Estamos no navegador");
+                    // Leave standard behaviour
+                }
             }
-          });
-        } else if (device.platform.toUpperCase() === 'IOS') {
-          Dom7(document).on('click', "a", function (e) {
-            if (Dom7(this).attr('href') != "") {
-              var url = Dom7(this).attr('href');
-              window.open(url, '_system');
-              e.preventDefault();
-            }
-          });
-        } else {
-          console.log("Estamos no navegador");
-          // Leave standard behaviour
-        }
-      }
-    },
-    on: {
-      pageInit: function (e, page) {
-        this.loadServices();
-        document.addEventListener('deviceready', this.onDeviceReady, false);
-      },
-    },
-  };
+        },
+        on: {
+            pageInit: function (e, page) {
+                this.loadServices();
+                document.addEventListener('deviceready', this.onDeviceReady, false);
+            },
+        },
+    };
 </script>

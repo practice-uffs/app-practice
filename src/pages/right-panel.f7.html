@@ -1,11 +1,12 @@
 <template>
   <div class="panel panel-right panel-cover">
     <div class="content-block">
-      <div class="no-gutter padding" style="background-color: var(--color-3)">
-        <div class="margin-top padding-top">
+      <div class="no-gutter padding" style="background-color: var(--f7-color-white-shade)">
+        <div class="padding-top text-align-center">
           {{#if user}}
-          <p class="no-margin"><strong>{{user.name}}</strong></p>
-          <p class="no-margin">{{user.username}}</p>
+            <img src="https://cc.uffs.edu.br/avatar/iduffs/{{user.username}}" class="profile-img">
+            <p class="no-margin"><strong>{{user.name}}</strong></p>
+            <p class="no-margin block-title small">{{user.username}}</p>
           {{else}}
           <p class="no-margin">
             <strong>_________________________________</strong>
@@ -90,6 +91,9 @@
           </li>
         </ul>
       </div>
+    </div>
+    <div style="width: 100%; display:flex; position:fixed; bottom: 3%">
+        <img src="static/images/logo/uffs_greenText.png" style="width: 60%; height: auto; margin: 0 auto;" />              
     </div>
   </div>
 </template>
