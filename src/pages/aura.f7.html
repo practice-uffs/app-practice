@@ -66,6 +66,9 @@
         var app = self.$app;
 
         return app.aura.requestAnswer(input).then((answer) => {
+          if(answer){
+            answer = answer.replace(/(Minerva)/gi, 'Aura');
+          }
           return answer;
         });
       },
