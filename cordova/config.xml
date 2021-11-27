@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="cc.uffs.practice" version="0.4.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="cc.uffs.practice" version="0.4.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
     <name>PRACTICE</name>
     <description>
       Toda inovação que o PRACTICE oferece ao alcance de um toque na tela!
@@ -43,12 +43,21 @@
       <splash density="port-xhdpi" src="res/screen/android/drawable-xhdpi/screen.png" />
       <splash density="port-xxhdpi" src="res/screen/android/drawable-xxhdpi/screen.png" />
       <splash density="port-xxxhdpi" src="res/screen/android/drawable-xxxhdpi/screen.png" />
-      <icon density="ldpi" src="res/icon/android/mipmap-ldpi/ic_launcher.png" />
-      <icon density="mdpi" src="res/icon/android/mipmap-mdpi/ic_launcher.png" />
-      <icon density="hdpi" src="res/icon/android/mipmap-hdpi/ic_launcher.png" />
-      <icon density="xhdpi" src="res/icon/android/mipmap-xhdpi/ic_launcher.png" />
-      <icon density="xxhdpi" src="res/icon/android/mipmap-xxhdpi/ic_launcher.png" />
-      <icon density="xxxhdpi" src="res/icon/android/mipmap-xxxhdpi/ic_launcher.png" />
+      <icon density="ldpi" src="res/icon/android/launcher_icon/mipmap-ldpi/ic_launcher.png" />
+      <icon density="mdpi" src="res/icon/android/launcher_icon/mipmap-mdpi/ic_launcher.png" />
+      <icon density="hdpi" src="res/icon/android/launcher_icon/mipmap-hdpi/ic_launcher.png" />
+      <icon density="xhdpi" src="res/icon/android/launcher_icon/mipmap-xhdpi/ic_launcher.png" />
+      <icon density="xxhdpi" src="res/icon/android/launcher_icon/mipmap-xxhdpi/ic_launcher.png" />
+      <icon density="xxxhdpi" src="res/icon/android/launcher_icon/mipmap-xxxhdpi/ic_launcher.png" />
+      <resource-file src="res/icon/android/notification_icon/drawable-xhdpi/notification_icon.png" target="app/src/main/res/drawable/notification_icon.png" />
+      <resource-file src="res/icon/android/notification_icon/drawable-hdpi/notification_icon.png" target="platforms/android/res/drawable-hdpi/notification_icon.png" />
+      <resource-file src="res/icon/android/notification_icon/drawable-mdpi/notification_icon.png" target="platforms/android/res/drawable-mdpi/notification_icon.png" />
+      <resource-file src="res/icon/android/notification_icon/drawable-xhdpi/notification_icon.png" target="platforms/android/res/drawable-xhdpi/notification_icon.png" />
+      <resource-file src="res/icon/android/notification_icon/drawable-xxhdpi/notification_icon.png" target="platforms/android/res/drawable-xxhdpi/notification_icon.png" />
+      <resource-file src="res/icon/android/notification_icon/drawable-xxxhdpi/notification_icon.png" target="platforms/android/res/drawable-xxxhdpi/notification_icon.png" />
+      <config-file parent="/manifest/application/" target="app/src/main/AndroidManifest.xml">
+        <meta-data android:name="com.google.firebase.messaging.default_notification_icon" android:resource="@drawable/notification_icon" />
+      </config-file>
     </platform>
 
 
