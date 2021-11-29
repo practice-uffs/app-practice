@@ -1,35 +1,22 @@
 <p align="center">
     <img width="600" src=".github/logo.png" title="Logo do projeto"><br /><br />
-    <img src="https://img.shields.io/maintenance/yes/2020?style=for-the-badge" title="Status do projeto">
+    <img src="https://img.shields.io/maintenance/yes/2021?style=for-the-badge" title="Status do projeto">
     <img src="https://img.shields.io/github/workflow/status/ccuffs/template/ci.uffs.cc?label=Build&logo=github&logoColor=white&style=for-the-badge" title="Status do build">
 </p>
 
 # App PRACTICE
 
-Esse repositório contém o código-fonte do aplicativo móvel *PRACTICE*.
+Esse repositório contém o código-fonte do aplicativo móvel *PRACTICE*. Esse aplicativo conta com uma imensa equipe que trabalhou com muito carinho para atender você da melhor forma possível. São quase trinta pessoas em equipes de desenvolvimento, conteúdo, design, mídia, auxílio-gerencial e comunicação!
 
-> **IMPORTANTE:** o aplicativo ainda está em desenvolvimento e logo será colocado à disposição na Google Play.
+> **IMPORTANTE:** o aplicativo está disponível para [download na Google Play](https://play.google.com/store/apps/details?id=cc.uffs.practice).
 
 ### Descrição
 
-Como objetivo principal, o PRACTICE busca estruturar ambientes, capacitar agentes educacionais e produzir e mediar na produção de conteúdos que possibitem a produção de conteúdos de ensino e tecnologias baseadas em metodologias ativas para promover a inovação do processo de aprendizagem de estudantes em componentes curriculares e extracurriculares da UFFS. Esse aplicativo é um dos facilitadores que está sendo criado para ajudar a suprir este objetivo.
+O [Programa de Ampliação e Consolidação de Tecnologias e Inovação no Contexto Educacional (PRACTICE)](https://practice.uffs.edu.br) é um programa multi-campi da [Universidade Federal da Fronteira Sul (UFFS)](https://www.uffs.edu.br).
+O aplicativo PRACTICE permite que seus usuários usufruam das tecnologias e conteúdos criados por nós. O objetivo desse aplicativo é fornecer acesso fácil a informações para a comunidade acadêmica de todos os seis campi pertencentes à UFFS. Com um toque, você pode acessar o calendário acadêmico, os horários de ônibus, o cardápio do RU, conversar com a Aura, nossa Assistente Virtual, e muito mais! E claro, inteirar nossos solicitantes sobre suas demandas, tendo o recurso de notificação vinculado ao Mural, nosso sistema de atendimento.
 
-### Equipe
-
-**Coordenação:**
-* Fernando Bevilacqua - _Professor Ciência da Computação, UFFS Chapecó/SC - [fernando.bevilacqua@uffs.edu.br](mailto:fernando.bevilacqua@uffs.edu.br)_
-
-**[Equipe de desenvolvimento](https://github.com/orgs/practice-uffs/teams/dev):**
-
-
-* [Andrew M. Silva](https://github.com/andrewmsilva)
-* [Cleisson Vieira Raimundi](https://github.com/CleissonVieira)
-* [Estela Vilas Boas](https://github.com/estelavilasboas)
-* [Jean Carlo Hilger](https://github.com/JeanCHilger)
-* [Junior Vitor Ramisch](https://github.com/arufonsekun)
-
-**Suporte:**
-* [Equipe PRACTICE](https://practice.uffs.cc/)
+![Imagem da tela da Aura no aplicativo](.github/mockup-aura.png)
+![Imagem da tela inicial do aplicativo](.github/mockup-home.png)
 
 ## Informações para desenvolvedores
 
@@ -137,7 +124,7 @@ Veja o arquivo [ROADMAP.md](ROADMAP.md) para ter uma ideia de como o projeto dev
 
 ## Licença
 
-Esse projeto é licenciado nos termos da licença open-source [Apache 2.0](https://choosealicense.com/licenses/apache-2.0/) e está disponível de graça.
+Esse projeto é licenciado nos termos da licença open-source [MIT](https://choosealicense.com/licenses/mit) e está disponível de graça.
 
 ## Changelog
 
