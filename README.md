@@ -10,13 +10,14 @@ Esse repositório contém o código-fonte do aplicativo móvel *PRACTICE*. Esse 
 
 > **IMPORTANTE:** o aplicativo está disponível para [download na Google Play](https://play.google.com/store/apps/details?id=cc.uffs.practice).
 
+<p align="center">
+    <img src=".github/imagens-app-practice.png" title="Imagens de algumas telas do aplicativo">
+</p>
+
 ### Descrição
 
 O [Programa de Ampliação e Consolidação de Tecnologias e Inovação no Contexto Educacional (PRACTICE)](https://practice.uffs.edu.br) é um programa multi-campi da [Universidade Federal da Fronteira Sul (UFFS)](https://www.uffs.edu.br).
 O aplicativo PRACTICE permite que seus usuários usufruam das tecnologias e conteúdos criados por nós. O objetivo desse aplicativo é fornecer acesso fácil a informações para a comunidade acadêmica de todos os seis campi pertencentes à UFFS. Com um toque, você pode acessar o calendário acadêmico, os horários de ônibus, o cardápio do RU, conversar com a Aura, nossa Assistente Virtual, e muito mais! E claro, inteirar nossos solicitantes sobre suas demandas, tendo o recurso de notificação vinculado ao Mural, nosso sistema de atendimento.
-
-![Imagem da tela da Aura no aplicativo](.github/mockup-aura.png)
-![Imagem da tela inicial do aplicativo](.github/mockup-home.png)
 
 ## Informações para desenvolvedores
 
