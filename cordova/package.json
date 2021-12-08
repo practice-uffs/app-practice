@@ -1,7 +1,7 @@
 {
   "name": "cc.uffs.practice",
   "displayName": "PRACTICE",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "description": "Toda inovação do PRACTICE ao alcance de um toque!",
   "main": "index.js",
   "scripts": {

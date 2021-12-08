@@ -1,7 +1,7 @@
 export class Storage {
 	constructor(app) {
-		this.prodApiURL = "https://mural.practice.uffs.cc/api/";
-		this.testApiURL = "https://practice.uffs.edu.br/api/v0/";
+		this.prodApiURL = "https://practice.uffs.edu.br/api/v0/";
+		this.testApiURL = "https://api.practice.uffs.cc/v0";
 		this.app = app;
 		app.storage = this;
 	}
