@@ -180,9 +180,13 @@
             app.dialog.password('Digite a senha:', function (password) {
               if (password != 'dev!Practice5918?') {
                 app.dialog.alert('Senha incorreta, modo de desenvolvedor não permitido!')
+                e.target.checked = false
               }
               else
                 self.changeSetting('devMode', true)
+            },
+            function() {
+              e.target.checked = false
             })
         } else if (e.target.name === 'allowNotifications') {
           if (e.target.checked) {
