@@ -4,12 +4,11 @@ export class Api {
         this.app.api = this;
 
         const settings = this.app.storage.getSettings();
-        // if (settings.devMode && settings.testApi) {
-        //     this.url = this.app.storage.testApiURL;
-        // } else {
-        //     this.url = this.app.storage.prodApiURL;
-        // } 
-		this.url = this.app.storage.prodApiURL;
+        if (settings.devMode && settings.testApi) {
+            this.url = this.app.storage.testApiURL;
+        } else {
+            this.url = this.app.storage.prodApiURL;
+        } 
     }
 
     async requestLogin(username, password) {
