@@ -49,7 +49,7 @@
     align-items: center;
     width: 100%;
   }
-  .rating-btn {
+  .rating-btn, .rated-btn {
     margin: 0;
     padding: 0 8px;
     width: fit-content;
@@ -95,15 +95,29 @@
           var messageId = e.target.id;
           var message = $$('.message-id-'+messageId+' .message-content .message-footer');
           if (e.target.value == 1) {
-            self.messages.messages[messageId].footer = "Avalie a resposta <button class='rating-btn f7-icons' value='1'>hand_thumbsup</button>";
-            message.html("Avalie a resposta <button class='rating-btn f7-icons' value='1'>hand_thumbsup</button>");
+            self.messages.messages[messageId].footer = "Avalie a resposta <button class='rated-btn f7-icons' value='1' id='"+messageId+"'>hand_thumbsup</button>";
+            message.html("Avalie a resposta <button class='rated-btn f7-icons' value='1' id='"+messageId+"'>hand_thumbsup</button>");
           } else {
-            self.messages.messages[messageId].footer = "Avalie a resposta <button class='rating-btn f7-icons' value='-1'>hand_thumbsdown</button>";
-            message.html("Avalie a resposta <button class='rating-btn f7-icons' value='-1'>hand_thumbsdown</button>");
+            self.messages.messages[messageId].footer = "Avalie a resposta <button class='rated-btn f7-icons' value='-1' id='"+messageId+"'>hand_thumbsdown</button>";
+            message.html("Avalie a resposta <button class='rated-btn f7-icons' value='-1' id='"+messageId+"'>hand_thumbsdown</button>");
           }
           app.aura.saveChat(self.messages.messages);
-          
+          self.changeRate();
         });  
+        self.changeRate();
+      },
+      changeRate: function () {
+        var $$ = Dom7;
+        var self = this;
+        var app = self.$app;
+        $$('.rated-btn').off('click');
+        $$('.rated-btn').on('click', function (e) {
+          var messageId = e.target.id;
+          self.messages.messages[messageId].footer = "Avalie a resposta <button class='rating-btn f7-icons' id='"+messageId+"' value='1'>hand_thumbsup</button> <button class='rating-btn f7-icons' id='"+messageId+"' value='-1'>hand_thumbsdown</button>";
+          $$('.message-id-'+messageId+' .message-content .message-footer').html("Avalie a resposta <button class='rating-btn f7-icons' id='"+messageId+"' value='1'>hand_thumbsup</button> <button class='rating-btn f7-icons' id='"+messageId+"' value='-1'>hand_thumbsdown</button>");
+          app.aura.saveChat(self.messages.messages);
+          self.rateAnswer();
+        }); 
       },
       resizeMessagesContent: function (){
         let logoAura = Dom7('#logo_aura');
