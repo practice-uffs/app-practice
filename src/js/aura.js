@@ -47,6 +47,10 @@ export class Aura{
         localStorage["auraChat"] =  JSON.stringify(chat);
     }
 
+    saveChat(chat) {
+        localStorage["auraChat"] =  JSON.stringify(chat);
+    }
+
     getChat() {
         let chat = JSON.parse(localStorage.getItem("auraChat"));
 		return chat;
