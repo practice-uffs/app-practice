@@ -101,7 +101,12 @@
             self.messages.messages[messageId].footer = "Avalie a resposta <button class='rated-btn f7-icons' value='-1' id='"+messageId+"'>hand_thumbsdown</button>";
             message.html("Avalie a resposta <button class='rated-btn f7-icons' value='-1' id='"+messageId+"'>hand_thumbsdown</button>");
           }
-          app.aura.saveChat(self.messages.messages);
+          app.aura.rateAnswer(self.messages.messages[messageId].text, e.target.value)
+          .then((res) => {
+            if (res) {
+              app.aura.saveChat(self.messages.messages);
+            }
+          });
           self.changeRate();
         });  
         self.changeRate();
