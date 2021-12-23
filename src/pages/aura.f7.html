@@ -45,7 +45,7 @@
   }
   .message-footer {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
     align-items: center;
     width: 100%;
   }
@@ -55,7 +55,6 @@
     width: fit-content;
     background-color: #fff;
     border: none
-
   }
 </style>
 
@@ -96,10 +95,10 @@
           var message = $$('.message-id-'+messageId+' .message-content .message-footer');
           if (e.target.value == 1) {
             self.messages.messages[messageId].footer = "Avalie a resposta <button class='rated-btn f7-icons' value='1' id='"+messageId+"'>hand_thumbsup</button>";
-            message.html("Avalie a resposta <button class='rated-btn f7-icons' value='1' id='"+messageId+"'>hand_thumbsup</button>");
+            message.html("<button class='rated-btn f7-icons' value='1' id='"+messageId+"'>hand_thumbsup</button>");
           } else {
             self.messages.messages[messageId].footer = "Avalie a resposta <button class='rated-btn f7-icons' value='-1' id='"+messageId+"'>hand_thumbsdown</button>";
-            message.html("Avalie a resposta <button class='rated-btn f7-icons' value='-1' id='"+messageId+"'>hand_thumbsdown</button>");
+            message.html("<button class='rated-btn f7-icons' value='-1' id='"+messageId+"'>hand_thumbsdown</button>");
           }
           app.aura.rateAnswer(self.messages.messages[messageId].text, e.target.value)
           .then((res) => {
