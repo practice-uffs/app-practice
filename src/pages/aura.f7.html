@@ -1,284 +1,305 @@
 <template>
-  <div data-name="aura" id="tab_aura" style="height: 100%;">
+	<div data-name="aura" id="tab_aura" style="height: 100%;">
 
-    <div id="logo_aura">
-      <img src="static/images/aura/aura_logo.png" alt="" width="40%">
-    </div>
-    
-    <div class="page-content messages-content">
-      <div class="messages">
-      </div>  
-    </div>
-    
-    <div class="aura-consent-buttons padding-left padding-right justify-content-space-between">
-        <button class="margin-right button button-raised" @click="auraConsentAnswer(false)">Discordo</button>
-        <button class="margin-left button button-fill button-raised" @click="auraConsentAnswer(true)">Concordo</button>
-    </div>
-    <div class="toolbar messagebar">
-      <div class="toolbar-inner">
-        <div class="messagebar-area">
-          <textarea placeholder="Digite uma mensagem"></textarea>
-        </div>
-        <a class="link send-link" href="#"><span><i class="icon f7-icons theme-color-2">arrowtriangle_right_fill</i></span></a>
-      </div>
-    </div>
-  </div>
+		<div id="logo_aura">
+			<img src="static/images/aura/aura_logo.png" alt="" width="40%">
+		</div>
+
+		<div class="page-content messages-content">
+			<div class="messages">
+			</div>
+		</div>
+
+		<div class="aura-consent-buttons padding-left padding-right justify-content-space-between">
+			<button class="margin-right button button-raised" @click="auraConsentAnswer(false)">Discordo</button>
+			<button class="margin-left button button-fill button-raised"
+				@click="auraConsentAnswer(true)">Concordo</button>
+		</div>
+		<div class="toolbar messagebar">
+			<div class="toolbar-inner">
+				<div class="messagebar-area">
+					<textarea placeholder="Digite uma mensagem"></textarea>
+				</div>
+				<a class="link send-link" href="#"><span><i
+							class="icon f7-icons theme-color-2">arrowtriangle_right_fill</i></span></a>
+			</div>
+		</div>
+	</div>
 </template>
 
-<style>  
-  .messages-content {
-    padding-bottom : 0px;
-    padding-top : 0px;
-  }
-  .aura-consent-buttons {
-    padding-bottom: 10px;
-    display: none;
-    background-color: #fff;
-  }
-  #logo_aura {
-    position: absolute;
-    padding: 20px 0px;
-    z-index: 3;
-    text-align: center;
-    width: 100%;
-    background-image: linear-gradient(to bottom, white, white, rgba(255,255,255,0.8),rgba(255,255,255,0));
-  }
+<style>
+	.messages-content {
+		padding-bottom: 0px;
+		padding-top: 0px;
+	}
+
+	.aura-consent-buttons {
+		padding-bottom: 10px;
+		display: none;
+		background-color: #fff;
+	}
+
+	#logo_aura {
+		position: absolute;
+		padding: 20px 0px;
+		z-index: 3;
+		text-align: center;
+		width: 100%;
+		background-image: linear-gradient(to bottom, white, white, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0));
+	}
 </style>
 
 <script>
-  import 'dom7/dist/dom7.js';
+	import 'dom7/dist/dom7.js';
 
-  export default {
-    data: function () {
-      return {
-        chat: null,
-        messages : null
-      }
-    },
-    methods: {
-      getTimestamp: function () {
-        var date = new Date();
-        var time = date.toTimeString().substring(0,5);
-        return time;
-      },
-      getAuraAnswer: async function (input) {
-        var self = this;
-        var app = self.$app;
+	export default {
+		data: function () {
+			return {
+				chat: null,
+				messages: null
+			}
+		},
+		methods: {
+			getTimestamp: function () {
+				var date = new Date();
+				var time = date.toTimeString().substring(0, 5);
+				return time;
+			},
+			getAuraAnswer: async function (input) {
+				var self = this;
+				var app = self.$app;
 
-        return app.aura.requestAnswer(input).then((answer) => {
-          if(answer){
-            answer = answer.replace(/(Minerva)/gi, 'Aura');
-          }
-          return answer;
-        });
-      },
-      resizeMessagesContent: function (){
-        let logoAura = Dom7('#logo_aura');
-        let aura = Dom7('#tab_aura');
-        let messagebar = Dom7('.messagebar');
-        let messagesContent = Dom7('.messages-content');
-        let height = aura.height() - messagebar.height() + 'px';
-        messagesContent.css('height', height);
-        messagesContent.css('padding-top', logoAura.height() + 10 + 'px');
-      },
-      messageInit: function () {
-        var self = this;
-        var app = self.$app;
-        var $$ = Dom7;
+				return app.aura.requestAnswer(input).then((answer) => {
+					if (answer) {
+						answer = answer.replace(/(Minerva)/gi, 'Aura');
+					}
+					return answer;
+				});
+			},
+			resizeMessagesContent: function () {
+				let logoAura = Dom7('#logo_aura');
+				let aura = Dom7('#tab_aura');
+				let messagebar = Dom7('.messagebar');
+				let messagesContent = Dom7('.messages-content');
+				let height = aura.height() - messagebar.height() + 'px';
+				messagesContent.css('height', height);
+				messagesContent.css('padding-top', logoAura.height() + 10 + 'px');
+			},
+			messageInit: function () {
+				var self = this;
+				var app = self.$app;
+				var $$ = Dom7;
 
-        self.messages = app.messages.create({
-          el: '.messages',
+				self.messages = app.messages.create({
+					el: '.messages',
 
-          firstMessageRule: function (message, previousMessage, nextMessage) {
-            if (message.isTitle) return false;
+					firstMessageRule: function (message, previousMessage, nextMessage) {
+						if (message.isTitle) return false;
 
-            if (!previousMessage || previousMessage.type !== message.type || previousMessage.name !== message.name) return true;
-            return false;
-          },
+						if (!previousMessage || previousMessage.type !== message.type || previousMessage
+							.name !== message.name) return true;
+						return false;
+					},
 
-          lastMessageRule: function (message, previousMessage, nextMessage) {
-            if (message.isTitle) return false;
-            
-            if (!nextMessage || nextMessage.type !== message.type || nextMessage.name !== message.name) return true;
-            return false;
-          },
+					lastMessageRule: function (message, previousMessage, nextMessage) {
+						if (message.isTitle) return false;
 
-          tailMessageRule: function (message, previousMessage, nextMessage) {
-            if (message.isTitle) return false;
-            
-            if (!nextMessage || nextMessage.type !== message.type || nextMessage.name !== message.name) return true;
-            return false;
-          }
-        });
+						if (!nextMessage || nextMessage.type !== message.type || nextMessage.name !==
+							message.name) return true;
+						return false;
+					},
 
-        var messagebar = app.messagebar.create({
-          el: '.messagebar'
-        });
+					tailMessageRule: function (message, previousMessage, nextMessage) {
+						if (message.isTitle) return false;
 
-        var responseInProgress = false;
+						if (!nextMessage || nextMessage.type !== message.type || nextMessage.name !==
+							message.name) return true;
+						return false;
+					}
+				});
 
-        $$('.send-link').on('click', function () {
-          var text = messagebar.getValue().replace(/\n/g, '<br>').trim();
-          if (!text.length) return;
+				var messagebar = app.messagebar.create({
+					el: '.messagebar'
+				});
 
-          messagebar.clear();
-          messagebar.focus();
+				var responseInProgress = false;
 
-          self.messages.addMessage({
-            text: text,
-            textFooter: self.getTimestamp(),
-          });
+				$$('.send-link').on('click', function () {
+					var text = messagebar.getValue().replace(/\n/g, '<br>').trim();
+					if (!text.length) return;
 
-          if (responseInProgress) return;
+					messagebar.clear();
+					messagebar.focus();
 
-          app.aura.addMessageToChat({
-            text: text,
-            textFooter: self.getTimestamp(),
-            type: "sent"
-          })
+					self.messages.addMessage({
+						text: text,
+						textFooter: self.getTimestamp(),
+					});
 
-          if (!app.aura.getConsent()) {
-            self.askAuraConsent();
-            return;
-          }
-          
-          receiveMessage(text);
-        });       
+					if (responseInProgress) return;
 
-        async function receiveMessage(received) {
-          self.getAuraAnswer(received).then(data => {
-            responseInProgress = true;
-  
-            setTimeout(function () {
-              var answer = {
-                name : "Aura",
-                avatar : "static/images/aura/aura_icon.png",
-                type : "received",
-                text : data? data : "Desculpe, infelizmente eu não entendi",
-                textFooter : self.getTimestamp(),
-              }
+					app.aura.addMessageToChat({
+						text: text,
+						textFooter: self.getTimestamp(),
+						type: "sent"
+					})
 
-              app.aura.addMessageToChat(answer);
+					if (!app.aura.getConsent()) {
+						self.askAuraConsent();
+						return;
+					}
 
-              self.messages.showTyping({
-                header: answer.name + ' is typing',
-                avatar: answer.avatar
-              });
+					receiveMessage(text);
+				});
 
-              setTimeout(function () {
-                self.messages.addMessage(answer);
-                self.messages.hideTyping();
-                responseInProgress = false;
-              }, 1000);
-            }, 1000);
-          }); 
-        }
-        function loadOldMessages() {
-          let chat = app.aura.getChat();
+				async function receiveMessage(received) {
+					self.getAuraAnswer(received).then(data => {
+						responseInProgress = true;
 
-          if (!chat) {
-            receiveMessage("se apresente");
-            return;
-          }
+						setTimeout(function () {
+							var answer = {
+								name: "Aura",
+								avatar: "static/images/aura/aura_icon.png",
+								type: "received",
+								text: data ? data : "Desculpe, infelizmente eu não entendi",
+								textFooter: self.getTimestamp(),
+							}
 
-          for (let i = 0; i < chat.length; i++) {
-            self.messages.addMessage(chat[i]);
-          }
-          self.messages.scroll();
-        }
+							app.aura.addMessageToChat(answer);
 
-        loadOldMessages();
-      },
-      auraConsentAnswer: function (consent) {
-        var self = this;
-        var app = self.$app;
+							self.messages.showTyping({
+								header: answer.name + ' is typing',
+								avatar: answer.avatar
+							});
 
-        app.aura.setConsent(consent);
+							setTimeout(function () {
+								self.messages.addMessage(answer);
+								self.messages.hideTyping();
+								responseInProgress = false;
+							}, 1000);
+						}, 1000);
+					});
+				}
 
-        const consentButtons = document.querySelector('.aura-consent-buttons');
-        consentButtons.style.display = "none";
+				function loadOldMessages() {
+					let chat = app.aura.getChat();
 
-        if (!consent) {
-          self.messages.clear();
-          app.aura.clearChat();
-          this.messageInit();
-          return;
-        }
+					if (!chat) {
+						receiveMessage("se apresente");
+						return;
+					}
 
-        self.messages.addMessage({
-          text: "Concordo",
-          textFooter: self.getTimestamp(),
-        });
+					for (let i = 0; i < chat.length; i++) {
+						self.messages.addMessage(chat[i]);
+					}
+					self.messages.scroll();
+				}
 
-        app.aura.addMessageToChat({
-          text: "Concordo",
-          textFooter: self.getTimestamp(),
-          type: "sent"
-        });
+				loadOldMessages();
+			},
+			auraConsentAnswer: function (consent) {
+				var self = this;
+				var app = self.$app;
 
-        var answer = {
-          name: "Aura",
-          avatar: "static/images/aura/aura_icon.png",
-          type: "received",
-          text: "Ótimo, obrigada! Com o que eu posso ajudar hoje?",
-          textFooter: self.getTimestamp()
-        };
+				app.aura.setConsent(consent);
 
-        app.aura.addMessageToChat(answer);
-        
-        self.messages.showTyping({
-          header: answer.name + ' is typing',
-          avatar: answer.avatar
-        });
+				const consentButtons = document.querySelector('.aura-consent-buttons');
+				consentButtons.style.display = "none";
 
-        setTimeout(function () {
-          self.messages.addMessage(answer);
-          self.messages.hideTyping();   
-        }, 3000);
-      },
-      askAuraConsent: function () {
-        var self = this;
-        var app = self.$app
-        var answer = {
-          name: "Aura",
-          avatar: "static/images/aura/aura_icon.png",
-          type: "received",
-          text: "Para que eu consiga evoluir constantemente, todas as mensagens e interações que você fizer comigo são armazenadas em um banco de dados, na íntegra. As mensagens não estão associadas a você (a autoria é anonimizada). Você concorda com isso?",
-          textFooter: self.getTimestamp()
-        };
-        
-        app.aura.addMessageToChat(answer);
+				if (!consent) {
+					if (typeof cordova !== 'undefined') {
+						cordova.plugins.firebase.analytics.logEvent("aura", {"consent": false}).then(res => {
+							console.log(`[${res}] aura: consent=false`);
+						})
+					}
+					self.messages.clear();
+					app.aura.clearChat();
+					this.messageInit();
+					return;
+				}
+				if (typeof cordova !== 'undefined') {
+					cordova.plugins.firebase.analytics.logEvent("aura", {"consent": true}).then(res => {
+						console.log(`[${res}] aura: consent=true`);
+					})
+				}
 
-        self.messages.showTyping({
-          header: answer.name + ' is typing',
-          avatar: answer.avatar
-        });
+				self.messages.addMessage({
+					text: "Concordo",
+					textFooter: self.getTimestamp(),
+				});
 
-        setTimeout(function () {
-          self.messages.addMessage(answer);
-          self.messages.hideTyping();
-          const consentButtons = document.querySelector('.aura-consent-buttons');
-          consentButtons.style.display = "flex";
-        }, 1500);
-      },
-    },
-    on: {
-      tabInit: function (e, page) {
-        this.messageInit();
-        var self = this;
-        this.showButtons = false;
+				app.aura.addMessageToChat({
+					text: "Concordo",
+					textFooter: self.getTimestamp(),
+					type: "sent"
+				});
 
-        setTimeout(() => {
-          this.resizeMessagesContent();
-        }, 1000)
-        
-        window.onresize = function() {
-          self.resizeMessagesContent();
-          var doc = document.getElementsByClassName("messages-content")[0];
-          var maxScroll = Dom7(".messages").height();
-          doc.scrollTo({ top: maxScroll, behavior: 'smooth' });
-        }
-      },
-    },
-  };
+				var answer = {
+					name: "Aura",
+					avatar: "static/images/aura/aura_icon.png",
+					type: "received",
+					text: "Ótimo, obrigada! Com o que eu posso ajudar hoje?",
+					textFooter: self.getTimestamp()
+				};
+
+				app.aura.addMessageToChat(answer);
+
+				self.messages.showTyping({
+					header: answer.name + ' is typing',
+					avatar: answer.avatar
+				});
+
+				setTimeout(function () {
+					self.messages.addMessage(answer);
+					self.messages.hideTyping();
+				}, 3000);
+			},
+			askAuraConsent: function () {
+				var self = this;
+				var app = self.$app
+				var answer = {
+					name: "Aura",
+					avatar: "static/images/aura/aura_icon.png",
+					type: "received",
+					text: "Para que eu consiga evoluir constantemente, todas as mensagens e interações que você fizer comigo são armazenadas em um banco de dados, na íntegra. As mensagens não estão associadas a você (a autoria é anonimizada). Você concorda com isso?",
+					textFooter: self.getTimestamp()
+				};
+
+				app.aura.addMessageToChat(answer);
+
+				self.messages.showTyping({
+					header: answer.name + ' is typing',
+					avatar: answer.avatar
+				});
+
+				setTimeout(function () {
+					self.messages.addMessage(answer);
+					self.messages.hideTyping();
+					const consentButtons = document.querySelector('.aura-consent-buttons');
+					consentButtons.style.display = "flex";
+				}, 1500);
+			},
+		},
+		on: {
+			tabInit: function (e, page) {
+				this.messageInit();
+				var self = this;
+				this.showButtons = false;
+
+				setTimeout(() => {
+					this.resizeMessagesContent();
+				}, 1000)
+
+				window.onresize = function () {
+					self.resizeMessagesContent();
+					var doc = document.getElementsByClassName("messages-content")[0];
+					var maxScroll = Dom7(".messages").height();
+					doc.scrollTo({
+						top: maxScroll,
+						behavior: 'smooth'
+					});
+				}
+			},
+		},
+	};
 </script>

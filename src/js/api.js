@@ -20,8 +20,8 @@ export class Api {
             "password": password,
             "app_id": "1"
         }).then( async (res) => {
-            let data = JSON.parse(res.data);
-            app.storage.setUserData(data.user);
+			let data = JSON.parse(res.data);
+			app.storage.setUserData(data.user);
             if (data.passport) {
                 app.storage.setUserCredentials(data);
                 app.request.setup({
