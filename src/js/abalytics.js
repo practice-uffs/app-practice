@@ -1,91 +1,93 @@
-import $$ from 'dom7';
-import { v4 as uuidv4 } from 'uuid';
-
 /**
  * Analytics with a grain of salt. Integrates Google Analytics into Framework7.
  * 
  * @author Fernando Bevilacqua <dovyski@gmail.com>
  * @license MIT
  */
-var Abalytics = {
-    STORAGE_KEY: 'abalytocs-data-v1',
-    f7: null,
-    uuid: '',
-    
-    trackScreenView: function(screenName) {
-        Abalytics.track('event', 'screen_view', {
-            'screen_name': screenName
-        });
-    },
 
-    addScreenTracking: function() {
-        $$(document).on('page:afterin', function (e) {
-            var page = e.detail;
+export class Abalytics{
+	constructor(app) {
+		this.app = app;
+		app.abalytics = this;
+		var self = this;
 
-            if(!page || page.direction != 'forward') {
-                return;
-            }
+		self.addScreenTracking();
+		self.addTabTracking();
+		cordova.plugins.firebase.analytics.setEnabled(true);
+	};
 
-            Abalytics.trackScreenView(page.name);
-        });
-      },
+	trackScreenView(screenName) {
+		var self = this;
 
-    track: function(type, label, data) {
-        var app = Abalytics.f7;
+		self.track('event', 'screen_view', {
+			'screen_name': screenName
+		});
+	};
 
-        if(type != 'event') {
-            console.error('invalid event type: ' + type);
-            return;
-        }
+	trackTabView(tabName) {
+		var self = this;
 
-        if(!gtag) {
-            console.warn('gtag is not present, unable to track Abalytics:', type, label, data);
-            return;
-        }
+		self.track('event', 'tab_view', {
+			'tab_name': tabName
+		});
+	};
 
-        console.log('[Abalytics] ' + type + ' | ' + label + ': ', data);
-        gtag(type, label, data);
+	addScreenTracking() {
+		var self = this;
+		var app = self.app;
 
-        var payload = {
-            uuid: Abalytics.getUUI() + (app.device.cordova ? '-c' : '-w'),
-            type: type,
-            label: label,
-            data: data
-        };
+		app.$$(document).on('page:afterin', function (e) {
+			var page = e.detail;
 
-        app.request.post('https://api.app.practice.uffs.cc/v0/analytics', payload, function (data) {
-            console.debug('[Abalytics] Payload sent to API: ', data);
-        });
-    },
+			if (!page || page.direction != 'forward') {
+				return;
+			}
 
-    getUUI: function () {
-        var app = Abalytics.f7;
-        var data = app.form.getFormData(Abalytics.STORAGE_KEY);
+			self.trackScreenView(page.name);
+		});
+	};
 
-        if(!data) {
-            // No stored data, let's create some
-            data = {
-                uuid: uuidv4()
-            };
+	addTabTracking() {
+		var self = this;
+		var app = self.app;
 
-            app.form.storeFormData(Abalytics.STORAGE_KEY, data);
-            console.debug('[Abalytics] uuid created: ', data.uuid);
-        }
+		app.$$(document).on('tab:mounted', function (e) {
+			var tab = e.detail;
 
-        Abalytics.uuid = data.uuid;
-        console.debug('[Abalytics] uuid used: ', Abalytics.uuid);
+			if (!tab) {
+				return;
+			}
 
-        return Abalytics.uuid;
-    },
+			self.trackTabView(tab.id);
+		});
+	};
 
-    init: function (f7) {
-        // Save f7 instance
-        Abalytics.f7 = f7;
-        f7.abalytics = Abalytics;
+	track(type, label, data) {
+		if (type != 'event') {
+			console.error('invalid event type: ' + type);
+			return;
+		}
 
-        // Track things
-        Abalytics.addScreenTracking();
-    },
-};
+		cordova.plugins.firebase.analytics.logEvent(label, data).then(res => {
+			console.log(`[${res}] event: ${label} | `, data);
+		});
+		if (label == "screen_view") {
+			cordova.plugins.firebase.analytics.setCurrentScreen(data.screen_name).then(res => {
+				console.log(`[${res}] set current screen: ${data.screen_name}`);
+			});
+		}
 
-export default Abalytics;
+		// | DISABLED |
+
+		// var payload = {
+		// 	uuid: Abalytics.getUUI() + (app.device.cordova ? '-c' : '-w'),
+		// 	type: type,
+		// 	label: label,
+		// 	data: data
+		// };
+
+		// app.request.post('https://api.app.practice.uffs.cc/v0/analytics', payload, function (data) {
+		// 	console.debug('[Abalytics] Payload sent to API: ', data);
+		// });
+	};
+}

@@ -10,7 +10,14 @@ export class Aura{
 
         let encodeInput = encodeURI(input);
         return await app.request.promise.get(app.api.url + "aura/nlp/qna/" + encodeInput)
-        .then(async (res) => {
+		.then(async (res) => {
+			if (typeof cordova !== 'undefined') {
+				cordova.plugins.firebase.analytics.logEvent("aura", {
+					"request_answer": input
+				}).then(res => {
+					console.log(`[${res}] aura: request_answer=${input}`);
+				})
+			}
             let data = JSON.parse(res.data);
             return data.answer;
         }).catch(err => err);
