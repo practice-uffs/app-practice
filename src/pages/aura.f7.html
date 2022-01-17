@@ -1,28 +1,30 @@
 <template>
-  <div data-name="aura" id="tab_aura" style="height: 100%;">
+	<div data-name="aura" id="tab_aura" style="height: 100%;">
 
-    <div id="logo_aura">
-      <img src="static/images/aura/aura_logo.png" alt="" width="40%">
-    </div>
-    
-    <div class="page-content messages-content">
-      <div class="messages">
-      </div>  
-    </div>
-    
-    <div class="aura-consent-buttons padding-left padding-right justify-content-space-between">
-        <button class="margin-right button button-raised" @click="auraConsentAnswer(false)">Discordo</button>
-        <button class="margin-left button button-fill button-raised" @click="auraConsentAnswer(true)">Concordo</button>
-    </div>
-    <div class="toolbar messagebar">
-      <div class="toolbar-inner">
-        <div class="messagebar-area">
-          <textarea placeholder="Digite uma mensagem"></textarea>
-        </div>
-        <a class="link send-link" href="#"><span><i class="icon f7-icons theme-color-2">arrowtriangle_right_fill</i></span></a>
-      </div>
-    </div>
-  </div>
+		<div id="logo_aura">
+			<img src="static/images/aura/aura_logo.png" alt="" width="40%">
+		</div>
+
+		<div class="page-content messages-content">
+			<div class="messages">
+			</div>
+		</div>
+
+		<div class="aura-consent-buttons padding-left padding-right justify-content-space-between">
+			<button class="margin-right button button-raised" @click="auraConsentAnswer(false)">Discordo</button>
+			<button class="margin-left button button-fill button-raised"
+				@click="auraConsentAnswer(true)">Concordo</button>
+		</div>
+		<div class="toolbar messagebar">
+			<div class="toolbar-inner">
+				<div class="messagebar-area">
+					<textarea placeholder="Digite uma mensagem"></textarea>
+				</div>
+				<a class="link send-link" href="#"><span><i
+							class="icon f7-icons theme-color-2">arrowtriangle_right_fill</i></span></a>
+			</div>
+		</div>
+	</div>
 </template>
 
 <style>  
@@ -253,10 +255,15 @@
         consentButtons.style.display = "none";
 
         if (!consent) {
-          self.messages.clear();
-          app.aura.clearChat();
-          this.messageInit();
-          return;
+          if (typeof cordova !== 'undefined') {
+						cordova.plugins.firebase.analytics.logEvent("aura", {"consent": false}).then(res => {
+							console.log(`[${res}] aura: consent=false`);
+						})
+					}
+					self.messages.clear();
+					app.aura.clearChat();
+					this.messageInit();
+					return;
         }
 
         self.messages.addMessage({

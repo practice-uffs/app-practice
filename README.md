@@ -14,7 +14,7 @@ Esse repositório contém o código-fonte do aplicativo móvel *PRACTICE*. Esse 
     <img src=".github/imagens-app-practice.png" title="Imagens de algumas telas do aplicativo">
 </p>
 
-### Descrição
+## Descrição
 
 O [Programa de Ampliação e Consolidação de Tecnologias e Inovação no Contexto Educacional (PRACTICE)](https://practice.uffs.edu.br) é um programa multi-campi da [Universidade Federal da Fronteira Sul (UFFS)](https://www.uffs.edu.br).
 O aplicativo PRACTICE permite que seus usuários usufruam das tecnologias e conteúdos criados por nós. O objetivo desse aplicativo é fornecer acesso fácil a informações para a comunidade acadêmica de todos os seis campi pertencentes à UFFS. Com um toque, você pode acessar o calendário acadêmico, os horários de ônibus, o cardápio do RU, conversar com a Aura, nossa Assistente Virtual, e muito mais! E claro, inteirar nossos solicitantes sobre suas demandas, tendo o recurso de notificação vinculado ao Mural, nosso sistema de atendimento.
@@ -82,7 +82,6 @@ A aplicação pronta para uso estará no diretório `www` na raiz do respositór
 ```
 npm run build-prod
 ```
-#### 4.3 Deploy
 
 ### 5. Build e deploy Google Play
 
@@ -115,6 +114,15 @@ Se tudo estiver certo, para fazer deploy (final) na Google Play, rode:
 ```
 npm run build-prod-cordova
 ```
+
+#### 5.1 Assinatura do App blundle 
+
+Essa etapa é necessária para realizar o upload do aplicativo na Google Play Store. Para isso, é necessário utilizar a `chave` de assinatura encontrada no drive do `dev`. Você deve baixar o arquivo `keys.zip` e extraí-lo na mesma pasta aonde foi gerado a build de produção do aplicativo, o caminho do arquivo provavelmente será esse: `app-practice/cordova/platforms/android/app/build/outputs/bundle/release/app-release.aab`. Com o `app-release.aab` e o `keystore.jsk` na mesma pasta, você deve abrir um terminal (Linux) neste diretório e executar esse comando:
+```
+jarsigner -tsa http://timestamp.digicert.com -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore keystore.jks app-release.aab upload
+```
+
+Após isso, seu build pode ser carregado na Google Play Store através do [Google Play Console](https://play.google.com/console/developers).
 
 ## Contribua
 
