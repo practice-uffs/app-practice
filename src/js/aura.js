@@ -23,6 +23,21 @@ export class Aura{
         }).catch(err => err);
     }
 
+    async rateAnswer(answer, value) {
+        var self = this;
+        var app = self.app;
+        const data = {
+            "app_id": 4,
+            "action": "aura_feedback",
+            "key": answer,
+            "value": value   
+        }
+        return await app.request.promise.postJSON(app.api.url + "analytics", data)
+        .then(async () => {
+            return true;
+        }).catch(err => false);
+    }
+
     setConsent(consent) {
         localStorage["auraConsent"] = JSON.stringify(consent);
     }
@@ -51,6 +66,10 @@ export class Aura{
 
         chat.push(message);
 
+        localStorage["auraChat"] =  JSON.stringify(chat);
+    }
+
+    saveChat(chat) {
         localStorage["auraChat"] =  JSON.stringify(chat);
     }
 
