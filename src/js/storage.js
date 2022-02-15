@@ -218,4 +218,29 @@ export class Storage {
 	removeFcmToken() {
 		localStorage.removeItem("fcmToken");
 	};
+
+	addCountTryLogin() {
+		if (localStorage.getItem("countTryLogin")) {
+			var count = parseInt(localStorage.getItem("countTryLogin"))
+			localStorage.setItem("countTryLogin", count + 1);
+		} else {
+			localStorage.setItem("countTryLogin", 1);
+		}
+	};
+
+	getCountTryLogin() {
+		return localStorage.getItem("countTryLogin");
+	};
+
+	resetCountTryLogin() {
+		localStorage.setItem("countTryLogin", 0);
+	};
+
+	getCountdownLogin() {
+		return localStorage.getItem("getCountdownLogin");
+	};
+
+	setCountdownLogin(value) {
+		localStorage.setItem("getCountdownLogin", value);
+	};
 };
