@@ -1,89 +1,91 @@
 <template>
-  <div class="login-screen">
-    <div class="view">
-      <div class="page">
-        <!-- Navbar -->
-        <div class="navbar">
-          <div class="navbar-inner">
-            <div class="left">
-              <a href="#" class="link back">
-                <i class="icon icon-back"></i>
-                <span class="if-not-md">Voltar</span>
-              </a>
-            </div>
-          </div>
-        </div>
-        <!-- Content -->
-        <div class="page-content login-screen-content">
-          <div class="login-screen-title">
-            <img
-              src="static/images/logo/logo 915x286.png"
-              style="width: 100%; height: auto"
-            />
-          </div>
-          <form
-            class="list"
-            id="login-form"
-            onSubmit="return false;"
-            @submit="login()"
-          >
-            <ul>
-              <li class="item-content item-input item-input-outline">
-                <div class="item-inner">
-                  <div class="item-title item-floating-label">idUFFS</div>
-                  <div class="item-input-wrap">
-                    <input
-                      type="text"
-                      name="iduffs"
-                      pattern="[a-zA-Z.]+"
-                      data-error-message="Digite apenas letras ou pontos."
-                      required
-                      validate
-                    />
-                    <span class="input-clear-button"></span>
-                  </div>
-                </div>
-              </li>
-              <li class="item-content item-input item-input-outline">
-                <div class="item-inner">
-                  <div class="item-title item-floating-label">Senha</div>
-                  <div class="password">
-                    <div class="item-input-wrap">
-                      <input type="password" name="password" id="input_password" required validate />
-                      <span class="input-clear-button"></span>
-                    </div>
-                    <div class="eye_box" @click="viewPassword()">
-                      <i class="f7-icons" id="eye_icon">eye_slash</i>
-                    </div>
-                  </div>
-                </div>
-              </li>
-              <li class="item-content item-input">
-                <div class="item-inner">
-                  <input
-                    type="submit"
-                    class="button button-raised button-fill"
-                    value="Acessar"
-                  />
-                </div>
-              </li>
-              <li class="item-content">
-                <div class="item-inner">
-                  <a
-                    href="#"
-                    class="link text-align-center login-screen-close"
-                    style="width: 100%"
-                  >
-                    Clique aqui para redefinir sua senha</a
-                  >
-                </div>
-              </li>
-            </ul>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
+	<div class="page" data-name="login">
+		<!-- Navbar -->
+		<div class="navbar">
+			<div class="navbar-inner">
+				<div class="left">
+					<a href="#" class="link back">
+						<i class="icon icon-back"></i>
+						<span class="if-not-md">Voltar</span>
+					</a>
+				</div>
+			</div>
+		</div>
+
+		<!-- Content -->
+		<div class="page-content login-screen-content display-flex flex-direction-column justify-content-center">
+			<div>
+				<div class="display-flex flex-direction-column justify-content-center" style="align-items: center;">
+					<div style="width: 80%;">
+						<img src="static/images/logo/logo 915x286.png"
+							style="width: 100%; height: auto;" />
+					</div>
+				</div>
+				<div class="block-header">
+					<p>Entre com seu idUFFS e senha</p>
+				</div>
+				<form id="login-form" action="#">
+					<div class="list">
+						<ul>
+							<li class="item-content item-input">
+								<div class="item-inner">
+									<div class="item-title item-label">idUFFS</div>
+									<div class="item-input-wrap">
+										<input type="text" name="username" placeholder="Seu idUFFS" pattern="[a-zA-Z.]+"
+											data-error-message="Digite apenas letras ou pontos" required validate>
+										<span class="input-clear-button"></span>
+									</div>
+								</div>
+							</li>
+							<li class="item-content item-input">
+								<div class="item-inner">
+									<div class="item-title item-label">Senha</div>
+									<div class="display-flex justify-content-center width-100">
+										<div class="item-input-wrap">
+											<input id="input_password" type="password" name="password"
+												placeholder="Sua senha"
+												data-error-message="Esse campo precisa ser preenchido" required
+												validate />
+											<span class="input-clear-button"></span>
+										</div>
+										<div class="padding-left display-flex align-items-center"
+											@click="viewPassword()">
+											<i class="f7-icons" id="eye_icon">eye_slash</i>
+										</div>
+									</div>
+								</div>
+							</li>
+
+							<div class="block-footer">
+								{{#if countDown}}
+								<span>
+									<h4>Login bloqueado</h4>
+								</span>
+								<span class="small">
+									Tente novamente em {{countDown}} segundos
+								</span>
+								{{else}}
+								<span class="small">
+									{{attempts}} tentativas restantes
+								</span>
+								{{/if}}
+							</div>
+
+
+						</ul>
+					</div>
+
+					<div class="list">
+						<ul>
+							<li>
+								<button class="button list-button" type="submit" id="button-login">Entrar</button>
+							</li>
+						</ul>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
 </template>
 
 <style>
@@ -105,43 +107,124 @@
 </style>
 
 <script>
-  import 'dom7/dist/dom7.js';
+	export default {
+		data: function () {
+			return {
+				countDown: null,
+				attempts: 5
+			}
+		},
+		methods: {
+			login: function () {
+				let self = this;
+				let app = self.$app;
 
-  export default {
-    methods: {
-      login: function () {
-        let self = this;
-        let app = self.$app;
+				app.dialog.preloader("Carregando...");
+				let loginData = app.form.convertToData("#login-form");
 
-        app.dialog.preloader("Carregando...");
-        let loginData = app.form.convertToData("#login-form");
+				// Request login
+				app.api.requestLogin(loginData.username, loginData.password).then((res) => {
+					app.dialog.close();
+					if (res) {
+						app.storage.resetCountTryLogin();
+						app.view.main.router.navigate("/");
+					} else {
+						app.dialog.alert("Credenciais incorretas, tente novamente!");
+						app.storage.addCountTryLogin();
 
-        // Request login
-        app.api
-          .requestLogin(loginData.iduffs, loginData.password)
-          .then((res) => {
-            app.dialog.close();
-            if (res) {
-              app.view.main.router.navigate("/");
-            } else {
-              app.dialog.alert("Credenciais incorretas, tente novamente!");
-            }
-          })
-          .catch(() => {
-            app.dialog.alert("Ocorreu um ero em sua rede, tente novamente!");
-          });
-      },
-      viewPassword : function () {
-        let eye = Dom7("#eye_icon");
-        let input = Dom7("#input_password");
-        if(eye.text() == "eye_slash"){
-          eye.text("eye");
-          input.attr("type","text");
-        } else if(eye.text() == "eye") {
-          eye.text("eye_slash");
-          input.attr("type","password");
-        }
-      }
-    },
-  };
+						app.$$("input").val("");
+
+						self.$setState({
+							attempts: self.attempts - 1
+						});
+
+						if (app.storage.getCountTryLogin() >= 5) {
+							self.timeoutCount(30);
+						}
+					}
+				}).catch(() => {
+					app.dialog.alert("Ocorreu um ero em sua rede, tente novamente!");
+				});
+
+				return;
+			},
+			viewPassword: function () {
+				let self = this;
+				let app = self.$app;
+
+				let eye = app.$$("#eye_icon");
+				let input = app.$$("#input_password");
+				if (eye.text() == "eye_slash") {
+					eye.text("eye");
+					input.attr("type", "text");
+				} else if (eye.text() == "eye") {
+					eye.text("eye_slash");
+					input.attr("type", "password");
+				}
+			},
+			timeoutCount: async function (count) {
+				let self = this;
+				let app = self.$app;
+
+				app.$$("#button-login").prop("disabled", true);
+				app.$$("input").prop("disabled", true);
+
+				await new Promise(resolve => {
+					var interval = setInterval(function () {
+						self.$setState({
+							countDown: count
+						});
+
+						app.storage.setCountdownLogin(count);
+
+						count--;
+
+						if (count < 0) {
+							self.$setState({
+								attempts: 5
+							});
+							resolve();
+							clearInterval(interval);
+						}
+					}, 1000);
+				})
+
+				app.storage.resetCountTryLogin();
+				app.$$("#button-login").prop("disabled", false);
+				app.$$("input").prop("disabled", false);
+			},
+			getCountdown: async function () {
+				let self = this;
+				let app = self.$app;
+
+				var data = app.storage.getCountdownLogin();
+				var countTry = app.storage.getCountTryLogin();
+
+				if (countTry) {
+					self.$setState({
+						attempts: 5 - countTry,
+					});
+				}
+
+				if (data != "NaN" || data != null) {
+					if (data > 0) {
+						self.timeoutCount(parseInt(data));
+					}
+				}
+			}
+		},
+		on: {
+			pageInit: function (e, page) {
+				let self = this;
+				let app = self.$app;
+
+				self.getCountdown();
+
+				app.$$('#login-form').submit((e) => {
+					e.preventDefault();
+					self.login();
+				});
+			}
+		}
+	};
 </script>

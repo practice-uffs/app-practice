@@ -27,236 +27,263 @@
 	</div>
 </template>
 
-<style>  
-  .messages-content {
-    padding-bottom : 0px;
-    padding-top : 0px;
-  }
-  .aura-consent-buttons {
-    padding-bottom: 10px;
-    display: none;
-    background-color: #fff;
-  }
-  #logo_aura {
-    position: absolute;
-    padding: 20px 0px;
-    z-index: 3;
-    text-align: center;
-    width: 100%;
-    background-image: linear-gradient(to bottom, white, white, rgba(255,255,255,0.8),rgba(255,255,255,0));
-  }
-  .message-footer {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    width: 100%;
-  }
-  .rating-btn, .rated-btn {
-    margin: 0;
-    padding: 0 8px;
-    width: fit-content;
-    background-color: #fff;
-    border: none
-  }
+<style>
+	.messages-content {
+		padding-bottom: 0px;
+		padding-top: 0px;
+	}
+
+	.aura-consent-buttons {
+		padding-bottom: 10px;
+		display: none;
+		background-color: var(--f7-page-bg-color);
+	}
+
+	#logo_aura {
+		position: absolute;
+		padding: 20px 0px;
+		z-index: 3;
+		text-align: center;
+		width: 100%;
+		background-image: linear-gradient(to bottom, rgb(var(--f7-page-bg-color-rgb)), rgb(var(--f7-page-bg-color-rgb)),
+				rgba(var(--f7-page-bg-color-rgb), 0.8), rgba(var(--f7-page-bg-color-rgb), 0));
+	}
+
+	.rating-btn,
+	.rated-btn {
+		margin: 0;
+		padding: 0 8px;
+		width: fit-content;
+		background-color: #fff;
+		border: none
+	}
 </style>
 
 <script>
-  import 'dom7/dist/dom7.js';
+	import 'dom7/dist/dom7.js';
 
-  export default {
-    data: function () {
-      return {
-        chat: null,
-        messages : null
-      }
-    },
-    methods: {
-      getTimestamp: function () {
-        var date = new Date();
-        var time = date.toTimeString().substring(0,5);
-        return time;
-      },
-      getAuraAnswer: async function (input) {
-        var self = this;
-        var app = self.$app;
+	export default {
+		data: function () {
+			return {
+				chat: null,
+				messages: null
+			}
+		},
+		methods: {
+			getTimestamp: function () {
+				var date = new Date();
+				var time = date.toTimeString().substring(0, 5);
+				return time;
+			},
+			getAuraAnswer: async function (input) {
+				var self = this;
+				var app = self.$app;
 
-        return app.aura.requestAnswer(input).then((answer) => {
-          if(answer){
-            answer = answer.replace(/(Minerva)/gi, 'Aura');
-          }
-          return answer;
-        });
-      },
-      rateAnswer: function () {
-        var $$ = Dom7;
-        var self = this;
-        var app = self.$app;
-        $$('.rating-btn').off('click');
-        $$('.rating-btn').on('click', function (e) {
-          var messageId = e.target.id;
-          var message = $$('.message-id-'+messageId+' .message-content .message-footer');
-          if (e.target.value == 1) {
-            self.messages.messages[messageId].footer = "Avalie a resposta <button class='rated-btn f7-icons' value='1' id='"+messageId+"'>hand_thumbsup</button>";
-            message.html("<button class='rated-btn f7-icons' value='1' id='"+messageId+"'>hand_thumbsup</button>");
-          } else {
-            self.messages.messages[messageId].footer = "Avalie a resposta <button class='rated-btn f7-icons' value='-1' id='"+messageId+"'>hand_thumbsdown</button>";
-            message.html("<button class='rated-btn f7-icons' value='-1' id='"+messageId+"'>hand_thumbsdown</button>");
-          }
-          app.aura.rateAnswer(self.messages.messages[messageId].text, e.target.value)
-          .then((res) => {
-            if (res) {
-              app.aura.saveChat(self.messages.messages);
-            }
-          });
-          self.changeRate();
-        });  
-        self.changeRate();
-      },
-      changeRate: function () {
-        var $$ = Dom7;
-        var self = this;
-        var app = self.$app;
-        $$('.rated-btn').off('click');
-        $$('.rated-btn').on('click', function (e) {
-          var messageId = e.target.id;
-          self.messages.messages[messageId].footer = "Avalie a resposta <button class='rating-btn f7-icons' id='"+messageId+"' value='1'>hand_thumbsup</button> <button class='rating-btn f7-icons' id='"+messageId+"' value='-1'>hand_thumbsdown</button>";
-          $$('.message-id-'+messageId+' .message-content .message-footer').html("Avalie a resposta <button class='rating-btn f7-icons' id='"+messageId+"' value='1'>hand_thumbsup</button> <button class='rating-btn f7-icons' id='"+messageId+"' value='-1'>hand_thumbsdown</button>");
-          app.aura.saveChat(self.messages.messages);
-          self.rateAnswer();
-        }); 
-      },
-      resizeMessagesContent: function (){
-        let logoAura = Dom7('#logo_aura');
-        let aura = Dom7('#tab_aura');
-        let messagebar = Dom7('.messagebar');
-        let messagesContent = Dom7('.messages-content');
-        let height = aura.height() - messagebar.height() + 'px';
-        messagesContent.css('height', height);
-        messagesContent.css('padding-top', logoAura.height() + 10 + 'px');
-      },
-      messageInit: function () {
-        var self = this;
-        var app = self.$app;
-        var $$ = Dom7;
+				return app.aura.requestAnswer(input).then((answer) => {
+					if (answer) {
+						answer = answer.replace(/(Minerva)/gi, 'Aura');
+					}
+					return answer;
+				});
+			},
+			rateAnswer: function () {
+				var $$ = Dom7;
+				var self = this;
+				var app = self.$app;
+				$$('.rating-btn').off('click');
+				$$('.rating-btn').on('click', function (e) {
+					var messageId = e.target.id;
+					var message = $$('.message-id-' + messageId + ' .message-content .message-footer');
+					if (e.target.value == 1) {
+						self.messages.messages[messageId].footer =
+							"Avalie a resposta <button class='rated-btn f7-icons' value='1' id='" + messageId +
+							"'>hand_thumbsup</button>";
+						message.html("<button class='rated-btn f7-icons' value='1' id='" + messageId +
+							"'>hand_thumbsup</button>");
+					} else {
+						self.messages.messages[messageId].footer =
+							"Avalie a resposta <button class='rated-btn f7-icons' value='-1' id='" +
+							messageId + "'>hand_thumbsdown</button>";
+						message.html("<button class='rated-btn f7-icons' value='-1' id='" + messageId +
+							"'>hand_thumbsdown</button>");
+					}
+					app.aura.rateAnswer(self.messages.messages[messageId].text, e.target.value)
+						.then((res) => {
+							if (res) {
+								app.aura.saveChat(self.messages.messages);
+							}
+						});
+					self.changeRate();
+				});
+				self.changeRate();
+			},
+			changeRate: function () {
+				var $$ = Dom7;
+				var self = this;
+				var app = self.$app;
+				$$('.rated-btn').off('click');
+				$$('.rated-btn').on('click', function (e) {
+					var messageId = e.target.id;
+					self.messages.messages[messageId].footer =
+						"Avalie a resposta <button class='rating-btn f7-icons' id='" + messageId +
+						"' value='1'>hand_thumbsup</button> <button class='rating-btn f7-icons' id='" +
+						messageId + "' value='-1'>hand_thumbsdown</button>";
+					$$('.message-id-' + messageId + ' .message-content .message-footer').html(
+						"Avalie a resposta <button class='rating-btn f7-icons' id='" + messageId +
+						"' value='1'>hand_thumbsup</button> <button class='rating-btn f7-icons' id='" +
+						messageId + "' value='-1'>hand_thumbsdown</button>");
+					app.aura.saveChat(self.messages.messages);
+					self.rateAnswer();
+				});
+			},
+			resizeMessagesContent: function () {
+				var self = this;
+				var app = self.$app;
 
-        self.messages = app.messages.create({
-          el: '.messages',
+				let logoAura = app.$$('#logo_aura');
+				let aura = app.$$('#tab_aura');
+				let messagebar = app.$$('.messagebar');
+				let messagesContent = app.$$('.messages-content');
+				let height = aura.height() - messagebar.height() + 'px';
+				messagesContent.css('height', height);
+				messagesContent.css('padding-top', logoAura.height() + 10 + 'px');
+			},
+			messageInit: async function () {
+				var self = this;
+				var app = self.$app;
+				var $$ = Dom7;
 
-          firstMessageRule: function (message, previousMessage, nextMessage) {
-            if (message.isTitle) return false;
+				self.messages = app.messages.create({
+					el: '.messages',
 
-            if (!previousMessage || previousMessage.type !== message.type || previousMessage.name !== message.name) return true;
-            return false;
-          },
+					firstMessageRule: function (message, previousMessage, nextMessage) {
+						if (message.isTitle) return false;
 
-          lastMessageRule: function (message, previousMessage, nextMessage) {
-            if (message.isTitle) return false;
-            
-            if (!nextMessage || nextMessage.type !== message.type || nextMessage.name !== message.name) return true;
-            return false;
-          },
+						if (!previousMessage || previousMessage.type !== message.type || previousMessage
+							.name !== message.name) return true;
+						return false;
+					},
 
-          tailMessageRule: function (message, previousMessage, nextMessage) {
-            if (message.isTitle) return false;
-            
-            if (!nextMessage || nextMessage.type !== message.type || nextMessage.name !== message.name) return true;
-            return false;
-          }
-        });
+					lastMessageRule: function (message, previousMessage, nextMessage) {
+						if (message.isTitle) return false;
 
-        var messagebar = app.messagebar.create({
-          el: '.messagebar'
-        });
+						if (!nextMessage || nextMessage.type !== message.type || nextMessage.name !==
+							message.name) return true;
+						return false;
+					},
 
-        var responseInProgress = false;
+					tailMessageRule: function (message, previousMessage, nextMessage) {
+						if (message.isTitle) return false;
 
-        $$('.send-link').on('click', function () {
-          var text = messagebar.getValue().replace(/\n/g, '<br>').trim();
-          if (!text.length) return;
+						if (!nextMessage || nextMessage.type !== message.type || nextMessage.name !==
+							message.name) return true;
+						return false;
+					}
+				});
 
-          messagebar.clear();
-          messagebar.focus();
+				var messagebar = app.messagebar.create({
+					el: '.messagebar'
+				});
 
-          self.messages.addMessage({
-            text: text,
-            textFooter: self.getTimestamp(),
-          });
+				self.resizeMessagesContent();
 
-          if (responseInProgress) return;
+				var responseInProgress = false;
 
-          app.aura.addMessageToChat({
-            text: text,
-            textFooter: self.getTimestamp(),
-            type: "sent"
-          })
+				$$('.send-link').on('click', function () {
+					var text = messagebar.getValue().replace(/\n/g, '<br>').trim();
+					if (!text.length) return;
 
-          if (!app.aura.getConsent()) {
-            self.askAuraConsent();
-            return;
-          }
-          
-          receiveMessage(text);
-        });      
-        
-        async function receiveMessage(received) {
-          self.getAuraAnswer(received).then(data => {
-            responseInProgress = true;
-  
-            setTimeout(function () {
-              var answer = {
-                name : "Aura",
-                avatar : "static/images/aura/aura_icon.png",
-                type : "received",
-                text : data? data : "Desculpe, infelizmente eu não entendi",
-                textFooter : self.getTimestamp(),
-                footer: "Avalie a resposta <button class='rating-btn f7-icons' id='"+self.messages.messages.length+"' value='1'>hand_thumbsup</button> <button class='rating-btn f7-icons' id='"+self.messages.messages.length+"' value='-1'>hand_thumbsdown</button>",
-                cssClass: "message-id-"+self.messages.messages.length
-              }
+					messagebar.clear();
+					messagebar.focus();
 
-              app.aura.addMessageToChat(answer);
+					self.messages.addMessage({
+						text: text,
+						textFooter: self.getTimestamp(),
+					});
 
-              self.messages.showTyping({
-                header: answer.name + ' is typing',
-                avatar: answer.avatar
-              });
+					if (responseInProgress) return;
 
-              setTimeout(function () {
-                self.messages.addMessage(answer);
-                self.rateAnswer();
-                self.messages.hideTyping();
-                responseInProgress = false;
-              }, 1000);
-            }, 1000);
-          }); 
-        }
-        function loadOldMessages() {
-          let chat = app.aura.getChat();
+					app.aura.addMessageToChat({
+						text: text,
+						textFooter: self.getTimestamp(),
+						type: "sent"
+					})
 
-          if (!chat) {
-            receiveMessage("se apresente");
-            return;
-          }
+					if (!app.aura.getConsent()) {
+						self.askAuraConsent();
+						return;
+					}
 
-          for (let i = 0; i < chat.length; i++) {
-            self.messages.addMessage(chat[i]);
-          }
-          self.messages.scroll();
-        }
+					receiveMessage(text);
+				});
 
-        loadOldMessages();
-      },
-      auraConsentAnswer: function (consent) {
-        var self = this;
-        var app = self.$app;
+				async function receiveMessage(received) {
+					self.getAuraAnswer(received).then(data => {
+						responseInProgress = true;
 
-        app.aura.setConsent(consent);
+						setTimeout(function () {
+							var answer = {
+								name: "Aura",
+								avatar: "static/images/aura/aura_icon.png",
+								type: "received",
+								text: data ? data : "Desculpe, infelizmente eu não entendi",
+								textFooter: self.getTimestamp(),
+								footer: "Avalie a resposta <button class='rating-btn f7-icons' id='" +
+									self.messages.messages.length +
+									"' value='1'>hand_thumbsup</button> <button class='rating-btn f7-icons' id='" +
+									self.messages.messages.length +
+									"' value='-1'>hand_thumbsdown</button>",
+								cssClass: "message-id-" + self.messages.messages.length
+							}
 
-        const consentButtons = document.querySelector('.aura-consent-buttons');
-        consentButtons.style.display = "none";
+							app.aura.addMessageToChat(answer);
 
-        if (!consent) {
-          if (typeof cordova !== 'undefined') {
-						cordova.plugins.firebase.analytics.logEvent("aura", {"consent": false}).then(res => {
+							self.messages.showTyping({
+								header: answer.name + ' is typing',
+								avatar: answer.avatar
+							});
+
+							setTimeout(function () {
+								self.messages.addMessage(answer);
+								self.rateAnswer();
+								self.messages.hideTyping();
+								responseInProgress = false;
+							}, 1000);
+						}, 1000);
+					});
+				}
+
+				function loadOldMessages() {
+					let chat = app.aura.getChat();
+
+					if (!chat) {
+						receiveMessage("se apresente");
+						return;
+					}
+
+					for (let i = 0; i < chat.length; i++) {
+						self.messages.addMessage(chat[i]);
+					}
+					self.messages.scroll();
+				}
+
+				await loadOldMessages();
+				return;
+			},
+			auraConsentAnswer: function (consent) {
+				var self = this;
+				var app = self.$app;
+
+				app.aura.setConsent(consent);
+
+				const consentButtons = document.querySelector('.aura-consent-buttons');
+				consentButtons.style.display = "none";
+
+				if (!consent) {
+					if (typeof cordova !== 'undefined') {
+						cordova.plugins.firebase.analytics.logEvent("aura", {
+							"consent": false
+						}).then(res => {
 							console.log(`[${res}] aura: consent=false`);
 						})
 					}
@@ -264,85 +291,89 @@
 					app.aura.clearChat();
 					this.messageInit();
 					return;
-        }
+				}
 
-        self.messages.addMessage({
-          text: "Concordo",
-          textFooter: self.getTimestamp(),
-        });
+				self.messages.addMessage({
+					text: "Concordo",
+					textFooter: self.getTimestamp(),
+				});
 
-        app.aura.addMessageToChat({
-          text: "Concordo",
-          textFooter: self.getTimestamp(),
-          type: "sent"
-        });
+				app.aura.addMessageToChat({
+					text: "Concordo",
+					textFooter: self.getTimestamp(),
+					type: "sent"
+				});
 
-        var answer = {
-          name: "Aura",
-          avatar: "static/images/aura/aura_icon.png",
-          type: "received",
-          text: "Ótimo, obrigada! Com o que eu posso ajudar hoje?",
-          textFooter: self.getTimestamp()
-        };
+				var answer = {
+					name: "Aura",
+					avatar: "static/images/aura/aura_icon.png",
+					type: "received",
+					text: "Ótimo, obrigada! Com o que eu posso ajudar hoje?",
+					textFooter: self.getTimestamp()
+				};
 
-        app.aura.addMessageToChat(answer);
-        
-        self.messages.showTyping({
-          header: answer.name + ' is typing',
-          avatar: answer.avatar
-        });
+				app.aura.addMessageToChat(answer);
 
-        setTimeout(function () {
-          self.messages.addMessage(answer);
-          self.messages.hideTyping();   
-        }, 3000);
-      },
-      askAuraConsent: function () {
-        var self = this;
-        var app = self.$app
-        var answer = {
-          name: "Aura",
-          avatar: "static/images/aura/aura_icon.png",
-          type: "received",
-          text: "Para que eu consiga evoluir constantemente, todas as mensagens e interações que você fizer comigo são armazenadas em um banco de dados, na íntegra. As mensagens não estão associadas a você (a autoria é anonimizada). Você concorda com isso?",
-          textFooter: self.getTimestamp()
-        };
-        
-        app.aura.addMessageToChat(answer);
+				self.messages.showTyping({
+					header: answer.name + ' is typing',
+					avatar: answer.avatar
+				});
 
-        self.messages.showTyping({
-          header: answer.name + ' is typing',
-          avatar: answer.avatar
-        });
+				setTimeout(function () {
+					self.messages.addMessage(answer);
+					self.messages.hideTyping();
+				}, 3000);
+			},
+			askAuraConsent: function () {
+				var self = this;
+				var app = self.$app
+				var answer = {
+					name: "Aura",
+					avatar: "static/images/aura/aura_icon.png",
+					type: "received",
+					text: "Para que eu consiga evoluir constantemente, todas as mensagens e interações que você fizer comigo são armazenadas em um banco de dados, na íntegra. As mensagens não estão associadas a você (a autoria é anonimizada). Você concorda com isso?",
+					textFooter: self.getTimestamp()
+				};
 
-        setTimeout(function () {
-          self.messages.addMessage(answer);
-          self.messages.hideTyping();
-          const consentButtons = document.querySelector('.aura-consent-buttons');
-          consentButtons.style.display = "flex";
-        }, 1500);
-      },
-    },
-    on: {
-      tabInit: function (e, page) {
-        this.messageInit();
-        var self = this;
-        this.showButtons = false;
-        var $$ = Dom7;
+				app.aura.addMessageToChat(answer);
 
-        setTimeout(() => {
-          this.resizeMessagesContent();
-        }, 1000)
+				self.messages.showTyping({
+					header: answer.name + ' is typing',
+					avatar: answer.avatar
+				});
 
-        this.rateAnswer();
-        
-        window.onresize = function() {
-          self.resizeMessagesContent();
-          var doc = document.getElementsByClassName("messages-content")[0];
-          var maxScroll = Dom7(".messages").height();
-          doc.scrollTo({ top: maxScroll, behavior: 'smooth' });
-        }
-      },
-    },
-  };
+				setTimeout(function () {
+					self.messages.addMessage(answer);
+					self.messages.hideTyping();
+					const consentButtons = document.querySelector('.aura-consent-buttons');
+					consentButtons.style.display = "flex";
+				}, 1500);
+			},
+		},
+		on: {
+			tabInit: async function (e, page) {
+				var self = this;
+				var app = self.$app;
+
+				await this.messageInit();
+				this.showButtons = false;
+
+				this.rateAnswer();
+
+				window.onresize = function () {
+					self.resizeMessagesContent();
+					var doc = document.getElementsByClassName("messages-content")[0];
+					var maxScroll = Dom7(".messages").height();
+					doc.scrollTo({
+						top: maxScroll,
+						behavior: 'smooth'
+					});
+				}
+
+				app.$$('#logo_aura_img').on("load", () => {
+					self.resizeMessagesContent();
+				})
+			},
+		},
+	};
 </script>

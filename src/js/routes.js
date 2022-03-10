@@ -230,9 +230,7 @@ const initialPageRoute = function () {
 const loginPageRoute = function () {
   return {
     path: "/login/",
-    loginScreen: {
-      component: LoginPage,
-    },
+    component: LoginPage,
     beforeEnter: unauthenticated,
   };
 };
