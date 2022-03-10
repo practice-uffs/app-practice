@@ -2,7 +2,7 @@
 	<div data-name="aura" id="tab_aura" style="height: 100%;">
 
 		<div id="logo_aura">
-			<img src="static/images/aura/aura_logo.png" alt="" width="40%">
+			<img id="logo_aura_image" src="static/images/aura/aura_logo.png" alt="" width="40%">
 		</div>
 
 		<div class="page-content messages-content">
@@ -370,7 +370,7 @@
 					});
 				}
 
-				app.$$('#logo_aura_img').on("load", () => {
+				app.$$('#logo_aura_image').on("load", () => {
 					self.resizeMessagesContent();
 				})
 			},
