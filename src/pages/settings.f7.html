@@ -188,6 +188,10 @@
             function() {
               e.target.checked = false
             })
+        } else if (e.target.name === 'testApi') {
+          self.changeSetting('testApi', e.target.checked)
+          app.storage.removeAllButSettings()
+          app.view.main.router.navigate('/')
         } else if (e.target.name === 'allowNotifications') {
           if (e.target.checked) {
             document.addEventListener('deviceready', async () => {
