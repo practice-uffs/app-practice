@@ -1,61 +1,46 @@
 <template>
-	<div data-name="aura" id="tab_aura" style="height: 100%;">
-
-		<div id="logo_aura">
-			<img id="logo_aura_image" src="static/images/aura/aura_logo.png" alt="" width="40%">
-		</div>
-
-		<div class="page-content messages-content">
-			<div class="messages">
-			</div>
-		</div>
-
-		<div class="aura-consent-buttons padding-left padding-right justify-content-space-between">
-			<button class="margin-right button button-raised" @click="auraConsentAnswer(false)">Discordo</button>
-			<button class="margin-left button button-fill button-raised"
-				@click="auraConsentAnswer(true)">Concordo</button>
-		</div>
-		<div class="toolbar messagebar">
-			<div class="toolbar-inner">
-				<div class="messagebar-area">
-					<textarea placeholder="Digite uma mensagem"></textarea>
+	<div style="width: 100%; height:100%">
+		<div class="page error_screen d-none">
+			<div class="page-content ptr-content" data-ptr-distance="55" data-ptr-mousewheel="true">
+				<div class="ptr-preloader">
+					<div class="preloader"></div>
+					<div class="ptr-arrow"></div>
 				</div>
-				<a class="link send-link" href="#"><span><i
-							class="icon f7-icons theme-color-2">arrowtriangle_right_fill</i></span></a>
-			</div>
+					<div class="error_message">
+						<div class="display-flex justify-content-center padding">
+							<img id="error_image" src="static/images/undraw_warning.svg" alt="Imagem de Erro" width="70%">
+						</div>
+						<div class="block-title block-title-small elegant text-align-center">Algo deu errado!</div>
+						<div class="block block-text text-align-center">
+							<p>Não foi possível conectar-se a Aura. Verifique sua conexão ou tente novamente mais tarde.</p>
+						</div>
+					</div>		
+				</div>
+		</div>
+		<div data-name="aura" id="tab_aura" style="height: 100%;">
+			{{#if passport}}
+				<iframe id="aura_iframe" style="width: 100%;height: 100%;" src="{{url}}widgets/aura?token={{passport}}&type=fullscreen" frameborder="0" ></iframe>
+			{{else}}
+				<iframe id="aura_iframe" style="width: 100%;height: 100%;" src="{{url}}widgets/aura?type=fullscreen" frameborder="0" ></iframe>
+			{{/if}}
 		</div>
 	</div>
 </template>
 
 <style>
-	.messages-content {
-		padding-bottom: 0px;
-		padding-top: 0px;
+	.preloader-modal {
+		background-color: transparent;
 	}
 
-	.aura-consent-buttons {
-		padding-bottom: 10px;
+	.d-none {
 		display: none;
-		background-color: var(--f7-page-bg-color);
 	}
 
-	#logo_aura {
-		position: absolute;
-		padding: 20px 0px;
-		z-index: 3;
-		text-align: center;
-		width: 100%;
-		background-image: linear-gradient(to bottom, rgb(var(--f7-page-bg-color-rgb)), rgb(var(--f7-page-bg-color-rgb)),
-				rgba(var(--f7-page-bg-color-rgb), 0.8), rgba(var(--f7-page-bg-color-rgb), 0));
-	}
-
-	.rating-btn,
-	.rated-btn {
-		margin: 0;
-		padding: 0 8px;
-		width: fit-content;
-		background-color: #fff;
-		border: none
+	.error_message {
+		display: flex;
+		flex-direction: column;
+		height: 100%;
+		justify-content: center;
 	}
 </style>
 
@@ -65,315 +50,45 @@
 	export default {
 		data: function () {
 			return {
-				chat: null,
-				messages: null
+				passport: null,
+				url: null,
 			}
 		},
-		methods: {
-			getTimestamp: function () {
-				var date = new Date();
-				var time = date.toTimeString().substring(0, 5);
-				return time;
-			},
-			getAuraAnswer: async function (input) {
-				var self = this;
-				var app = self.$app;
-
-				return app.aura.requestAnswer(input).then((answer) => {
-					if (answer) {
-						answer = answer.replace(/(Minerva)/gi, 'Aura');
-					}
-					return answer;
-				});
-			},
-			rateAnswer: function () {
-				var $$ = Dom7;
-				var self = this;
-				var app = self.$app;
-				$$('.rating-btn').off('click');
-				$$('.rating-btn').on('click', function (e) {
-					var messageId = e.target.id;
-					var message = $$('.message-id-' + messageId + ' .message-content .message-footer');
-					if (e.target.value == 1) {
-						self.messages.messages[messageId].footer =
-							"Avalie a resposta <button class='rated-btn f7-icons' value='1' id='" + messageId +
-							"'>hand_thumbsup</button>";
-						message.html("<button class='rated-btn f7-icons' value='1' id='" + messageId +
-							"'>hand_thumbsup</button>");
-					} else {
-						self.messages.messages[messageId].footer =
-							"Avalie a resposta <button class='rated-btn f7-icons' value='-1' id='" +
-							messageId + "'>hand_thumbsdown</button>";
-						message.html("<button class='rated-btn f7-icons' value='-1' id='" + messageId +
-							"'>hand_thumbsdown</button>");
-					}
-					app.aura.rateAnswer(self.messages.messages[messageId].text, e.target.value)
-						.then((res) => {
-							if (res) {
-								app.aura.saveChat(self.messages.messages);
-							}
-						});
-					self.changeRate();
-				});
-				self.changeRate();
-			},
-			changeRate: function () {
-				var $$ = Dom7;
-				var self = this;
-				var app = self.$app;
-				$$('.rated-btn').off('click');
-				$$('.rated-btn').on('click', function (e) {
-					var messageId = e.target.id;
-					self.messages.messages[messageId].footer =
-						"Avalie a resposta <button class='rating-btn f7-icons' id='" + messageId +
-						"' value='1'>hand_thumbsup</button> <button class='rating-btn f7-icons' id='" +
-						messageId + "' value='-1'>hand_thumbsdown</button>";
-					$$('.message-id-' + messageId + ' .message-content .message-footer').html(
-						"Avalie a resposta <button class='rating-btn f7-icons' id='" + messageId +
-						"' value='1'>hand_thumbsup</button> <button class='rating-btn f7-icons' id='" +
-						messageId + "' value='-1'>hand_thumbsdown</button>");
-					app.aura.saveChat(self.messages.messages);
-					self.rateAnswer();
-				});
-			},
-			resizeMessagesContent: function () {
-				var self = this;
-				var app = self.$app;
-
-				let logoAura = app.$$('#logo_aura');
-				let aura = app.$$('#tab_aura');
-				let messagebar = app.$$('.messagebar');
-				let messagesContent = app.$$('.messages-content');
-				let height = aura.height() - messagebar.height() + 'px';
-				messagesContent.css('height', height);
-				messagesContent.css('padding-top', logoAura.height() + 10 + 'px');
-			},
-			messageInit: async function () {
-				var self = this;
-				var app = self.$app;
-				var $$ = Dom7;
-
-				self.messages = app.messages.create({
-					el: '.messages',
-
-					firstMessageRule: function (message, previousMessage, nextMessage) {
-						if (message.isTitle) return false;
-
-						if (!previousMessage || previousMessage.type !== message.type || previousMessage
-							.name !== message.name) return true;
-						return false;
-					},
-
-					lastMessageRule: function (message, previousMessage, nextMessage) {
-						if (message.isTitle) return false;
-
-						if (!nextMessage || nextMessage.type !== message.type || nextMessage.name !==
-							message.name) return true;
-						return false;
-					},
-
-					tailMessageRule: function (message, previousMessage, nextMessage) {
-						if (message.isTitle) return false;
-
-						if (!nextMessage || nextMessage.type !== message.type || nextMessage.name !==
-							message.name) return true;
-						return false;
-					}
-				});
-
-				var messagebar = app.messagebar.create({
-					el: '.messagebar'
-				});
-
-				self.resizeMessagesContent();
-
-				var responseInProgress = false;
-
-				$$('.send-link').on('click', function () {
-					var text = messagebar.getValue().replace(/\n/g, '<br>').trim();
-					if (!text.length) return;
-
-					messagebar.clear();
-					messagebar.focus();
-
-					self.messages.addMessage({
-						text: text,
-						textFooter: self.getTimestamp(),
-					});
-
-					if (responseInProgress) return;
-
-					app.aura.addMessageToChat({
-						text: text,
-						textFooter: self.getTimestamp(),
-						type: "sent"
-					})
-
-					if (!app.aura.getConsent()) {
-						self.askAuraConsent();
-						return;
-					}
-
-					receiveMessage(text);
-				});
-
-				async function receiveMessage(received) {
-					self.getAuraAnswer(received).then(data => {
-						responseInProgress = true;
-
-						setTimeout(function () {
-							var answer = {
-								name: "Aura",
-								avatar: "static/images/aura/aura_icon.png",
-								type: "received",
-								text: data ? data : "Desculpe, infelizmente eu não entendi",
-								textFooter: self.getTimestamp(),
-								footer: "Avalie a resposta <button class='rating-btn f7-icons' id='" +
-									self.messages.messages.length +
-									"' value='1'>hand_thumbsup</button> <button class='rating-btn f7-icons' id='" +
-									self.messages.messages.length +
-									"' value='-1'>hand_thumbsdown</button>",
-								cssClass: "message-id-" + self.messages.messages.length
-							}
-
-							app.aura.addMessageToChat(answer);
-
-							self.messages.showTyping({
-								header: answer.name + ' is typing',
-								avatar: answer.avatar
-							});
-
-							setTimeout(function () {
-								self.messages.addMessage(answer);
-								self.rateAnswer();
-								self.messages.hideTyping();
-								responseInProgress = false;
-							}, 1000);
-						}, 1000);
-					});
-				}
-
-				function loadOldMessages() {
-					let chat = app.aura.getChat();
-
-					if (!chat) {
-						receiveMessage("se apresente");
-						return;
-					}
-
-					for (let i = 0; i < chat.length; i++) {
-						self.messages.addMessage(chat[i]);
-					}
-					self.messages.scroll();
-				}
-
-				await loadOldMessages();
-				return;
-			},
-			auraConsentAnswer: function (consent) {
-				var self = this;
-				var app = self.$app;
-
-				app.aura.setConsent(consent);
-
-				const consentButtons = document.querySelector('.aura-consent-buttons');
-				consentButtons.style.display = "none";
-
-				if (!consent) {
-					if (typeof cordova !== 'undefined') {
-						cordova.plugins.firebase.analytics.logEvent("aura", {
-							"consent": false
-						}).then(res => {
-							console.log(`[${res}] aura: consent=false`);
-						})
-					}
-					self.messages.clear();
-					app.aura.clearChat();
-					this.messageInit();
-					return;
-				}
-
-				self.messages.addMessage({
-					text: "Concordo",
-					textFooter: self.getTimestamp(),
-				});
-
-				app.aura.addMessageToChat({
-					text: "Concordo",
-					textFooter: self.getTimestamp(),
-					type: "sent"
-				});
-
-				var answer = {
-					name: "Aura",
-					avatar: "static/images/aura/aura_icon.png",
-					type: "received",
-					text: "Ótimo, obrigada! Com o que eu posso ajudar hoje?",
-					textFooter: self.getTimestamp()
-				};
-
-				app.aura.addMessageToChat(answer);
-
-				self.messages.showTyping({
-					header: answer.name + ' is typing',
-					avatar: answer.avatar
-				});
-
-				setTimeout(function () {
-					self.messages.addMessage(answer);
-					self.messages.hideTyping();
-				}, 3000);
-			},
-			askAuraConsent: function () {
-				var self = this;
-				var app = self.$app
-				var answer = {
-					name: "Aura",
-					avatar: "static/images/aura/aura_icon.png",
-					type: "received",
-					text: "Para que eu consiga evoluir constantemente, todas as mensagens e interações que você fizer comigo são armazenadas em um banco de dados, na íntegra. As mensagens não estão associadas a você (a autoria é anonimizada). Você concorda com isso?",
-					textFooter: self.getTimestamp()
-				};
-
-				app.aura.addMessageToChat(answer);
-
-				self.messages.showTyping({
-					header: answer.name + ' is typing',
-					avatar: answer.avatar
-				});
-
-				setTimeout(function () {
-					self.messages.addMessage(answer);
-					self.messages.hideTyping();
-					const consentButtons = document.querySelector('.aura-consent-buttons');
-					consentButtons.style.display = "flex";
-				}, 1500);
-			},
-		},
 		on: {
-			tabInit: async function (e, page) {
-				var self = this;
-				var app = self.$app;
+			tabInit: function (e, page) {
+				
+				let self = this;
+				let app = self.$app;
 
-				await this.messageInit();
-				this.showButtons = false;
+				let url = app.api.url;
+				app.preloader.show('blue');
 
-				this.rateAnswer();
+				app.request.promise.get(url+"widgets/aura").catch((e) => {
+					app.$$("#aura_iframe").addClass('d-none')
+					app.$$(".error_screen").removeClass('d-none')
+					app.preloader.hide();
+                });
 
-				window.onresize = function () {
-					self.resizeMessagesContent();
-					var doc = document.getElementsByClassName("messages-content")[0];
-					var maxScroll = Dom7(".messages").height();
-					doc.scrollTo({
-						top: maxScroll,
-						behavior: 'smooth'
-					});
-				}
+				let userCredentials = app.storage.getUserCredentials()
+								
+				self.$setState({
+					passport: userCredentials.passport,
+					url: url
+				});
 
-				app.$$('#logo_aura_image').on("load", () => {
-					self.resizeMessagesContent();
+				app.$$("#aura_iframe").on('load', function(e) {
+					app.preloader.hide();
+				});
+
+				// Pull to refresh
+				var $ptrContent = app.$$('.ptr-content');
+				$ptrContent.on('ptr:refresh', function (e) {
+					setTimeout(()=>{
+						app.view.main.router.refreshPage();
+						app.ptr.done(); 
+					}, 700);
 				})
 			},
-		},
+		}
 	};
 </script>
