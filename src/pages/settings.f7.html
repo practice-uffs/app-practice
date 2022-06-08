@@ -190,6 +190,11 @@
             })
         } else if (e.target.name === 'testApi') {
           self.changeSetting('testApi', e.target.checked)
+          if (e.target.checked) {
+            app.api.url = app.storage.testApiURL;
+          } else {
+            app.api.url = app.storage.prodApiURL;
+          } 
           app.storage.removeAllButSettings()
           app.view.main.router.navigate('/')
         } else if (e.target.name === 'allowNotifications') {
