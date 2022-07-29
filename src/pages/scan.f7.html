@@ -1,6 +1,19 @@
 <template>
-  <div data-name="scan">
-    <div class="block card no-margin no-padding">
+  <div class="page" data-name="scan">
+    <div class="navbar">
+      <div class="navbar-bg"></div>
+      <div class="navbar-inner sliding">
+        <div class="left">
+          <a href="#" class="link back">
+            <i class="icon icon-back"></i>
+            <span class="if-not-md">Voltar</span>
+          </a>
+        </div>
+        <div class="title">Leitor de QRCode</div>
+      </div>
+    </div>
+    <div class="page-content">
+      <div class="block card no-margin no-padding">
         <div id="qr-reader"></div>
 
         <div id="scanner_bar"></div>
@@ -16,6 +29,7 @@
             </ul>
           </div>           
         </div>
+      </div>
     </div>
   </div>
 </template>
@@ -334,12 +348,12 @@
       }
     },
     on: {
-      tabInit: async function(e, page) {
+      pageInit: async function(e, page) {
         this.getCamPermission()
         // this.initScan() //Para funcionar na web, descomente essa linhas
         document.addEventListener('deviceready', this.onDeviceReady, false);
       },
-      tabBeforeRemove: function (e) {
+      pageBeforeOut: function (e) {
         if(Dom7('#qr-shaded-region').length != 0){
           this.removeScan();
         }

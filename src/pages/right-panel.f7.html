@@ -18,7 +18,26 @@
 
       <div class="list no-margin">
         <ul>
-          {{#if isEnabled.ideasPage}}
+
+          {{/if}} {{#if isEnabled.scanPage}}
+          <li>
+            <a href="/scan/" class="item-link item-content">
+              <div class="item-media"><i class="f7-icons">qrcode_viewfinder</i></div>
+              <div class="item-inner">
+                <div class="item-title">Leitor de QRCode</div>
+              </div>
+            </a>
+          </li>
+          {{/if}} {{#if isEnabled.envPage}}
+          <li>
+            <a href="/env/" class="item-link item-content">
+              <div class="item-media"><i class="f7-icons">wand_stars</i></div>
+              <div class="item-inner">
+                <div class="item-title">Desenvolvimento</div>
+              </div>
+            </a>
+          </li>
+          {{/if}}{{#if isEnabled.ideasPage}}
           <li>
             <a href="/ideas/" class="item-link item-content">
               <div class="item-media padding-top">

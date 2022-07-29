@@ -67,25 +67,12 @@ const homePageRoute = function () {
       id: "services",
       component: ServicesPage,
     });
+
   if (IsEnabled.newsPage)
     tabs.push({
       path: "/news/",
       id: "news",
       component: NewsPage,
-    });
-
-  if (IsEnabled.envPage)
-    tabs.push({
-      path: "/env/",
-      id: "env",
-      component: EnvPage,
-    });
-
-  if (IsEnabled.scanPage)
-    tabs.push({
-      path: "/scan/",
-      id: "scan",
-      component: ScanPage,
     });
 
   if (IsEnabled.auraPage)
@@ -199,6 +186,26 @@ const aboutPageRoute = function () {
   if (IsEnabled.aboutPage) return route;
 };
 
+const scanPageRoute = function () {
+  let route = {
+    path: "/scan/",
+    component: ScanPage,
+    beforeEnter: authenticated,
+  };
+
+  if (IsEnabled.scanPage) return route;
+};
+
+const envPageRoute = function () {
+  let route = {
+    path: "/env/",
+    component: EnvPage,
+    beforeEnter: authenticated,
+  };
+
+  if (IsEnabled.envPage) return route;
+};
+
 const taskCompletedPageRoute = function () {
   let route = {
     path: "/task-completed/",
@@ -254,6 +261,8 @@ var routes = [
   notificationsPageRoute(),
   settingsPageRoute(),
   aboutPageRoute(),
+  scanPageRoute(),
+  envPageRoute(),
   taskCompletedPageRoute(),
   recordAudioPageRoute(),
   // Unauthenticated routes
