@@ -1,0 +1,78 @@
+<template>
+	<div class="page" data-name="id-card-details">
+
+		<div class="navbar">
+			<div class="navbar-bg"></div>
+			<div class="navbar-inner sliding">
+				<!-- Link to go back -->
+				<div class="left">
+					<a href="/id-card/" class="link back">
+						<i class="icon icon-back"></i>
+						<span class="if-not-md">Voltar</span>
+					</a>
+				</div>
+				<div class="title">Editar carteirinha</div>
+			</div>
+		</div>
+
+		<div class="page-content">
+			<form>
+				<div class="card">
+					<div class="block display-flex justify-content-center padding">
+						<img width="150px" src="../static/images/id-card/user-photo.jpg" alt="">
+					</div>
+					<div class="card-content card-content-padding">
+						<div class="list no-hairlines">
+							<ul>
+								<li class="item-content item-input item-input-outline">
+									<div class="item-inner">
+										<div class="item-title item-floating-label">idUffs</div>
+										<div class="item-input-wrap">
+											<input type="text" name="user-uid" required validate disabled />
+										</div>
+									</div>
+								</li>
+								<li class="item-content item-input item-input-outline">
+									<div class="item-inner">
+										<div class="item-title item-floating-label">Matrícula</div>
+										<div class="item-input-wrap">
+											<input type="text" name="user-enrollment_id" required validate />
+											<span class="input-clear-button"></span>
+										</div>
+									</div>
+								</li>
+								<li class="item-content item-input item-input-outline margin-bottom">
+									<div class="item-inner">
+										<div class="item-title item-floating-label">Data de nascimento</div>
+										<div class="item-input-wrap">
+											<input type="date" name="user-birth_date" required validate />
+										</div>
+									</div>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div class="block">
+					<input id="id-card-submit" type="submit" class="button button-raised button-fill margin-vertical"
+						value="Solicitar Edição">
+				</div>
+			</form>
+		</div>
+	</div>
+</template>
+<script>
+	export default {
+		on: {
+			pageInit: function () {
+				let self = this;
+				let app = self.$app;
+				let userCredentials = app.storage.getUserCredentials();
+
+				app.$$("input[name*='user-uid']").val(userCredentials.user.uid);
+			}
+		},
+		methods: {
+		}
+	}
+</script>

@@ -39,6 +39,8 @@ var IsEnabled = {
 
     aboutPage: true,
     recordAudioPage: true,
+
+    idCardPage: true,
 }
 
 export default IsEnabled;

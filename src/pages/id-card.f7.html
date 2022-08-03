@@ -1,0 +1,134 @@
+<template>
+	<div data-name="id-card">
+		<!-- Request Page -->
+		<div id="id-card-request">
+			<div class="block display-none">
+				<div class="block display-flex justify-content-center">
+					<lottie-player src="static/lottie/id-card-request.json" background="rgba(0, 0, 0, 0)" loop autoplay>
+					</lottie-player>
+				</div>
+
+				<div class="block-title block-title-medium elegant">Carteirinha Digital</div>
+				<div class="block">
+					<p class="">A carteirinha de sempre, agora digital.</p>
+					<a href="/id-card/id-card-request/" class="button button-raised button-fill display-flex">
+						<span class="flex-grow">Solicitar Carteirinha</span>
+						<i class="f7-icons margin-left">chevron_right_circle</i>
+					</a>
+				</div>
+			</div>
+		</div>
+
+		<!-- Display Page -->
+		<div id="id-card-display" class="block">
+			<div class="id-card-wrapper" id="id-card-front">
+				<img id="template" src="../static/images/id-card/id-card-front.png" alt="">
+				<img id="user-photo-display" src="../static/images/id-card/user-photo.jpg" alt="">
+				<span id="user-name-display">Pedro Zawadzki Dutra</span>
+				<span id="user-uid-display">Matrícula: 2022000000</span>
+				<span id="user-course-display">Ciência da Computação</span>
+			</div>
+			<div class="id-card-wrapper" id="id-card-back">
+				<img id="template" src="../static/images/id-card/id-card-back.png" alt="">
+				<span id="user-birthday-display">01/01/2000</span>
+			</div>
+		</div>
+
+		<!-- Floating Action Button -->
+		<div class="fab fab-right-bottom color-orange">
+			<a href="#">
+				<i class="icon f7-icons if-not-md">plus</i>
+				<i class="icon f7-icons if-not-md">xmark</i>
+				<i class="icon material-icons md-only">add</i>
+				<i class="icon material-icons md-only">close</i>
+			</a>
+			<div class="fab-buttons fab-buttons-top">
+				<a class="fab-label-button" href="/id-card/id-card-details/">
+					<span><i class="icon f7-icons">square_pencil</i></span><span class="fab-label">Editar</span>
+				</a>
+				<a class="fab-label-button" href="/id-card/id-card-request/">
+					<span><i class="icon f7-icons">creditcard</i></span><span class="fab-label">Solicitar</span>
+				</a>
+			</div>
+		</div>
+	</div>
+</template>
+<style>
+	@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@800&display=swap');
+
+	@font-face {
+		font-family: sans-serif;
+		src: url(../fonts/OpenSans-VariableFon.ttf);
+	}
+
+	.id-card-wrapper {
+		font-family: sans-serif;
+		font-weight: 700;
+		color: white;
+		overflow: hidden;
+		border-radius: 15px;
+		box-shadow: 5px 5px 10px #16161666;
+		position: relative;
+		line-height: 0px;
+		margin-bottom: 20px;
+	}
+
+	#template {
+		width: 100%;
+	}
+
+	#user-photo-display {
+		position: absolute;
+		left: 9%;
+		top: 12%;
+		width: 30%;
+	}
+
+	#user-name-display {
+		position: absolute;
+		text-transform: uppercase;
+		font-size: 117%;
+		top: 41%;
+		left: 44%;
+	}
+
+	#user-course-display {
+		position: absolute;
+		text-transform: uppercase;
+		font-size: 105%;
+		top: 66%;
+		left: 44%;
+	}
+
+	#user-uid-display {
+		position: absolute;
+		font-size: 110%;
+		top: 57%;
+		left: 44%;
+	}
+
+	#user-birthday-display {
+		position: absolute;
+		font-weight: bold;
+		font-size: 110%;
+		color: #1A3335;
+		top: 43%;
+		left: 12.5%;
+	}
+</style>
+
+<script>
+	export default {
+		on: {
+			tabInit: function () {
+				this.calcFontSize();
+			}
+		},
+		methods: {
+			calcFontSize: function () {
+				let cardView = document.getElementsByClassName('id-card-wrapper')[0];
+				document.getElementById('id-card-display').style.fontSize = (cardView.clientWidth / 31) + "px";
+			}
+		}
+	}
+</script>

@@ -1,0 +1,214 @@
+<template>
+	<div class="page" data-name="id-card-request">
+
+		<div class="navbar">
+			<div class="navbar-bg"></div>
+			<div class="navbar-inner sliding">
+				<!-- Link to go back -->
+				<div class="left">
+					<a href="/id-card/" class="link back">
+						<i class="icon icon-back"></i>
+						<span class="if-not-md">Voltar</span>
+					</a>
+				</div>
+				<div class="title">Solicitar carteirinha</div>
+			</div>
+		</div>
+
+		<div class="page-content">
+			<form>
+				<!-- User-Data Step -->
+				<div id="step-data" class="card step">
+					<div class="block display-flex justify-content-center">
+						<lottie-player class="margin-vertical" src="static/lottie/id-card-request-step-data.json"
+							style="width: auto; height: 150px; margin: 0 auto;" loop autoplay>
+						</lottie-player>
+					</div>
+					<div class="card-header">Primeiro, precisamos de alguns dados...</div>
+					<div class="card-content card-content-padding">
+						<div class="list no-hairlines">
+							<ul>
+								<li class="item-content item-input item-input-outline">
+									<div class="item-inner">
+										<div class="item-title item-floating-label">Matrícula</div>
+										<div class="item-input-wrap">
+											<input type="text" name="user-enrollment_id" required validate />
+											<span class="input-clear-button"></span>
+										</div>
+									</div>
+								</li>
+								<li class="item-content item-input item-input-outline">
+									<div class="item-inner">
+										<div class="item-title item-floating-label">Data de nascimento</div>
+										<div class="item-input-wrap">
+											<input type="date" name="user-birth_date" required validate />
+										</div>
+									</div>
+								</li>
+							</ul>
+						</div>
+					</div>
+					<div class="card-footer">
+						<button type="button" class="button button-raised button-fill margin-vertical"
+							@click="stepDataContinue">
+							Continuar
+						</button>
+					</div>
+				</div>
+
+				<!-- User-Photo Step -->
+				<div id="step-photo" class="card step display-none">
+					<div class="block display-flex justify-content-center">
+						<lottie-player id="lootie-photo-display" class="margin-vertical"
+							src="static/lottie/id-card-request-step-photo.json"
+							style="width: auto; height: 150px; margin: 0 auto;" speed="0.5" loop autoplay>
+						</lottie-player>
+						<img id="user-photo-preview" width="40%" src="" class="display-none margin-top">
+					</div>
+					<div class="card-content card-content-padding">
+						<h3>Atenção, a foto deve ter o seguinte padrão:</h3>
+						<ul>
+							<li>Ser colorida e com fundo branco;</li>
+							<li>Mostrar apenas o pescoço e o rosto do usuário;</li>
+							<li>Usuário ter expressão facial neutra;</li>
+						</ul>
+						<p style="text-align: justify;">
+							Não serão aceitas fotos utilizando óculos escuros, bonés, chapéus, fones de ouvido ou outros
+							acessórios que prejudiquem a identificação do usuário.
+						</p>
+
+						<label for="user-photo"
+							class="button button-raised button-fill display-flex margin-bottom color-deeporange">
+							<i class="f7-icons margin-right">camera_fill</i>
+							<span id="btn-photo-text"> Selecione sua foto</span>
+							<input required validate class="display-none" type="file" id="user-photo"
+								accept="image/*;capture=camera" @change="changePhotoDisplay()">
+						</label>
+					</div>
+					<div class="card-footer padding-vertical row display-flex">
+						<div class="col-50 align-self-flex-end">
+							<a @click="changeToStep('step-data', true)">
+								<i class="f7-icons small">chevron_left</i> Voltar
+							</a>
+						</div>
+						<div class="col-50">
+							<button type="button" class="button button-raised button-fill display-flex"
+								@click="stepPhotoContinue">
+								Continuar <i class="f7-icons margin-left">chevron_right_circle</i>
+							</button>
+						</div>
+					</div>
+				</div>
+
+				<!-- User-Credentials Step -->
+				<div id="step-credentials" class="card step display-none">
+					<div class="block display-flex justify-content-center">
+						<lottie-player class="margin-vertical" src="static/lottie/id-card-request-step-credentials.json"
+							style="width: auto; height: 150px; margin: 0 auto;" speed="0.5" loop autoplay>
+						</lottie-player>
+					</div>
+
+					<div class="card-header">Para finalizar, confirme suas credenciais.</div>
+					<div class="card-content card-content-padding">
+						<div class="list no-hairlines">
+							<ul>
+								<li class="item-content item-input item-input-outline">
+									<div class="item-inner">
+										<div class="item-title item-floating-label">Usuário idUffs</div>
+										<div class="item-input-wrap">
+											<input type="text" name="user-uid" required validate disabled />
+										</div>
+									</div>
+								</li>
+								<li class="item-content item-input item-input-outline">
+									<div class="item-inner">
+										<div class="item-title item-floating-label">Senha</div>
+										<div class="item-input-wrap">
+											<input type="password" name="user-password" required validate />
+											<span class="input-clear-button"></span>
+										</div>
+									</div>
+								</li>
+							</ul>
+						</div>
+					</div>
+					<div class="card-footer">
+						<a @click="changeToStep('step-photo', true)">
+							<i class="f7-icons small">chevron_left</i> Voltar
+						</a>
+					</div>
+				</div>
+				<div class="block">
+					<input id="id-card-submit" type="submit"
+						class="button button-raised button-fill margin-vertical display-none" value="Solicitar">
+				</div>
+			</form>
+		</div>
+	</div>
+</template>
+<script>
+	export default {
+		on: {
+			pageInit: function () {
+				let self = this;
+				let app = self.$app;
+				let userCredentials = app.storage.getUserCredentials();
+
+				app.$$("input[name*='user-uid']").val(userCredentials.user.uid);
+			}
+		},
+		methods: {
+			changeToStep: function (step, back = false) {
+				let self = this;
+				let app = self.$app;
+
+				app.$$('#' + step).css({ "opacity": 0.5, "left": (back ? "-50px" : "50px") })
+					.removeClass('display-none')
+					.animate({ 'opacity': 1, 'left': 0 });
+
+				app.$$('.step:not(#' + step + ')').each(function () {
+					app.$$(this).addClass('display-none');
+				})
+
+				if (step == 'step-credentials') {
+					app.$$('#id-card-submit').removeClass('display-none');
+				} else {
+					app.$$('#id-card-submit').addClass('display-none');
+				}
+			},
+			stepDataContinue: function () {
+				if (this.$app.input.validateInputs('#step-data')) {
+					this.changeToStep('step-photo');
+				}
+			},
+			stepPhotoContinue: function () {
+				if (this.$app.input.validateInputs('#step-photo')) {
+					this.changeToStep('step-credentials');
+					return;
+				}
+				this.$app.dialog.alert('Você deve inserir uma foto.', 'Não fuja!');
+			},
+			changePhotoDisplay: function () {
+				let self = this;
+				let app = self.$app;
+				let reader = new FileReader();
+				let file = document.getElementById('user-photo').files[0];
+
+				if (file) {
+					app.$$('#user-photo-preview').removeClass('display-none');
+					app.$$('#lootie-photo-display').addClass('display-none');
+					app.$$('#btn-photo-text').html('Alterar sua foto');
+
+					reader.onloadend = function () {
+						document.getElementById('user-photo-preview').src = reader.result;
+					}
+					reader.readAsDataURL(file);
+				} else {
+					app.$$('#user-photo-preview').addClass('display-none');
+					app.$$('#lootie-photo-display').removeClass('display-none');
+					app.$$('#btn-photo-text').html('Selecione sua foto');
+				}
+			}
+		}
+	}
+</script>

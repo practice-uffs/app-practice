@@ -10,6 +10,10 @@ import ChatPage from "../pages/chat.f7.html";
 import NewsPage from "../pages/news.f7.html";
 import ProfilePage from "../pages/profile.f7.html";
 
+import IdCardPage from "../pages/id-card.f7.html";
+import IdCardRequestPage from "../pages/id-card-request.f7.html";
+import IdCardDetailsPage from "../pages/id-card-details.f7.html";
+
 import IdeasPage from "../pages/ideas.f7.html";
 import ServicesPage from "../pages/services.f7.html";
 import ServiceRequestPage from "../pages/service-request.f7.html";
@@ -75,6 +79,13 @@ const homePageRoute = function () {
       component: NewsPage,
     });
 
+  if (IsEnabled.idCardPage)
+  tabs.push({
+    path: "/id-card/",
+    id: "id-card",
+    component: IdCardPage,
+  });
+
   if (IsEnabled.auraPage)
     tabs.push({
       path: "/aura/",
@@ -122,6 +133,26 @@ const serviceRequestPageRoute = function () {
   };
 
   if (IsEnabled.servicesPage) return route;
+};
+
+const idCardRequestPageRoute = function () {
+  let route = {
+    path: "/id-card/id-card-request/",
+    component: IdCardRequestPage,
+    beforeEnter: authenticated,
+  };
+
+  if (IsEnabled.idCardPage) return route;
+};
+
+const idCardDetailsPageRoute = function () {
+  let route = {
+    path: "/id-card/id-card-details/",
+    component: IdCardDetailsPage,
+    beforeEnter: authenticated,
+  };
+
+  if (IsEnabled.idCardPage) return route;
 };
 
 const rightPanelRoute = function () {
@@ -255,6 +286,8 @@ var routes = [
   chatPageRoute(),
   serviceRequestPageRoute(),
   serviceDetailsPageRoute(),
+  idCardRequestPageRoute(),
+  idCardDetailsPageRoute(),
   rightPanelRoute(),
   ideasPageRoute(),
   coinPageRoute(),
