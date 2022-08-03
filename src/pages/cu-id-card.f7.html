@@ -1,10 +1,10 @@
 <template>
-	<div data-name="id-card">
+	<div data-name="cu-id-card">
 		<!-- Request Page -->
 		<div id="id-card-request">
 			<div class="block display-none">
 				<div class="block display-flex justify-content-center">
-					<lottie-player src="static/lottie/id-card-request.json" background="rgba(0, 0, 0, 0)" loop autoplay>
+					<lottie-player src="static/lottie/cu-id-card-request.json" background="rgba(0, 0, 0, 0)" loop autoplay>
 					</lottie-player>
 				</div>
 
@@ -22,14 +22,14 @@
 		<!-- Display Page -->
 		<div id="id-card-display" class="block">
 			<div class="id-card-wrapper" id="id-card-front">
-				<img id="template" src="../static/images/id-card/id-card-front.png" alt="">
-				<img id="user-photo-display" src="../static/images/id-card/user-photo.jpg" alt="">
+				<img id="template" src="../static/images/cu/id-card/id-card-front.png" alt="">
+				<img id="user-photo-display" src="../static/images/cu/id-card/user-photo.jpg" alt="">
 				<span id="user-name-display">Pedro Zawadzki Dutra</span>
 				<span id="user-uid-display">Matrícula: 2022000000</span>
 				<span id="user-course-display">Ciência da Computação</span>
 			</div>
 			<div class="id-card-wrapper" id="id-card-back">
-				<img id="template" src="../static/images/id-card/id-card-back.png" alt="">
+				<img id="template" src="../static/images/cu/id-card/id-card-back.png" alt="">
 				<span id="user-birthday-display">01/01/2000</span>
 			</div>
 		</div>
@@ -43,10 +43,10 @@
 				<i class="icon material-icons md-only">close</i>
 			</a>
 			<div class="fab-buttons fab-buttons-top">
-				<a class="fab-label-button" href="/id-card/id-card-details/">
+				<a class="fab-label-button" href="/cu/id-card/details/">
 					<span><i class="icon f7-icons">square_pencil</i></span><span class="fab-label">Editar</span>
 				</a>
-				<a class="fab-label-button" href="/id-card/id-card-request/">
+				<a class="fab-label-button" href="/cu/id-card/request/">
 					<span><i class="icon f7-icons">creditcard</i></span><span class="fab-label">Solicitar</span>
 				</a>
 			</div>

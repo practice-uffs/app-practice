@@ -1,0 +1,46 @@
+<template>
+	<div data-name="cu-home">
+		<div id="lottie" class="block display-flex align-items-center">
+			<div id="lottie-text">
+				<h2 class="no-margin">
+					Cadastro Único
+				</h2>
+				<p class="text-color-gray no-margin">Tudo em um só lugar!</p>
+			</div>
+			<div>
+				<lottie-player src="../static/lottie/cu-home.json" loop autoplay>
+				</lottie-player>
+			</div>
+		</div>
+
+		<div class="card card-banner">
+			<div class="card-content">
+				<a href="">
+					<div class="card-header"
+						style="background-image: url(../static/images/cu/room-scheduling/room-scheduling-banner.svg); background-color: #D3D3D3;">
+						Reserva de Salas
+					</div>
+				</a>
+			</div>
+		</div>
+	</div>
+</template>
+<style>
+	.card-banner {
+		height: 150px;
+		background-color: black;
+	}
+
+	.card-banner .card-header {
+		min-height: 150px;
+		background-repeat: no-repeat;
+		background-size: 100%;
+		color: #ffffff;
+		font-weight: bold;
+		text-shadow: 2px 2px 6px black;
+		font-size: 24px;
+	}
+</style>
+<script>
+	export default {}
+</script>

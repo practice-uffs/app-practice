@@ -10,9 +10,11 @@ import ChatPage from "../pages/chat.f7.html";
 import NewsPage from "../pages/news.f7.html";
 import ProfilePage from "../pages/profile.f7.html";
 
-import IdCardPage from "../pages/id-card.f7.html";
-import IdCardRequestPage from "../pages/id-card-request.f7.html";
-import IdCardDetailsPage from "../pages/id-card-details.f7.html";
+import CuIdCardPage from "../pages/cu-id-card.f7.html";
+import CuIdCardRequestPage from "../pages/cu-id-card-request.f7.html";
+import CuIdCardDetailsPage from "../pages/cu-id-card-details.f7.html";
+import CuHomePage from "../pages/cu-home.f7.html";
+
 
 import IdeasPage from "../pages/ideas.f7.html";
 import ServicesPage from "../pages/services.f7.html";
@@ -79,11 +81,18 @@ const homePageRoute = function () {
       component: NewsPage,
     });
 
-  if (IsEnabled.idCardPage)
+  if (IsEnabled.cuIdCardPage)
   tabs.push({
-    path: "/id-card/",
-    id: "id-card",
-    component: IdCardPage,
+    path: "/cu/id-card/",
+    id: "cu-id-card",
+    component: CuIdCardPage,
+  });
+
+  if (IsEnabled.cuHomePage)
+  tabs.push({
+    path: "/cu/home/",
+    id: "cu-home",
+    component: CuHomePage,
   });
 
   if (IsEnabled.auraPage)
@@ -135,24 +144,24 @@ const serviceRequestPageRoute = function () {
   if (IsEnabled.servicesPage) return route;
 };
 
-const idCardRequestPageRoute = function () {
+const cuIdCardRequestPageRoute = function () {
   let route = {
-    path: "/id-card/id-card-request/",
-    component: IdCardRequestPage,
+    path: "/cu/id-card/request/",
+    component: CuIdCardRequestPage,
     beforeEnter: authenticated,
   };
 
-  if (IsEnabled.idCardPage) return route;
+  if (IsEnabled.cuIdCardPage) return route;
 };
 
-const idCardDetailsPageRoute = function () {
+const cuIdCardDetailsPageRoute = function () {
   let route = {
-    path: "/id-card/id-card-details/",
-    component: IdCardDetailsPage,
+    path: "/cu/id-card/details/",
+    component: CuIdCardDetailsPage,
     beforeEnter: authenticated,
   };
 
-  if (IsEnabled.idCardPage) return route;
+  if (IsEnabled.cuIdCardPage) return route;
 };
 
 const rightPanelRoute = function () {
@@ -286,8 +295,8 @@ var routes = [
   chatPageRoute(),
   serviceRequestPageRoute(),
   serviceDetailsPageRoute(),
-  idCardRequestPageRoute(),
-  idCardDetailsPageRoute(),
+  cuIdCardRequestPageRoute(),
+  cuIdCardDetailsPageRoute(),
   rightPanelRoute(),
   ideasPageRoute(),
   coinPageRoute(),

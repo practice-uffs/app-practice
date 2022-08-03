@@ -40,7 +40,8 @@ var IsEnabled = {
     aboutPage: true,
     recordAudioPage: true,
 
-    idCardPage: true,
+    cuIdCardPage: true,
+    cuHomePage: true,
 }
 
 export default IsEnabled;

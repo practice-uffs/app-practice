@@ -20,8 +20,11 @@
         {{#if isEnabled.servicesPage}}
           <a href="/" class="tab-link" data-route-tab-id="services"><i class="f7-icons">briefcase</i></a>
         {{/if}}
-        {{#if isEnabled.idCardPage}}
-          <a href="/id-card/" class="tab-link" data-route-tab-id="id-card"><i class="f7-icons">creditcard</i></a>
+        {{#if isEnabled.cuHomePage}}
+          <a href="/cu/home/" class="tab-link" data-route-tab-id="cu"> <img src="../static/images/cu/tab_bar_icon_cu.svg"> </a>
+        {{/if}}
+        {{#if isEnabled.cuIdCardPage}}
+          <a href="/cu/id-card/" class="tab-link" data-route-tab-id="cu-id-card"><i class="f7-icons">creditcard</i></a>
         {{/if}}
         {{#if isEnabled.newsPage}}
           <a href="/news/" class="tab-link" data-route-tab-id="news"><i class="f7-icons">doc</i></a>
@@ -43,8 +46,11 @@
         {{#if isEnabled.newsPage}}
           <div class="page-content tab" id="news"></div>
         {{/if}}
-        {{#if isEnabled.idCardPage}}
-          <div class="page-content tab" id="id-card"></div>
+        {{#if isEnabled.cuHomePage}}
+          <div class="page-content tab" id="cu-home"></div>
+        {{/if}}
+        {{#if isEnabled.cuIdCardPage}}
+          <div class="page-content tab" id="cu-id-card"></div>
         {{/if}}
         {{#if isEnabled.auraPage}}
           <div class="page-content tab" id="aura"></div>
