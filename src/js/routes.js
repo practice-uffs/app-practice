@@ -14,6 +14,7 @@ import CuIdCardPage from "../pages/cu-id-card.f7.html";
 import CuIdCardRequestPage from "../pages/cu-id-card-request.f7.html";
 import CuIdCardDetailsPage from "../pages/cu-id-card-details.f7.html";
 import CuHomePage from "../pages/cu-home.f7.html";
+import CuRoomSchedulingPage from "../pages/cu-room-scheduling.f7.html";
 
 
 import IdeasPage from "../pages/ideas.f7.html";
@@ -82,18 +83,18 @@ const homePageRoute = function () {
     });
 
   if (IsEnabled.cuIdCardPage)
-  tabs.push({
-    path: "/cu/id-card/",
-    id: "cu-id-card",
-    component: CuIdCardPage,
-  });
+    tabs.push({
+      path: "/cu/id-card/",
+      id: "cu-id-card",
+      component: CuIdCardPage,
+    });
 
   if (IsEnabled.cuHomePage)
-  tabs.push({
-    path: "/cu/home/",
-    id: "cu-home",
-    component: CuHomePage,
-  });
+    tabs.push({
+      path: "/cu/home/",
+      id: "cu-home",
+      component: CuHomePage,
+    });
 
   if (IsEnabled.auraPage)
     tabs.push({
@@ -144,24 +145,37 @@ const serviceRequestPageRoute = function () {
   if (IsEnabled.servicesPage) return route;
 };
 
-const cuIdCardRequestPageRoute = function () {
+const cuPagesRoutes = function () {
   let route = {
-    path: "/cu/id-card/request/",
-    component: CuIdCardRequestPage,
-    beforeEnter: authenticated,
+    path: "/cu/"
   };
 
-  if (IsEnabled.cuIdCardPage) return route;
-};
+  let modules = [];
 
-const cuIdCardDetailsPageRoute = function () {
-  let route = {
-    path: "/cu/id-card/details/",
-    component: CuIdCardDetailsPage,
-    beforeEnter: authenticated,
-  };
+  if (IsEnabled.cuIdCardPage) {
+    modules.push({
+      path: "/id-card/",
+      routes: [{
+        path: "/request/",
+        component: CuIdCardRequestPage,
+        beforeEnter: authenticated,
+      }, {
+        path: "/details/",
+        component: CuIdCardDetailsPage,
+        beforeEnter: authenticated,
+      }]
+    });
+  }
 
-  if (IsEnabled.cuIdCardPage) return route;
+  if (IsEnabled.cuRoomSchedulingPage) {
+    modules.push({
+      path: "/room-scheduling/",
+      component: CuRoomSchedulingPage
+    });
+  }
+
+  route.routes = modules;
+  if (IsEnabled.cuPages) return route;
 };
 
 const rightPanelRoute = function () {
@@ -295,8 +309,7 @@ var routes = [
   chatPageRoute(),
   serviceRequestPageRoute(),
   serviceDetailsPageRoute(),
-  cuIdCardRequestPageRoute(),
-  cuIdCardDetailsPageRoute(),
+  cuPagesRoutes(),
   rightPanelRoute(),
   ideasPageRoute(),
   coinPageRoute(),

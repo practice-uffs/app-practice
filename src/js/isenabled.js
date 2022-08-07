@@ -40,8 +40,10 @@ var IsEnabled = {
     aboutPage: true,
     recordAudioPage: true,
 
+    cuPages: true,
     cuIdCardPage: true,
     cuHomePage: true,
+    cuRoomSchedulingPage: true,
 }
 
 export default IsEnabled;

@@ -1,0 +1,253 @@
+<template>
+	<div class="page" data-name="cu-room-scheduling">
+
+		<div class="navbar">
+			<div class="navbar-bg"></div>
+			<div class="navbar-inner sliding">
+				<!-- Link to go back -->
+				<div class="left">
+					<a href="/" class="link back">
+						<i class="icon icon-back"></i>
+						<span class="if-not-md">Voltar</span>
+					</a>
+				</div>
+				<div class="title">Agendamento de Salas</div>
+			</div>
+		</div>
+
+		<div class="page-content">
+			<div data-tabRoomScheduling="locator" class="display-none">
+				<div id="lottie" class="block display-flex align-items-center">
+					<div id="lottie-text">
+						<h2 class="no-margin">Agendamentos</h2>
+					</div>
+					<div>
+						<lottie-player src="../static/lottie/cu-room-scheduling-locator.json" loop autoplay>
+						</lottie-player>
+					</div>
+				</div>
+				<div class="display-flex justify-content-space-around">
+					<span class="badge color-primary padding" @click="filterRoomScheduling('since')">
+						<h2 class="cu-room-scheduling-filter display-flex">
+							<span>De: </span><input type="text" readonly="readonly" value="01/08/2022"
+								data-roomschedulingfilter="since" />
+						</h2>
+
+					</span>
+					<span class="badge color-primary padding" @click="filterRoomScheduling('until')">
+						<h2 class="cu-room-scheduling-filter display-flex">
+							<span>Até: </span><input type="text" readonly="readonly" value="30/08/2022"
+								data-roomschedulingfilter="until" />
+						</h2>
+
+					</span>
+				</div>
+				<div class="list simple-list">
+					<ul class="roomScheduling">
+						<li class="item-content" style="border-left: solid 10px green;" @click="detailsRoomSchedule()">
+							<div class="item-inner">
+								<div class="item-title-row">
+									<div class="item-title">
+										<div><b>Sala 404</b></div>
+										<span class="badge color-orange">CC-GEX613</span>
+									</div>
+								</div>
+								<div class="item-text no-wrap"><b>03/08 19h10 - 22h40</b></div>
+							</div>
+						</li>
+						<li class="item-content" style="border-left: solid 10px #FCAE17;"
+							@click="detailsRoomSchedule()">
+							<div class="item-inner">
+								<div class="item-title-row">
+									<div class="item-title">
+										<div><b>Sala 403</b></div>
+										<span class="badge color-orange">CC-GEX613</span>
+									</div>
+								</div>
+								<div class="item-text no-wrap">03/08 13h30 - 18h00</div>
+							</div>
+						</li>
+						<li class="item-content" style="border-left: solid 10px rgb(218, 36, 36);"
+							@click="detailsRoomSchedule()">
+							<div class="item-inner">
+								<div class="item-title-row">
+									<div class="item-title">
+										<div><b>Sala 403</b></div>
+										<span class="badge color-orange">CC-GEX613</span>
+									</div>
+								</div>
+								<div class="item-text no-wrap">02/08 13h30 - 18h00</div>
+							</div>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div data-tabRoomScheduling="responsible">
+				<div id="lottie" class="block display-flex align-items-center">
+					<div id="lottie-text">
+						<h2 class="no-margin">Solicitações</h2>
+					</div>
+					<div>
+						<lottie-player src="../static/lottie/cu-room-scheduling-responsible.json" loop autoplay>
+						</lottie-player>
+					</div>
+				</div>
+				<div class="display-flex justify-content-space-around">
+					<span class="badge color-primary padding" @click="filterRoomScheduling('since')">
+						<h2 class="cu-room-scheduling-filter display-flex">
+							<span>De: </span><input type="text" readonly="readonly" value="01/08/2022"
+								data-roomschedulingfilter="since" />
+						</h2>
+
+					</span>
+					<span class="badge color-primary padding" @click="filterRoomScheduling('until')">
+						<h2 class="cu-room-scheduling-filter display-flex">
+							<span>Até: </span><input type="text" readonly="readonly" value="30/08/2022"
+								data-roomschedulingfilter="until" />
+						</h2>
+					</span>
+				</div>
+				<div class="list simple-list">
+					<ul class="roomScheduling">
+						<li class="item-content" style="border-left: solid 10px #FCAE17;" @click="detailsRoomSchedule()">
+							<div class="item-inner">
+								<div class="item-title-row">
+									<div class="item-title">
+										<div><b>Sala 404</b></div>
+										<span class="badge color-orange">CC-GEX613</span>
+									</div>
+								</div>
+								<div class="item-text no-wrap"><b>03/08 19h10 - 22h40</b></div>
+							</div>
+						</li>
+						<li class="item-content" style="border-left: solid 10px #FCAE17;"
+							@click="detailsRoomSchedule()">
+							<div class="item-inner">
+								<div class="item-title-row">
+									<div class="item-title">
+										<div><b>Sala 403</b></div>
+										<span class="badge color-orange">CC-GEX613</span>
+									</div>
+								</div>
+								<div class="item-text no-wrap">03/08 13h30 - 18h00</div>
+							</div>
+						</li>
+						<li class="item-content" style="border-left: solid 10px #FCAE17"
+							@click="detailsRoomSchedule()">
+							<div class="item-inner">
+								<div class="item-title-row">
+									<div class="item-title">
+										<div><b>Sala 403</b></div>
+										<span class="badge color-orange">CC-GEX613</span>
+									</div>
+								</div>
+								<div class="item-text no-wrap">02/08 13h30 - 18h00</div>
+							</div>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+
+		<div class="fab fab-right-bottom color-orange">
+			<a href="#">
+				<i class="icon f7-icons if-not-md">plus</i>
+				<i class="icon f7-icons if-not-md">xmark</i>
+				<i class="icon material-icons md-only">add</i>
+				<i class="icon material-icons md-only">close</i>
+			</a>
+			<div class="fab-buttons fab-buttons-top">
+				<a class="fab-label-button" href="#" @click="changeToTab('locator')">
+					<span><i class="icon f7-icons">calendar_badge_plus</i></span>
+					<span class="fab-label">Agendamentos</span>
+				</a>
+				<a class="fab-label-button" href="#" @click="changeToTab('responsible')">
+					<span><i class="icon f7-icons">chat_bubble_fill</i></span>
+					<span class="fab-label">Solicitações</span>
+				</a>
+			</div>
+		</div>
+		<div class="popup display-flex flex-direction-column-reverse" id="meupopup" style="background: none;">
+			<div class="block bg-white padding no-margin display-flex flex-direction-column justify-content-space-between"
+				style="height: 50vh; background-color: white;">
+				<div class="block no-margin">
+					<h2>Sala 403</h2>
+					<div>Responsável pela Sala: Dênio Duarte</div>
+					<div>Status do Agendamento: <b>Pendente</b></div>
+					<hr class="margin-vertical">
+					<div class="text-align-right">Início da Reserva: <b>03/08/2022 - 13h30</b></div>
+					<div class="text-align-right">Fim da Reserva: <b>03/08/2022 - 18h00</b></div>
+					<div class="margin-vertical padding-vertical">CCR vinculado: <b>CC-GEX613</b></div>
+					<div><b>Observações: </b></div>
+					<textarea rows="4"
+						style="width: 100%;">Reserva referente a uma atividade prática de Geometria Analítica com o 4º Semestre de Ciência da computação, utilizaremos o GeoGebra web.</textarea>
+				</div>
+				<button class="align-self-flex-end button button-fill color-red margin-top">
+					Cancelar Agendamento
+				</button>
+			</div>
+		</div>
+	</div>
+</template>
+<style>
+	.roomScheduling .item-content {
+		line-height: normal;
+		height: 100px;
+	}
+
+	/* Striped List */
+	.roomScheduling .item-content:nth-child(even) {
+		background-color: rgb(208, 208, 208);
+	}
+
+	.cu-room-scheduling-filter input {
+		width: 100px;
+		margin-left: 5px;
+		font-weight: bold;
+	}
+</style>
+<script>
+	export default {
+		methods: {
+			changeToTab(tab) {
+				let app = this.$app;
+				app.$$('div[data-tabRoomScheduling]').each(function () {
+					app.$$(this).addClass('display-none');
+				})
+				app.$$('div[data-tabRoomScheduling=' + tab + ']').removeClass('display-none');
+			},
+			filterRoomScheduling(filter) {
+				let app = this.$app;
+				let placeholder = (filter == 'since' ? 'início' : 'fim');
+
+				let calendar = app.calendar.create({
+					inputEl: 'input[data-roomschedulingfilter="' + filter + '"]',
+					dateFormat: 'dd/mm/yyyy',
+					closeOnSelect: true,
+					backdrop: true,
+					header: true,
+					headerPlaceholder: 'Data ' + placeholder + ' do filtro:',
+					on: {
+						close: function () {
+							console.log('Procurar()')
+						},
+						closed: function () {
+							calendar.destroy();
+						}
+					}
+				});
+				calendar.open();
+			},
+			detailsRoomSchedule() {
+				let app = this.$app;
+
+				let popup = app.popup.create({
+					swipeToClose: 'to-bottom',
+					closeByBackdropClick: true,
+					el: app.$$('#meupopup'),
+				})
+				popup.open();
+			}
+		}
+	}
+</script>
