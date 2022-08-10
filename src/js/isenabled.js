@@ -44,6 +44,7 @@ var IsEnabled = {
     cuIdCardPage: true,
     cuHomePage: true,
     cuRoomSchedulingPage: true,
+    cuUniversityRestaurantPage: true,
 }
 
 export default IsEnabled;

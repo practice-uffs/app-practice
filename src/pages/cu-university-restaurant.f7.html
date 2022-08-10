@@ -1,0 +1,268 @@
+<template>
+	<div class="page" data-name="cu-university-restaurant">
+
+		<div class="navbar">
+			<div class="navbar-bg"></div>
+			<div class="navbar-inner sliding">
+				<!-- Link to go back -->
+				<div class="left">
+					<a href="/" class="link back">
+						<i class="icon icon-back"></i>
+						<span class="if-not-md">Voltar</span>
+					</a>
+				</div>
+				<div class="title">Restaurante Universitário</div>
+			</div>
+		</div>
+
+		<div class="page-content">
+			<div data-tabUniversityRestaurant="tickets">
+				<div id="tickets-balance" class="block display-flex align-items-center justify-content-center">
+					<div id="text-balance" >
+						<p>Você tem um saldo de </p>
+						<span>5 fichas</span>
+					</div>
+					<div id="lottie-tickets">
+						<lottie-player src="../static/lottie/cu-university-restaurant-tickets.json	" autoplay>
+						</lottie-player>
+					</div>
+				</div>
+
+				<div id="entries">
+					<h2 style="text-align: center;">Entradas</h2>
+					<div class="display-flex justify-content-space-evenly">
+						<span class="badge color-primary padding" @click="filterEntriesRU('since')">
+							<h3 class="cu-universiry-restaurant-filter display-flex">
+								<span>De: </span><input type="text" readonly="readonly" value="01/08/2022"
+									data-entries-ru-filter="since" />
+							</h3>
+						</span>
+
+						<span class="badge color-primary padding" @click="filterEntriesRU('until')">
+							<h3 class="cu-universiry-restaurant-filter display-flex">
+								<span>Até: </span><input type="text" readonly="readonly" value="30/08/2022"
+									data-entries-ru-filter="until" />
+							</h3>
+						</span>
+					</div>
+
+					<div class="list simple-list">
+						<ul class="entries-list">
+							<li class="item-content lunch" style="border-left: solid 10px var(--color-5);">
+								<div class="item-inner">
+									<div class="item-title-row">
+										<div class="item-title">
+											<div><b>Almoço</b></div>
+										</div>
+									</div>
+									<div class="item-text no-wrap"><b>01/08 12:15</b></div>
+								</div>
+							</li>
+							<li class="item-content dinner" style="border-left: solid 10px var(--color-2);">
+								<div class="item-inner">
+									<div class="item-title-row">
+										<div class="item-title">
+											<div><b>Janta</b></div>
+										</div>
+									</div>
+									<div class="item-text no-wrap">01/08 18:30</div>
+								</div>
+							</li>
+							<li class="item-content lunch" style="border-left: solid 10px var(--color-5);">
+								<div class="item-inner">
+									<div class="item-title-row">
+										<div class="item-title">
+											<div><b>Almoço</b></div>
+										</div>
+									</div>
+									<div class="item-text no-wrap"><b>02/08 12:00</b></div>
+								</div>
+							</li>
+							<li class="item-content lunch" style="border-left: solid 10px var(--color-5);">
+								<div class="item-inner">
+									<div class="item-title-row">
+										<div class="item-title">
+											<div><b>Almoço</b></div>
+										</div>
+									</div>
+									<div class="item-text no-wrap"><b>03/08 12:45</b></div>
+								</div>
+							</li>
+					</div>
+				</div>
+			</div>
+
+			<div data-tabUniversityRestaurant="menus" class="display-none">
+				<div id="menus" class="block display-flex align-items-center justify-content-center">
+					<div id="lottie-text">
+						<h2 class="no-margin">Cardápios</h2>
+					</div>
+					<div>
+						<lottie-player src="../static/lottie/cu-university-restaurant-menus.json" loop autoplay>
+						</lottie-player>
+					</div>
+				</div>
+
+				<div class="menus-list block">
+					<div class="menu">
+						<div class="block-title">
+							<h3>08/08</h3>
+						</div>
+						<div class="block block-strong">
+							<ul>
+								<li>Acelga</li>
+								<li>Pepino</li>
+								<li>Beterraba cozida</li>
+								<li>Arroz branco</li>
+								<li>Arroz integral</li>
+								<li>Feijão preto</li>
+								<li>Batata palha</li>
+								<li>Estrogonofe bovino (contém lactose)</li>
+								<li>Estrogonofe de grão-de-bico (contém lactose)</li>
+								<li>Fruta</li>
+							</ul>
+						</div>
+					</div>
+
+					<div class="menu">
+						<div class="block-title">
+							<h3>09/08</h3>
+						</div>
+						<div class="block block-strong">
+							<ul>
+								<li>Acelga</li>
+								<li>Pepino</li>
+								<li>Beterraba cozida</li>
+								<li>Arroz branco</li>
+								<li>Arroz integral</li>
+								<li>Feijão preto</li>
+								<li>Batata palha</li>
+								<li>Estrogonofe bovino (contém lactose)</li>
+								<li>Estrogonofe de grão-de-bico (contém lactose)</li>
+								<li>Fruta</li>
+							</ul>
+						</div>
+					</div>
+
+					<div class="menu">
+						<div class="block-title">
+							<h3>10/08</h3>
+						</div>
+						<div class="block block-strong">
+							<ul>
+								<li>Acelga</li>
+								<li>Pepino</li>
+								<li>Beterraba cozida</li>
+								<li>Arroz branco</li>
+								<li>Arroz integral</li>
+								<li>Feijão preto</li>
+								<li>Batata palha</li>
+								<li>Estrogonofe bovino (contém lactose)</li>
+								<li>Estrogonofe de grão-de-bico (contém lactose)</li>
+								<li>Fruta</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="fab fab-right-bottom color-orange">
+			<a href="#">
+				<i class="icon f7-icons if-not-md">plus</i>
+				<i class="icon f7-icons if-not-md">xmark</i>
+				<i class="icon material-icons md-only">add</i>
+				<i class="icon material-icons md-only">close</i>
+			</a>
+			<div class="fab-buttons fab-buttons-top">
+				<a class="fab-label-button" href="#" @click="changeToTab('tickets')">
+					<span><i class="icon f7-icons">ticket</i></span>
+					<span class="fab-label">Fichas</span>
+				</a>
+
+				<a class="fab-label-button" href="#" @click="changeToTab('menus')">
+					<span><i class="icon f7-icons">square_list</i></span>
+					<span class="fab-label">Cardápios</span>
+				</a>
+			</div>
+		</div>
+	</div>
+</template>
+<style>
+	#tickets-balance #text-balance p {
+		font-size: 1rem;
+		margin: 0;
+	}
+
+	#tickets-balance #text-balance span {
+		font-size: 2rem;
+		font-weight: 800;
+		color: var(--f7-theme-color);
+	}
+
+	#tickets-balance #lottie-tickets lottie-player {
+		height: 130px;
+		max-width: 130px;
+	}
+
+	#menus lottie-player {
+		height: 130px;
+	}
+
+	.entries-list .item-content {
+		line-height: normal;
+		height: 65px;
+	}
+
+	/* Striped List */
+	.entries-list .item-content:nth-child(even) {
+		background-color: rgb(223, 223, 223);
+	}
+
+	.cu-universiry-restaurant-filter input {
+		width: 75px;
+		margin-left: 5px;
+		font-weight: bold;
+	}
+
+	.menus-list .block-title {
+		font-size: 1rem;
+		text-align: center;
+		margin: auto;
+	}
+</style>
+<script>
+	export default {
+		methods: {
+			changeToTab(tab) {
+				let app = this.$app;
+				app.$$('div[data-tabUniversityRestaurant]').each(function () {
+					app.$$(this).addClass('display-none');
+				})
+				app.$$('div[data-tabUniversityRestaurant=' + tab + ']').removeClass('display-none');
+			},
+			filterEntriesRU(filter) {
+				let app = this.$app;
+				let placeholder = (filter == 'since' ? 'início' : 'fim');
+
+				let calendar = app.calendar.create({
+					inputEl: 'input[data-entries-ru-filter="' + filter + '"]',
+					dateFormat: 'dd/mm/yyyy',
+					closeOnSelect: true,
+					backdrop: true,
+					header: true,
+					headerPlaceholder: 'Data ' + placeholder + ' do filtro:',
+					on: {
+						close: function () {
+							console.log('Procurar()')
+						},
+						closed: function () {
+							calendar.destroy();
+						}
+					}
+				});
+				calendar.open();
+			}
+		}
+	}
+</script>

@@ -15,7 +15,7 @@ import CuIdCardRequestPage from "../pages/cu-id-card-request.f7.html";
 import CuIdCardDetailsPage from "../pages/cu-id-card-details.f7.html";
 import CuHomePage from "../pages/cu-home.f7.html";
 import CuRoomSchedulingPage from "../pages/cu-room-scheduling.f7.html";
-
+import CuUniversityRestaurantPage from "../pages/cu-university-restaurant.f7.html";
 
 import IdeasPage from "../pages/ideas.f7.html";
 import ServicesPage from "../pages/services.f7.html";
@@ -50,7 +50,7 @@ const authenticated = function (to, from, resolve, reject) {
 const unauthenticated = function (to, from, resolve, reject) {
   let self = this;
   var app = self.app;
-  
+
   if (!app.storage.getUserCredentials()) {
     resolve();
   } else {
@@ -171,6 +171,13 @@ const cuPagesRoutes = function () {
     modules.push({
       path: "/room-scheduling/",
       component: CuRoomSchedulingPage
+    });
+  }
+
+  if (IsEnabled.cuUniversityRestaurantPage) {
+    modules.push({
+      path: "/university-restaurant/",
+      component: CuUniversityRestaurantPage
     });
   }
 
